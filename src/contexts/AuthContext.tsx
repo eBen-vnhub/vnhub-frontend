@@ -4,17 +4,20 @@ import authService from '../services/auth';
 
 interface AuthContextType {
   user: User | null;
+  displayName: string;
   isAuthenticated: boolean;
   isLoading: boolean;
   login: (user: User) => void;
-  logout: () => void;
+  logout: () => Promise<void>;
 }
 
-const AuthContext = createContext<AuthContextType | null>(null);
+const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+
+  const displayName = user?.firstName ? `${user.firstName} ${user.lastName || ''}`.trim() : (user?.companyName || user?.email?.split('@')[0] || 'User');
 
   useEffect(() => {
     authService.me()
@@ -36,7 +39,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ user, isAuthenticated: !!user, isLoading, login, logout }}>
+    <AuthContext.Provider value={{ user, displayName, isAuthenticated: !!user, isLoading, login, logout }}>
       {children}
     </AuthContext.Provider>
   );

@@ -5,13 +5,11 @@ import EbenLogo from '../ui/EbenLogo';
 import { LogOut, ChevronDown, Lock, Shield, User as UserIcon } from 'lucide-react';
 
 export default function Header() {
-  const { user, logout } = useAuth();
+  const { user, displayName, logout } = useAuth();
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
 
-  const isSuperAdmin = false;
-
-  const displayName = user?.firstName ? `${user.firstName} ${user.lastName}` : (user?.companyName || user?.email?.split('@')[0] || 'User');
+  const isSuperAdmin = user?.role === 'SUPERADMIN' || user?.role === 'SUPER_ADMIN';
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -86,18 +84,16 @@ export default function Header() {
                           </Link>
                         )}
 
-                        <button
-                          onClick={() => {
-                            setIsProfileMenuOpen(false);
-                          }}
-                          className="flex items-center gap-3 w-full px-3 py-2.5 text-sm font-semibold text-main hover:text-brand hover:bg-brand/5 rounded-xl transition-all duration-200 group disabled:opacity-50"
-                          disabled
+                        <Link
+                          to="/portal/change-password"
+                          onClick={() => setIsProfileMenuOpen(false)}
+                          className="flex items-center gap-3 w-full px-3 py-2.5 text-sm font-semibold text-main hover:text-brand hover:bg-brand/5 rounded-xl transition-all duration-200 group"
                         >
                           <div className="w-8 h-8 flex items-center justify-center bg-surface-hover rounded-lg group-hover:bg-brand/10 transition-all flex-shrink-0">
                             <Lock className="w-4 h-4" />
                           </div>
-                          <span>Change Password (Soon)</span>
-                        </button>
+                          <span>Change Password</span>
+                        </Link>
 
                         <div className="border-t border-border-subtle my-1" />
 

@@ -16,7 +16,7 @@ export default function Sidebar() {
       disabled: true
     },
     {
-      label: 'Vendor Admin',
+      label: 'Team Management',
       path: '/portal/admin',
       icon: <UserCog className="w-5 h-5" />,
       disabled: true

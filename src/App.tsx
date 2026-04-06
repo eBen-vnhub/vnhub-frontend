@@ -7,6 +7,7 @@ import ResetPasswordPage from './features/auth/pages/ResetPasswordPage';
 import SetPasswordPage from './features/auth/pages/SetPasswordPage';
 import PortalLayout from './layouts/PortalLayout';
 import SubscriptionsPage from './features/portal/pages/SubscriptionsPage';
+import ChangePasswordPage from './features/auth/pages/ChangePasswordPage';
 import ProtectedRoute from './components/guards/ProtectedRoute';
 
 export default function App() {
@@ -19,7 +20,6 @@ export default function App() {
         <Route path="/reset-password" element={<ResetPasswordPage />} />
         <Route path="/set-password" element={<SetPasswordPage />} />
 
-        {/* Portal Routes */}
         <Route path="/portal" element={
           <ProtectedRoute>
             <VendorsProvider>
@@ -28,9 +28,9 @@ export default function App() {
           </ProtectedRoute>
         }>
           <Route index element={<SubscriptionsPage />} />
+          <Route path="change-password" element={<ChangePasswordPage />} />
         </Route>
 
-        {/* Redirect root to portal or login */}
         <Route path="/" element={<Navigate to="/portal" replace />} />
         <Route path="*" element={<Navigate to="/login" replace />} />
       </Routes>

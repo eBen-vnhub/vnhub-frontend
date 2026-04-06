@@ -18,12 +18,18 @@ export interface ForgotPasswordData {
   email: string;
 }
 
+export interface ChangePasswordData {
+  old_password: string;
+  new_password: string;
+}
+
 export interface User {
   id: string;
   email: string;
   companyName: string;
   firstName: string;
   lastName: string;
+  role?: string;
 }
 
 export interface AuthState {

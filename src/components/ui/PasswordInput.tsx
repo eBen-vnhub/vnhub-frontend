@@ -10,6 +10,7 @@ interface PasswordInputProps {
   autoComplete?: string;
   required?: boolean;
   error?: string;
+  disabled?: boolean;
 }
 
 export default function PasswordInput({
@@ -20,6 +21,7 @@ export default function PasswordInput({
   autoComplete = 'current-password',
   required = false,
   error,
+  disabled = false,
 }: PasswordInputProps) {
   const [showPassword, setShowPassword] = useState(false);
   const [isFocused, setIsFocused] = useState(false);
@@ -36,6 +38,7 @@ export default function PasswordInput({
           autoComplete={autoComplete}
           required={required}
           error={error}
+          disabled={disabled}
           isFocused={isFocused}
           onFocus={() => setIsFocused(true)}
           onBlur={() => setIsFocused(false)}
@@ -44,6 +47,7 @@ export default function PasswordInput({
         />
         <button
           type="button"
+          disabled={disabled}
           onClick={() => setShowPassword(!showPassword)}
           className="absolute bottom-3 sm:bottom-3.5 end-0 pe-3 sm:pe-4 flex items-center text-hint hover:text-brand transition-colors"
         >
