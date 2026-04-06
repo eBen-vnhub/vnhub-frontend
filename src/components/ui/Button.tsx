@@ -9,8 +9,8 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 const variantStyles: Record<string, string> = {
-  primary: 'bg-gradient-to-r from-brand-hover to-brand text-white hover:from-brand-active hover:to-brand-hover hover:shadow-xl hover:shadow-brand/30 active:scale-[0.98]',
-  outline: 'border border-border-subtle text-main hover:bg-gray-50 active:bg-gray-100',
+  primary: 'bg-brand text-white hover:bg-brand-hover',
+  outline: 'border border-border-subtle text-main hover:bg-gray-50',
   ghost: 'text-muted hover:text-main hover:bg-gray-50',
 };
 
