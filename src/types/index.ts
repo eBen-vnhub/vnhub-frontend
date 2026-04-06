@@ -34,3 +34,21 @@ export interface AuthState {
 
 export type Language = 'en' | 'ar';
 export type Direction = 'ltr' | 'rtl';
+
+export interface Subscription {
+  id: number;
+  plan: string;
+  billingCycle: string;
+  status: string;
+  startDate: string;
+  amount: string;
+  currency: string;
+}
+
+export interface Vendor {
+  id: number;
+  companyName: string;
+  companyWebsite: string;
+  companyCountry: string;
+  businessCategory: string;
+}
