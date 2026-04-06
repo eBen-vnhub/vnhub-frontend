@@ -1,4 +1,4 @@
-import type { LoginCredentials, SetPasswordData, ResetPasswordData, ForgotPasswordData } from '../types';
+import type { LoginCredentials, SetPasswordData, ResetPasswordData, ForgotPasswordData, ChangePasswordData } from '../types';
 
 const API_BASE = import.meta.env.VITE_API_URL || '/api/v1';
 
@@ -50,6 +50,12 @@ const authService = {
 
   setPassword: (data: SetPasswordData) =>
     request<{ success: boolean; message: string }>('/auth/set-password/', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    }),
+
+  changePassword: (data: ChangePasswordData) =>
+    request<{ success: boolean; message: string }>('/auth/change-password/', {
       method: 'POST',
       body: JSON.stringify(data),
     }),

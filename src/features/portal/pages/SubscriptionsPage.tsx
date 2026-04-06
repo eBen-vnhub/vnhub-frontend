@@ -6,11 +6,9 @@ import NextActionModal from '../../../components/portal/NextActionModal';
 import LoadingSpinner from '../../../components/ui/LoadingSpinner';
 
 export default function SubscriptionsPage() {
-  const { user } = useAuth();
+  const { displayName } = useAuth();
   const { vendor, subscriptions, isLoading, error } = useVendors();
   const [isModalOpen, setIsModalOpen] = useState(false);
-
-  const displayName = user?.firstName ? user.firstName : (user?.companyName || user?.email?.split('@')[0] || 'User');
 
   if (isLoading) {
     return (
@@ -33,6 +31,42 @@ export default function SubscriptionsPage() {
           Manage your subscriptions, complete required forms, and track your progress all in one place.
         </p>
       </section>
+
+      {vendor && (
+        <section className="bg-surface border border-border shadow-sm rounded-3xl p-6 sm:p-8">
+          <div className="flex items-center justify-between mb-6">
+            <div>
+              <h2 className="text-xl font-bold text-main">Company Snapshot</h2>
+              <div className="w-12 h-1 bg-brand rounded-full mt-2" />
+            </div>
+          </div>
+          
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+            <div>
+              <p className="text-sm font-semibold text-muted mb-1">Company Name</p>
+              <p className="text-main font-medium">{vendor.companyName}</p>
+            </div>
+            <div>
+              <p className="text-sm font-semibold text-muted mb-1">Country</p>
+              <p className="text-main font-medium">{vendor.companyCountry || '—'}</p>
+            </div>
+            <div>
+              <p className="text-sm font-semibold text-muted mb-1">Business Category</p>
+              <p className="text-main font-medium">{vendor.businessCategory || '—'}</p>
+            </div>
+            <div>
+              <p className="text-sm font-semibold text-muted mb-1">Website</p>
+              <p className="text-brand font-medium break-words">
+                {vendor.companyWebsite ? (
+                  <a href={vendor.companyWebsite.startsWith('http') ? vendor.companyWebsite : `https://${vendor.companyWebsite}`} target="_blank" rel="noopener noreferrer" className="hover:underline">
+                    {vendor.companyWebsite}
+                  </a>
+                ) : '—'}
+              </p>
+            </div>
+          </div>
+        </section>
+      )}
 
       <section>
         <div className="flex items-center justify-between mb-6">
