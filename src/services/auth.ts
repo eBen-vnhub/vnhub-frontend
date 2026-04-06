@@ -1,6 +1,6 @@
 import type { LoginCredentials, SetPasswordData, ResetPasswordData, ForgotPasswordData } from '../types';
 
-const API_BASE = import.meta.env.VITE_API_URL || '/api';
+const API_BASE = import.meta.env.VITE_API_URL || '/api/v1';
 
 async function request<T>(endpoint: string, options: RequestInit = {}): Promise<T> {
   const response = await fetch(`${API_BASE}${endpoint}`, {
