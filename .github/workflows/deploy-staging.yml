@@ -34,4 +34,4 @@ jobs:
 
     - name: Deploy via Rsync
       run: |
-        rsync -avz --delete ./dist/ ${{ secrets.STAGING_SSH_USER }}@${{ secrets.STAGING_SSH_HOST }}:/var/www/vnhub/staging/frontend/dist/
+        rsync -avz --delete ./dist/ ${{ secrets.STAGING_SSH_USER }}@${{ secrets.STAGING_SSH_HOST }}:/var/www/vnhub/frontend/dist/
