@@ -24,6 +24,8 @@ jobs:
 
     - name: Build Application
       run: npm run build
+      env:
+        VITE_REGISTRATION_FORM_URL: ${{ vars.REGISTRATION_FORM_URL }}
 
     - name: Setup SSH
       run: |
