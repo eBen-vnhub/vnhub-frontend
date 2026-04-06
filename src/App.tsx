@@ -20,7 +20,6 @@ export default function App() {
         <Route path="/reset-password" element={<ResetPasswordPage />} />
         <Route path="/set-password" element={<SetPasswordPage />} />
 
-        {/* Portal Routes */}
         <Route path="/portal" element={
           <ProtectedRoute>
             <VendorsProvider>
@@ -32,7 +31,6 @@ export default function App() {
           <Route path="change-password" element={<ChangePasswordPage />} />
         </Route>
 
-        {/* Redirect root to portal or login */}
         <Route path="/" element={<Navigate to="/portal" replace />} />
         <Route path="*" element={<Navigate to="/login" replace />} />
       </Routes>
