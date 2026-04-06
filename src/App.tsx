@@ -7,6 +7,8 @@ import ResetPasswordPage from './features/auth/pages/ResetPasswordPage';
 import SetPasswordPage from './features/auth/pages/SetPasswordPage';
 import PortalLayout from './layouts/PortalLayout';
 import SubscriptionsPage from './features/portal/pages/SubscriptionsPage';
+import CompanyProfilePage from './features/portal/pages/CompanyProfilePage';
+import VendorAdminPage from './features/portal/pages/VendorAdminPage';
 import ChangePasswordPage from './features/auth/pages/ChangePasswordPage';
 import ProtectedRoute from './components/guards/ProtectedRoute';
 
@@ -28,6 +30,8 @@ export default function App() {
           </ProtectedRoute>
         }>
           <Route index element={<SubscriptionsPage />} />
+          <Route path="company-profile" element={<CompanyProfilePage />} />
+          <Route path="admin" element={<VendorAdminPage />} />
           <Route path="change-password" element={<ChangePasswordPage />} />
         </Route>
 

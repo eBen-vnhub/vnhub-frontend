@@ -1,15 +1,15 @@
 import { useState, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
+import { usePermissions } from '../../hooks/usePermissions';
 import EbenLogo from '../ui/EbenLogo';
 import { LogOut, ChevronDown, Lock, Shield, User as UserIcon } from 'lucide-react';
 
 export default function Header() {
   const { user, displayName, logout } = useAuth();
+  const { isSuperAdmin } = usePermissions();
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
-
-  const isSuperAdmin = user?.role === 'SUPERADMIN' || user?.role === 'SUPER_ADMIN';
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {

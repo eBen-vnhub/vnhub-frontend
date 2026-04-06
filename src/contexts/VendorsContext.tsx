@@ -8,6 +8,7 @@ interface VendorsContextType {
   isLoading: boolean;
   error: string | null;
   refresh: () => Promise<void>;
+  updateVendorContext: (vendorData: Vendor) => void;
 }
 
 const VendorsContext = createContext<VendorsContextType | null>(null);
@@ -34,6 +35,10 @@ export function VendorsProvider({ children }: { children: ReactNode }) {
     }
   };
 
+  const updateVendorContext = (vendorData: Vendor) => {
+    setVendor(vendorData);
+  };
+
   useEffect(() => {
     fetchVendorData();
   }, []);
@@ -46,6 +51,7 @@ export function VendorsProvider({ children }: { children: ReactNode }) {
         isLoading,
         error,
         refresh: fetchVendorData,
+        updateVendorContext,
       }}
     >
       {children}
