@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Mail } from 'lucide-react';
 import { useLanguage } from '../../../i18n/LanguageContext';
 import { useAuth } from '../../../contexts/AuthContext';
+import { validateEmail } from '../../../utils/validators';
 import authService from '../../../services/auth';
 import Input from '../../../components/ui/Input';
 import PasswordInput from '../../../components/ui/PasswordInput';
@@ -19,9 +20,6 @@ export default function LoginForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [focusedField, setFocusedField] = useState<string | null>(null);
   const [errors, setErrors] = useState<{ email?: string; password?: string }>({});
-
-  const validateEmail = (value: string) =>
-    /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(value);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

@@ -1,4 +1,5 @@
 import { useAuth } from '../../../contexts/AuthContext';
+import { LockKeyhole } from 'lucide-react';
 import ChangePasswordForm from '../components/ChangePasswordForm';
 
 export default function ChangePasswordPage() {
@@ -6,19 +7,23 @@ export default function ChangePasswordPage() {
   const displayName = user?.firstName ? user.firstName : (user?.companyName || user?.email?.split('@')[0] || 'User');
 
   return (
-    <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 max-w-2xl mx-auto space-y-8">
-      <section className="bg-gradient-to-br from-brand/10 to-brand/5 rounded-3xl p-8 border border-brand/10 text-center">
-        <h1 className="text-2xl font-bold text-main leading-tight mb-2">
-          Change Password
-        </h1>
-        <p className="text-muted">
-          Update the password for <span className="font-semibold text-main">{displayName}</span> ({user?.email})
-        </p>
-      </section>
+    <div className="animate-in fade-in slide-in-from-bottom-4 duration-700 max-w-4xl mx-auto space-y-6">
+      <div className="bg-surface border border-border shadow-sm rounded-3xl p-6 sm:p-8">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
+          <div>
+            <h2 className="text-xl font-bold text-main flex items-center gap-2">
+              <LockKeyhole className="w-5 h-5 text-brand" />
+              Security Settings
+            </h2>
+            <p className="text-sm text-muted mt-1">
+              Update the password for <span className="font-semibold text-brand">{displayName}</span>
+            </p>
+          </div>
+        </div>
 
-      <div className="bg-surface border border-border shadow-sm rounded-3xl p-8 sm:p-10">
-        <h2 className="text-lg font-bold text-main mb-6">Security Settings</h2>
-        <ChangePasswordForm />
+        <div className="max-w-xl">
+          <ChangePasswordForm />
+        </div>
       </div>
     </div>
   );

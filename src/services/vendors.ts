@@ -1,29 +1,35 @@
-import type { Vendor, Subscription } from '../types';
-
-const API_BASE = import.meta.env.VITE_API_URL || '/api/v1';
-
-async function request<T>(endpoint: string, options: RequestInit = {}): Promise<T> {
-  const response = await fetch(`${API_BASE}${endpoint}`, {
-    credentials: 'include',
-    headers: {
-      'Content-Type': 'application/json',
-      ...options.headers,
-    },
-    ...options,
-  });
-
-  const data = await response.json();
-
-  if (!response.ok) {
-    throw { response: { data }, status: response.status };
-  }
-
-  return data;
-}
+import { request } from './api';
+import type {
+  Vendor,
+  Subscription,
+  User,
+  InviteTeamMemberData,
+  ApiSuccessResponse,
+} from '../types';
 
 const vendorsService = {
   getDashboardData: () =>
     request<{ vendor: Vendor; subscriptions: Subscription[] }>('/vendors/me/'),
+
+  updateDashboardData: (data: Partial<Vendor>) =>
+    request<ApiSuccessResponse & { vendor: Vendor }>('/vendors/me/', {
+      method: 'PUT',
+      body: JSON.stringify(data),
+    }),
+
+  getTeamMembers: () =>
+    request<User[]>('/vendors/team/'),
+
+  inviteTeamMember: (data: InviteTeamMemberData) =>
+    request<ApiSuccessResponse>('/vendors/team/', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    }),
+
+  removeTeamMember: (userId: string) =>
+    request<ApiSuccessResponse>(`/vendors/team/${userId}/`, {
+      method: 'DELETE',
+    }),
 };
 
 export default vendorsService;

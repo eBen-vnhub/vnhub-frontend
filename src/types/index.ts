@@ -58,3 +58,13 @@ export interface Vendor {
   companyCountry: string;
   businessCategory: string;
 }
+
+export interface InviteTeamMemberData {
+  email: string;
+  role: string;
+}
+
+export interface ApiSuccessResponse {
+  success: boolean;
+  message: string;
+}

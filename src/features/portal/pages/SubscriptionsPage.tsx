@@ -5,8 +5,11 @@ import SubscriptionCard from '../../../components/portal/SubscriptionCard';
 import NextActionModal from '../../../components/portal/NextActionModal';
 import LoadingSpinner from '../../../components/ui/LoadingSpinner';
 
+import { Plus } from 'lucide-react';
+import Button from '../../../components/ui/Button';
+
 export default function SubscriptionsPage() {
-  const { displayName } = useAuth();
+  const { displayName, user } = useAuth();
   const { vendor, subscriptions, isLoading, error } = useVendors();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -32,48 +35,23 @@ export default function SubscriptionsPage() {
         </p>
       </section>
 
-      {vendor && (
-        <section className="bg-surface border border-border shadow-sm rounded-3xl p-6 sm:p-8">
-          <div className="flex items-center justify-between mb-6">
-            <div>
-              <h2 className="text-xl font-bold text-main">Company Snapshot</h2>
-              <div className="w-12 h-1 bg-brand rounded-full mt-2" />
-            </div>
-          </div>
-          
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
-            <div>
-              <p className="text-sm font-semibold text-muted mb-1">Company Name</p>
-              <p className="text-main font-medium">{vendor.companyName}</p>
-            </div>
-            <div>
-              <p className="text-sm font-semibold text-muted mb-1">Country</p>
-              <p className="text-main font-medium">{vendor.companyCountry || '—'}</p>
-            </div>
-            <div>
-              <p className="text-sm font-semibold text-muted mb-1">Business Category</p>
-              <p className="text-main font-medium">{vendor.businessCategory || '—'}</p>
-            </div>
-            <div>
-              <p className="text-sm font-semibold text-muted mb-1">Website</p>
-              <p className="text-brand font-medium break-words">
-                {vendor.companyWebsite ? (
-                  <a href={vendor.companyWebsite.startsWith('http') ? vendor.companyWebsite : `https://${vendor.companyWebsite}`} target="_blank" rel="noopener noreferrer" className="hover:underline">
-                    {vendor.companyWebsite}
-                  </a>
-                ) : '—'}
-              </p>
-            </div>
-          </div>
-        </section>
-      )}
-
       <section>
-        <div className="flex items-center justify-between mb-6">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
           <div>
             <h2 className="text-2xl font-bold text-main">My Subscriptions</h2>
             <div className="w-12 h-1 bg-brand rounded-full mt-2" />
           </div>
+          <Button
+            className="flex items-center gap-2"
+            onClick={() => {
+              const base = import.meta.env.VITE_REGISTRATION_FORM_URL;
+              const url = user?.email ? `${base}?email=${encodeURIComponent(user.email)}` : base;
+              window.open(url, '_blank');
+            }}
+          >
+            <Plus className="w-4 h-4" />
+            Subscribe to new product
+          </Button>
         </div>
 
         {error && (
@@ -108,9 +86,9 @@ export default function SubscriptionsPage() {
         )}
       </section>
 
-      <NextActionModal 
-        isOpen={isModalOpen} 
-        onClose={() => setIsModalOpen(false)} 
+      <NextActionModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
       />
     </div>
   );
