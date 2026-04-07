@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { X, Loader2 } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
 import { useVendors } from '../../contexts/VendorsContext';
+import { useLanguage } from '../../i18n/LanguageContext';
 
 interface InlineSubscriptionModalProps {
   isOpen: boolean;
@@ -12,6 +13,7 @@ interface InlineSubscriptionModalProps {
 export default function InlineSubscriptionModal({ isOpen, onClose, onSuccess }: InlineSubscriptionModalProps) {
   const { user } = useAuth();
   const { vendor } = useVendors();
+  const { language } = useLanguage();
   const iframeRef = useRef<HTMLIFrameElement>(null);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -55,7 +57,8 @@ export default function InlineSubscriptionModal({ isOpen, onClose, onSuccess }: 
           mobileCountryCode: '',
           mobileNumber: '',
           jobTitle: '',
-        }
+        },
+        language: language
       };
       
       iframeRef.current.contentWindow.postMessage(payload, '*');
