@@ -1,11 +1,13 @@
 import { useState } from 'react';
 import { usePermissions } from '../../../hooks/usePermissions';
+import { useLanguage } from '../../../i18n/LanguageContext';
 import vendorsService from '../../../services/vendors';
 import type { Vendor } from '../../../types';
 import toast from 'react-hot-toast';
 
 export function useCompanyProfile(initialData: Vendor, onUpdate: (vendor: Vendor) => void) {
   const { canEditCompanyProfile } = usePermissions();
+  const { t } = useLanguage();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
     companyName: initialData.companyName || '',
@@ -26,9 +28,9 @@ export function useCompanyProfile(initialData: Vendor, onUpdate: (vendor: Vendor
     try {
       const response = await vendorsService.updateDashboardData(formData);
       onUpdate(response.vendor);
-      toast.success('Company profile updated successfully');
+      toast.success(t.portal.companyProfile.updateSuccess);
     } catch (err: any) {
-      toast.error(err.response?.data?.error || 'Failed to update company profile');
+      toast.error(err.response?.data?.error || t.portal.companyProfile.updateFailed);
     } finally {
       setIsSubmitting(false);
     }

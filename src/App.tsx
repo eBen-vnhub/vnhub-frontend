@@ -10,6 +10,7 @@ import SubscriptionsPage from './features/portal/pages/SubscriptionsPage';
 import CompanyProfilePage from './features/portal/pages/CompanyProfilePage';
 import VendorAdminPage from './features/portal/pages/VendorAdminPage';
 import ChangePasswordPage from './features/auth/pages/ChangePasswordPage';
+import UserProfilePage from './features/portal/pages/UserProfilePage';
 import ProtectedRoute from './components/guards/ProtectedRoute';
 
 export default function App() {
@@ -32,6 +33,7 @@ export default function App() {
           <Route index element={<SubscriptionsPage />} />
           <Route path="company-profile" element={<CompanyProfilePage />} />
           <Route path="admin" element={<VendorAdminPage />} />
+          <Route path="profile" element={<UserProfilePage />} />
           <Route path="change-password" element={<ChangePasswordPage />} />
         </Route>
 

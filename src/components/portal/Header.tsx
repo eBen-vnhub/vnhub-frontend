@@ -1,13 +1,14 @@
 import { useState, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
-import { usePermissions } from '../../hooks/usePermissions';
+import { useLanguage } from '../../i18n/LanguageContext';
 import EbenLogo from '../ui/EbenLogo';
-import { LogOut, ChevronDown, Lock, Shield, User as UserIcon } from 'lucide-react';
+import LanguageSwitcher from '../ui/LanguageSwitcher';
+import { LogOut, ChevronDown, Lock, User as UserIcon } from 'lucide-react';
 
 export default function Header() {
   const { user, displayName, logout } = useAuth();
-  const { isSuperAdmin } = usePermissions();
+  const { t, direction } = useLanguage();
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
 
@@ -23,7 +24,7 @@ export default function Header() {
 
   return (
     <>
-      <header className="fixed top-0 left-0 right-0 z-50">
+      <header className="fixed top-0 left-0 right-0 z-50" dir={direction}>
         <div className="absolute inset-0 bg-white/95 backdrop-blur-xl border-b border-border-subtle" />
 
         <div className="relative px-4 sm:px-6">
@@ -39,13 +40,15 @@ export default function Header() {
               </Link>
             </div>
 
-            <div className="flex items-center gap-3 ml-auto">
+            <div className="flex items-center gap-3 ms-auto">
+              <LanguageSwitcher />
+
               <div className="relative" ref={menuRef}>
                 <button
                   onClick={() => setIsProfileMenuOpen(!isProfileMenuOpen)}
                   className="flex items-center gap-2.5 px-2 py-1.5 sm:px-3 sm:py-2 rounded-xl hover:bg-surface-hover transition-all duration-300 group"
                 >
-                  <div className="hidden md:block text-right">
+                  <div className="hidden md:block text-end">
                     <p className="text-sm font-semibold text-main leading-tight">
                       {displayName}
                     </p>
@@ -59,7 +62,7 @@ export default function Header() {
                 </button>
 
                 {isProfileMenuOpen && (
-                  <div className="absolute right-0 mt-2 w-72 animate-in fade-in zoom-in-95 duration-200">
+                  <div className="absolute end-0 mt-2 w-72 animate-in fade-in zoom-in-95 duration-200">
                     <div className="bg-surface rounded-2xl border border-border shadow-2xl overflow-hidden">
                       <div className="px-5 py-4 bg-surface border-b border-border-subtle">
                         <p className="text-sm font-bold text-main text-center">
@@ -71,18 +74,16 @@ export default function Header() {
                       </div>
 
                       <div className="p-2 space-y-0.5">
-                        {isSuperAdmin && (
-                          <Link
-                            to="/admin"
-                            onClick={() => setIsProfileMenuOpen(false)}
-                            className="flex items-center gap-3 w-full px-3 py-2.5 text-sm font-semibold text-main hover:text-brand hover:bg-brand/5 rounded-xl transition-all duration-200 group"
-                          >
-                            <div className="w-8 h-8 flex items-center justify-center bg-surface-hover rounded-lg group-hover:bg-brand/10 transition-all flex-shrink-0">
-                              <Shield className="w-4 h-4" />
-                            </div>
-                            <span>Admin Panel</span>
-                          </Link>
-                        )}
+                        <Link
+                          to="/portal/profile"
+                          onClick={() => setIsProfileMenuOpen(false)}
+                          className="flex items-center gap-3 w-full px-3 py-2.5 text-sm font-semibold text-main hover:text-brand hover:bg-brand/5 rounded-xl transition-all duration-200 group"
+                        >
+                          <div className="w-8 h-8 flex items-center justify-center bg-surface-hover rounded-lg group-hover:bg-brand/10 transition-all flex-shrink-0">
+                            <UserIcon className="w-4 h-4" />
+                          </div>
+                          <span>{t.portal.header.myProfile}</span>
+                        </Link>
 
                         <Link
                           to="/portal/change-password"
@@ -92,7 +93,7 @@ export default function Header() {
                           <div className="w-8 h-8 flex items-center justify-center bg-surface-hover rounded-lg group-hover:bg-brand/10 transition-all flex-shrink-0">
                             <Lock className="w-4 h-4" />
                           </div>
-                          <span>Change Password</span>
+                          <span>{t.portal.header.changePassword}</span>
                         </Link>
 
                         <div className="border-t border-border-subtle my-1" />
@@ -107,7 +108,7 @@ export default function Header() {
                           <div className="w-8 h-8 flex items-center justify-center bg-surface-hover rounded-lg group-hover:bg-error/10 transition-all flex-shrink-0">
                             <LogOut className="w-4 h-4" />
                           </div>
-                          <span>Sign Out</span>
+                          <span>{t.portal.header.signOut}</span>
                         </button>
                       </div>
                     </div>

@@ -4,15 +4,16 @@ import type {
   Subscription,
   User,
   InviteTeamMemberData,
+  SubscriptionUpdateData,
   ApiSuccessResponse,
 } from '../types';
 
 const vendorsService = {
   getDashboardData: () =>
-    request<{ vendor: Vendor; subscriptions: Subscription[] }>('/vendors/me/'),
+    request<{ vendor: Vendor; subscriptions: Subscription[] }>('/vendors/company/'),
 
   updateDashboardData: (data: Partial<Vendor>) =>
-    request<ApiSuccessResponse & { vendor: Vendor }>('/vendors/me/', {
+    request<ApiSuccessResponse & { vendor: Vendor }>('/vendors/company/', {
       method: 'PUT',
       body: JSON.stringify(data),
     }),
@@ -28,6 +29,26 @@ const vendorsService = {
 
   removeTeamMember: (userId: string) =>
     request<ApiSuccessResponse>(`/vendors/team/${userId}/`, {
+      method: 'DELETE',
+    }),
+
+  getUserProfile: () =>
+    request<User>('/vendors/profile/'),
+
+  updateUserProfile: (data: Partial<User>) =>
+    request<ApiSuccessResponse & { user: User }>('/vendors/profile/', {
+      method: 'PUT',
+      body: JSON.stringify(data),
+    }),
+
+  updateSubscription: (subscriptionId: number, data: SubscriptionUpdateData) =>
+    request<ApiSuccessResponse & { subscription: Subscription }>(`/vendors/subscriptions/${subscriptionId}/`, {
+      method: 'PUT',
+      body: JSON.stringify(data),
+    }),
+
+  cancelSubscription: (subscriptionId: number) =>
+    request<ApiSuccessResponse & { subscription: Subscription }>(`/vendors/subscriptions/${subscriptionId}/`, {
       method: 'DELETE',
     }),
 };
