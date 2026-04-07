@@ -1,51 +1,124 @@
+import { useState } from 'react';
 import type { Subscription } from '../../types';
+import { useLanguage } from '../../i18n/LanguageContext';
 import Button from '../ui/Button';
-import { ArrowRight, CheckCircle2, Clock } from 'lucide-react';
+import { ArrowRight, CheckCircle2, Clock, XCircle, MapPin, Calendar, Edit3, Trash2 } from 'lucide-react';
 
 interface SubscriptionCardProps {
   subscription: Subscription;
   companyName: string;
   onNextAction: () => void;
+  onEdit: (subscription: Subscription) => void;
+  onCancel: (subscriptionId: number) => void;
+  isCancelling: boolean;
 }
 
-export default function SubscriptionCard({ subscription, companyName, onNextAction }: SubscriptionCardProps) {
-  const isActive = subscription.status?.toLowerCase() === 'active';
-  
+const STATUS_CONFIG: Record<string, { icon: typeof CheckCircle2; className: string }> = {
+  active: { icon: CheckCircle2, className: 'bg-success/10 text-success' },
+  pending: { icon: Clock, className: 'bg-warning/10 text-warning' },
+  cancelled: { icon: XCircle, className: 'bg-error/10 text-error' },
+};
+
+export default function SubscriptionCard({ subscription, companyName, onNextAction, onEdit, onCancel, isCancelling }: SubscriptionCardProps) {
+  const { t } = useLanguage();
+  const [showCancelConfirm, setShowCancelConfirm] = useState(false);
+  const statusKey = subscription.status?.toLowerCase() || 'pending';
+  const config = STATUS_CONFIG[statusKey] || STATUS_CONFIG.pending;
+  const StatusIcon = config.icon;
+  const isCancelled = statusKey === 'cancelled';
+  const formattedDate = subscription.createdAt
+    ? new Date(subscription.createdAt).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })
+    : '';
+
   return (
-    <div className="bg-surface border border-border shadow-sm rounded-2xl p-6 transition-all hover:shadow-md">
-      <div className="flex items-start justify-between mb-6">
+    <div className={`bg-surface border shadow-sm rounded-2xl p-6 transition-all hover:shadow-md ${isCancelled ? 'border-error/20 opacity-75' : 'border-border'}`}>
+      <div className="flex items-start justify-between mb-4">
         <div>
           <h3 className="text-xl font-bold text-main mb-1">{companyName}</h3>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 flex-wrap">
             <span className="text-sm font-semibold text-brand px-2.5 py-0.5 rounded-full bg-brand/10">
-              {subscription.plan} Plan
+              {subscription.plan} {t.portal.subscriptionCard.plan}
             </span>
-            <span className="text-sm text-muted">
-              • {subscription.billingCycle}
-            </span>
+            <span className="text-sm text-muted">• {subscription.billingCycle}</span>
           </div>
         </div>
-        
-        <div className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-semibold ${isActive ? 'bg-success/10 text-success' : 'bg-warning/10 text-warning'}`}>
-          {isActive ? <CheckCircle2 className="w-4 h-4" /> : <Clock className="w-4 h-4" />}
-          <span>{subscription.status || 'Pending'}</span>
+
+        <div className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-semibold ${config.className}`}>
+          <StatusIcon className="w-4 h-4" />
+          <span>{subscription.status || t.portal.subscriptionCard.pending}</span>
         </div>
       </div>
 
-      <div className="border-t border-border-subtle pt-6">
-        <h4 className="text-sm font-bold text-main mb-4">Required Action</h4>
-        
-        <div className="bg-surface-hover rounded-xl p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <div>
-            <p className="font-semibold text-main">Complete Vendor Listing</p>
-            <p className="text-sm text-muted mt-0.5">Please provide your vendor details to proceed.</p>
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4">
+        {subscription.locations && subscription.locations.length > 0 && (
+          <div className="flex items-center gap-2 text-sm text-muted">
+            <MapPin className="w-4 h-4 text-brand flex-shrink-0" />
+            <span>{subscription.locations.join(', ')}</span>
           </div>
-          
-          <Button onClick={onNextAction} className="whitespace-nowrap">
-            Open Form <ArrowRight className="w-4 h-4" />
-          </Button>
-        </div>
+        )}
+        {formattedDate && (
+          <div className="flex items-center gap-2 text-sm text-muted">
+            <Calendar className="w-4 h-4 text-brand flex-shrink-0" />
+            <span>{t.portal.subscriptionCard.subscribedOn} {formattedDate}</span>
+          </div>
+        )}
       </div>
+
+      {!isCancelled && (
+        <div className="flex items-center gap-2 border-t border-border-subtle pt-4">
+          <Button
+            variant="outline"
+            onClick={() => onEdit(subscription)}
+            className="flex items-center gap-2 text-sm"
+          >
+            <Edit3 className="w-4 h-4" />
+            {t.portal.subscriptionCard.edit}
+          </Button>
+
+          {!showCancelConfirm ? (
+            <button
+              onClick={() => setShowCancelConfirm(true)}
+              className="flex items-center gap-2 px-4 py-2.5 text-sm font-semibold text-error hover:bg-error/5 rounded-xl transition-colors"
+            >
+              <Trash2 className="w-4 h-4" />
+              {t.portal.subscriptionCard.cancel}
+            </button>
+          ) : (
+            <div className="flex items-center gap-2 animate-in fade-in duration-200">
+              <span className="text-sm text-error font-semibold">{t.portal.subscriptionCard.confirmCancel}</span>
+              <Button
+                variant="outline"
+                onClick={() => { onCancel(subscription.id); setShowCancelConfirm(false); }}
+                isLoading={isCancelling}
+                className="!text-error !border-error/30 hover:!bg-error/5 text-sm"
+              >
+                {t.portal.subscriptionCard.yes}
+              </Button>
+              <button
+                onClick={() => setShowCancelConfirm(false)}
+                className="px-3 py-2 text-sm font-semibold text-muted hover:text-main transition-colors"
+              >
+                {t.portal.subscriptionCard.no}
+              </button>
+            </div>
+          )}
+        </div>
+      )}
+
+      {!isCancelled && subscription.nextStep && subscription.nextStep !== 'COMPLETED' && (
+        <div className="border-t border-border-subtle pt-4 mt-4">
+          <h4 className="text-sm font-bold text-main mb-3">{t.portal.subscriptionCard.requiredAction}</h4>
+          <div className="bg-surface-hover rounded-xl p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div>
+              <p className="font-semibold text-main">{t.portal.subscriptionCard.completeVendorListing}</p>
+              <p className="text-sm text-muted mt-0.5">{t.portal.subscriptionCard.provideDetails}</p>
+            </div>
+            <Button onClick={onNextAction} className="whitespace-nowrap">
+              {t.portal.subscriptionCard.openForm} <ArrowRight className="w-4 h-4" />
+            </Button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

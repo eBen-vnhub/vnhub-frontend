@@ -29,10 +29,10 @@ export function useVendorAdmin() {
     fetchTeam();
   }, [fetchTeam]);
 
-  const handleInvite = async (email: string, role: string) => {
+  const handleInvite = async (email: string) => {
     setIsInviting(true);
     try {
-      await vendorsService.inviteTeamMember({ email, role });
+      await vendorsService.inviteTeamMember({ email, role: 'ADMIN' });
       toast.success('Invitation sent successfully');
       fetchTeam();
     } catch (err: any) {

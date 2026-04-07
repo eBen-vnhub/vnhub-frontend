@@ -1,17 +1,65 @@
 import { useState } from 'react';
 import { useAuth } from '../../../contexts/AuthContext';
 import { useVendors } from '../../../contexts/VendorsContext';
+import { useLanguage } from '../../../i18n/LanguageContext';
 import SubscriptionCard from '../../../components/portal/SubscriptionCard';
 import NextActionModal from '../../../components/portal/NextActionModal';
+import EditSubscriptionModal from '../../../components/portal/EditSubscriptionModal';
+import InlineSubscriptionModal from '../../../components/portal/InlineSubscriptionModal';
 import LoadingSpinner from '../../../components/ui/LoadingSpinner';
+import vendorsService from '../../../services/vendors';
+import toast from 'react-hot-toast';
 
 import { Plus } from 'lucide-react';
 import Button from '../../../components/ui/Button';
+import type { Subscription } from '../../../types';
 
 export default function SubscriptionsPage() {
-  const { displayName, user } = useAuth();
-  const { vendor, subscriptions, isLoading, error } = useVendors();
+  const { displayName } = useAuth();
+  const { vendor, subscriptions, isLoading, error, updateSubscriptionInContext, fetchDashboardData } = useVendors();
+  const { t } = useLanguage();
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isInlineModalOpen, setIsInlineModalOpen] = useState(false);
+  const [editingSubscription, setEditingSubscription] = useState<Subscription | null>(null);
+  const [isSaving, setIsSaving] = useState(false);
+  const [cancellingId, setCancellingId] = useState<number | null>(null);
+
+  const handleEdit = (subscription: Subscription) => {
+    setEditingSubscription(subscription);
+  };
+
+  const handleSaveEdit = async (subscriptionId: number, data: { plan?: string; billingCycle?: string; locations?: string[] }) => {
+    setIsSaving(true);
+    try {
+      const response = await vendorsService.updateSubscription(subscriptionId, data);
+      updateSubscriptionInContext(response.subscription);
+      setEditingSubscription(null);
+      toast.success(t.portal.subscriptionCard.updateSuccess);
+    } catch (err: any) {
+      toast.error(err.response?.data?.error || t.portal.subscriptionCard.updateFailed);
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  const handleCancel = async (subscriptionId: number) => {
+    setCancellingId(subscriptionId);
+    try {
+      const response = await vendorsService.cancelSubscription(subscriptionId);
+      updateSubscriptionInContext(response.subscription);
+      toast.success(t.portal.subscriptionCard.cancelSuccess);
+    } catch (err: any) {
+      toast.error(err.response?.data?.error || t.portal.subscriptionCard.cancelFailed);
+    } finally {
+      setCancellingId(null);
+    }
+  };
+
+  const handleInlineSuccess = async () => {
+    setIsInlineModalOpen(false);
+    toast.success("Subscription successfully added to your account!");
+    await fetchDashboardData();
+  };
 
   if (isLoading) {
     return (
@@ -25,32 +73,28 @@ export default function SubscriptionsPage() {
     <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
       <section className="bg-gradient-to-br from-brand/10 to-brand/5 rounded-3xl p-8 border border-brand/10">
         <h2 className="text-lg font-semibold text-muted mb-2">
-          Hi, <span className="text-main">{displayName}</span>
+          {t.portal.subscriptions.greeting} <span className="text-main">{displayName}</span>
         </h2>
         <h1 className="text-3xl font-bold text-main leading-tight">
-          Welcome to <span className="text-brand">VN Hub</span>!
+          {t.portal.subscriptions.welcomeTitle} <span className="text-brand">{t.portal.subscriptions.welcomeBrand}</span>!
         </h1>
         <p className="text-muted mt-3 max-w-2xl">
-          Manage your subscriptions, complete required forms, and track your progress all in one place.
+          {t.portal.subscriptions.welcomeDescription}
         </p>
       </section>
 
       <section>
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
           <div>
-            <h2 className="text-2xl font-bold text-main">My Subscriptions</h2>
+            <h2 className="text-2xl font-bold text-main">{t.portal.subscriptions.mySubscriptions}</h2>
             <div className="w-12 h-1 bg-brand rounded-full mt-2" />
           </div>
           <Button
             className="flex items-center gap-2"
-            onClick={() => {
-              const base = import.meta.env.VITE_REGISTRATION_FORM_URL;
-              const url = user?.email ? `${base}?email=${encodeURIComponent(user.email)}` : base;
-              window.open(url, '_blank');
-            }}
+            onClick={() => setIsInlineModalOpen(true)}
           >
             <Plus className="w-4 h-4" />
-            Subscribe to new product
+            {t.portal.subscriptions.subscribeNew}
           </Button>
         </div>
 
@@ -67,9 +111,9 @@ export default function SubscriptionsPage() {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
               </svg>
             </div>
-            <h3 className="text-xl font-bold text-main mb-2">No Subscriptions Found</h3>
+            <h3 className="text-xl font-bold text-main mb-2">{t.portal.subscriptions.noSubscriptionsTitle}</h3>
             <p className="text-muted max-w-md mx-auto">
-              You haven't subscribed to any products yet, or your portal is still being created. Check back soon!
+              {t.portal.subscriptions.noSubscriptionsDescription}
             </p>
           </div>
         ) : (
@@ -80,6 +124,9 @@ export default function SubscriptionsPage() {
                 subscription={sub}
                 companyName={vendor.companyName}
                 onNextAction={() => setIsModalOpen(true)}
+                onEdit={handleEdit}
+                onCancel={handleCancel}
+                isCancelling={cancellingId === sub.id}
               />
             ))}
           </div>
@@ -89,6 +136,20 @@ export default function SubscriptionsPage() {
       <NextActionModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
+      />
+
+      <EditSubscriptionModal
+        isOpen={!!editingSubscription}
+        subscription={editingSubscription}
+        onClose={() => setEditingSubscription(null)}
+        onSave={handleSaveEdit}
+        isSaving={isSaving}
+      />
+
+      <InlineSubscriptionModal
+        isOpen={isInlineModalOpen}
+        onClose={() => setIsInlineModalOpen(false)}
+        onSuccess={handleInlineSuccess}
       />
     </div>
   );

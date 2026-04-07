@@ -2,6 +2,7 @@ import { Building, Globe, MapPin, Tag, Lock } from 'lucide-react';
 import Input from '../../../components/ui/Input';
 import Button from '../../../components/ui/Button';
 import { useCompanyProfile } from '../hooks/useCompanyProfile';
+import { useLanguage } from '../../../i18n/LanguageContext';
 import type { Vendor } from '../../../types';
 
 interface CompanyProfileFormProps {
@@ -11,6 +12,7 @@ interface CompanyProfileFormProps {
 
 export default function CompanyProfileForm({ initialData, onUpdate }: CompanyProfileFormProps) {
   const { formData, isSubmitting, canEditCompanyProfile, handleChange, handleSubmit } = useCompanyProfile(initialData, onUpdate);
+  const { t } = useLanguage();
 
   return (
     <div className="bg-surface border border-border shadow-sm rounded-3xl p-6 sm:p-8 animate-in fade-in duration-500">
@@ -18,14 +20,14 @@ export default function CompanyProfileForm({ initialData, onUpdate }: CompanyPro
         <div>
           <h2 className="text-xl font-bold text-main flex items-center gap-2">
             <Building className="w-5 h-5 text-brand" />
-            Company Profile
+            {t.portal.companyProfile.title}
           </h2>
-          <p className="text-sm text-muted mt-1">Manage your business information.</p>
+          <p className="text-sm text-muted mt-1">{t.portal.companyProfile.subtitle}</p>
         </div>
         {!canEditCompanyProfile && (
           <div className="inline-flex items-center gap-2 bg-surface-hover/50 border border-border px-3 py-1.5 rounded-full">
             <Lock className="w-4 h-4 text-muted-foreground" />
-            <span className="text-xs font-medium text-muted-foreground whitespace-nowrap">View Only Mode</span>
+            <span className="text-xs font-medium text-muted-foreground whitespace-nowrap">{t.portal.companyProfile.viewOnlyMode}</span>
           </div>
         )}
       </div>
@@ -34,7 +36,7 @@ export default function CompanyProfileForm({ initialData, onUpdate }: CompanyPro
         <div className="mb-6 p-4 bg-blue-500/10 border border-blue-500/20 rounded-xl flex items-start gap-3">
           <Lock className="w-5 h-5 text-blue-600 mt-0.5" />
           <p className="text-sm text-blue-900 leading-relaxed text-left">
-            <strong>Restricted Access:</strong> Only Super Admins have permission to modify company information. If you need to make changes, please contact your Super Admin.
+            <strong>{t.portal.companyProfile.restrictedAccess}</strong> {t.portal.companyProfile.restrictedMessage}
           </p>
         </div>
       )}
@@ -42,7 +44,7 @@ export default function CompanyProfileForm({ initialData, onUpdate }: CompanyPro
       <form onSubmit={handleSubmit} className="space-y-6">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <Input
-            label="Company Name"
+            label={t.portal.companyProfile.companyName}
             name="companyName"
             value={formData.companyName}
             onChange={handleChange}
@@ -53,7 +55,7 @@ export default function CompanyProfileForm({ initialData, onUpdate }: CompanyPro
           />
 
           <Input
-            label="Headquarters Country"
+            label={t.portal.companyProfile.headquartersCountry}
             name="companyCountry"
             value={formData.companyCountry}
             onChange={handleChange}
@@ -64,7 +66,7 @@ export default function CompanyProfileForm({ initialData, onUpdate }: CompanyPro
           />
 
           <Input
-            label="Business Category"
+            label={t.portal.companyProfile.businessCategory}
             name="businessCategory"
             value={formData.businessCategory}
             onChange={handleChange}
@@ -75,14 +77,14 @@ export default function CompanyProfileForm({ initialData, onUpdate }: CompanyPro
           />
 
           <Input
-            label="Company Website"
+            label={t.portal.companyProfile.companyWebsite}
             name="companyWebsite"
             type="url"
             value={formData.companyWebsite}
             onChange={handleChange}
             icon={<Globe className="w-5 h-5" />}
             disabled={!canEditCompanyProfile}
-            placeholder="https://example.com"
+            placeholder={t.portal.companyProfile.websitePlaceholder}
             className={!canEditCompanyProfile ? 'bg-surface-hover/50 text-muted-foreground select-none' : ''}
           />
         </div>
@@ -94,7 +96,7 @@ export default function CompanyProfileForm({ initialData, onUpdate }: CompanyPro
               isLoading={isSubmitting}
               className="w-full sm:w-auto"
             >
-              Save Changes
+              {t.portal.companyProfile.saveChanges}
             </Button>
           </div>
         )}

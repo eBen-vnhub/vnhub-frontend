@@ -46,9 +46,9 @@ export interface Subscription {
   plan: string;
   billingCycle: string;
   status: string;
-  startDate: string;
-  amount: string;
-  currency: string;
+  nextStep: string;
+  locations: string[];
+  createdAt: string;
 }
 
 export interface Vendor {
@@ -62,6 +62,12 @@ export interface Vendor {
 export interface InviteTeamMemberData {
   email: string;
   role: string;
+}
+
+export interface SubscriptionUpdateData {
+  plan?: string;
+  billingCycle?: string;
+  locations?: string[];
 }
 
 export interface ApiSuccessResponse {

@@ -1,10 +1,12 @@
 import { useState } from 'react';
 import toast from 'react-hot-toast';
+import { useLanguage } from '../../../i18n/LanguageContext';
 import PasswordInput from '../../../components/ui/PasswordInput';
 import Button from '../../../components/ui/Button';
 import authService from '../../../services/auth';
 
 export default function ChangePasswordForm() {
+  const { t } = useLanguage();
   const [oldPassword, setOldPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -14,15 +16,15 @@ export default function ChangePasswordForm() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!oldPassword || !newPassword || !confirmPassword) {
-      setError('All fields are required');
+      setError(t.auth.changePassword.allFieldsRequired);
       return;
     }
     if (newPassword.length < 8) {
-      setError('New password must be at least 8 characters long');
+      setError(t.auth.changePassword.passwordMinLength);
       return;
     }
     if (newPassword !== confirmPassword) {
-      setError('New passwords do not match');
+      setError(t.auth.changePassword.passwordsDoNotMatch);
       return;
     }
 
@@ -31,12 +33,12 @@ export default function ChangePasswordForm() {
 
     try {
       await authService.changePassword({ old_password: oldPassword, new_password: newPassword });
-      toast.success('Password changed successfully');
+      toast.success(t.auth.changePassword.success);
       setOldPassword('');
       setNewPassword('');
       setConfirmPassword('');
     } catch (err: any) {
-      setError(err?.response?.data?.message || 'Failed to change password. Please verify your old password.');
+      setError(err?.response?.data?.message || t.auth.changePassword.failed);
     } finally {
       setIsLoading(false);
     }
@@ -51,31 +53,31 @@ export default function ChangePasswordForm() {
       )}
 
       <PasswordInput
-        label="Current Password"
+        label={t.auth.changePassword.currentPassword}
         value={oldPassword}
         onChange={(val) => setOldPassword(val)}
-        placeholder="Enter your current password"
+        placeholder={t.auth.changePassword.currentPasswordPlaceholder}
         disabled={isLoading}
       />
 
       <PasswordInput
-        label="New Password"
+        label={t.auth.changePassword.newPassword}
         value={newPassword}
         onChange={(val) => setNewPassword(val)}
-        placeholder="Enter your new password"
+        placeholder={t.auth.changePassword.newPasswordPlaceholder}
         disabled={isLoading}
       />
 
       <PasswordInput
-        label="Confirm New Password"
+        label={t.auth.changePassword.confirmPassword}
         value={confirmPassword}
         onChange={(val) => setConfirmPassword(val)}
-        placeholder="Confirm your new password"
+        placeholder={t.auth.changePassword.confirmPasswordPlaceholder}
         disabled={isLoading}
       />
 
       <Button type="submit" isLoading={isLoading} className="w-full">
-        Update Password
+        {t.auth.changePassword.updatePassword}
       </Button>
     </form>
   );

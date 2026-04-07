@@ -1,4 +1,5 @@
 import { X } from 'lucide-react';
+import { useLanguage } from '../../i18n/LanguageContext';
 import Button from '../ui/Button';
 
 interface NextActionModalProps {
@@ -7,6 +8,8 @@ interface NextActionModalProps {
 }
 
 export default function NextActionModal({ isOpen, onClose }: NextActionModalProps) {
+  const { t } = useLanguage();
+
   if (!isOpen) return null;
 
   return (
@@ -18,7 +21,7 @@ export default function NextActionModal({ isOpen, onClose }: NextActionModalProp
 
       <div className="relative bg-surface rounded-3xl shadow-2xl w-full max-w-2xl overflow-hidden animate-in zoom-in-95 duration-200">
         <div className="flex items-center justify-between px-6 py-4 border-b border-border-subtle bg-surface-hover/50">
-          <h2 className="text-lg font-bold text-main">Vendor Listing Form</h2>
+          <h2 className="text-lg font-bold text-main">{t.portal.nextActionModal.title}</h2>
           <button
             onClick={onClose}
             className="p-2 -mr-2 text-muted hover:text-main hover:bg-surface-hover rounded-full transition-colors"
@@ -33,13 +36,13 @@ export default function NextActionModal({ isOpen, onClose }: NextActionModalProp
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
           </div>
-          <h3 className="text-xl font-bold text-main mb-2">Coming Soon</h3>
+          <h3 className="text-xl font-bold text-main mb-2">{t.portal.nextActionModal.comingSoon}</h3>
           <p className="text-muted max-w-md mx-auto">
-            The external vendor listing form integration will be rendered here.
+            {t.portal.nextActionModal.description}
           </p>
 
           <Button variant="outline" className="mt-8" onClick={onClose}>
-            Close Window
+            {t.portal.nextActionModal.close}
           </Button>
         </div>
       </div>
