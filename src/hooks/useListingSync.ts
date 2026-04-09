@@ -15,6 +15,15 @@ export function useListingSync({ onSuccess }: UseListingSyncProps) {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+    if (iframeRef.current && iframeRef.current.contentWindow) {
+      iframeRef.current.contentWindow.postMessage({
+        type: 'SYNC_LANGUAGE',
+        language: language
+      }, '*');
+    }
+  }, [language]);
+
+  useEffect(() => {
     const handleMessage = (event: MessageEvent) => {
       if (event.data?.type === 'LISTING_SUCCESS') {
         onSuccess();
@@ -22,7 +31,7 @@ export function useListingSync({ onSuccess }: UseListingSyncProps) {
     };
 
     window.addEventListener('message', handleMessage);
-    
+
     return () => {
       window.removeEventListener('message', handleMessage);
       setIsLoading(true);
@@ -31,7 +40,7 @@ export function useListingSync({ onSuccess }: UseListingSyncProps) {
 
   const handleIframeLoad = () => {
     setIsLoading(false);
-    
+
     if (iframeRef.current && iframeRef.current.contentWindow && vendor && user) {
       const payload = {
         type: 'SYNC_LISTING_DATA',
@@ -44,12 +53,12 @@ export function useListingSync({ onSuccess }: UseListingSyncProps) {
           firstName: user.firstName || '',
           lastName: user.lastName || '',
           email: user.email || '',
-          mobileCountryCode: '',
-          mobileNumber: '',
+          mobileCountryCode: user.mobileCountryCode || '',
+          mobileNumber: user.mobileNumber || '',
         },
         language: language
       };
-      
+
       iframeRef.current.contentWindow.postMessage(payload, '*');
     }
   };
