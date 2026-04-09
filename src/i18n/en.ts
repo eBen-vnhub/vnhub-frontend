@@ -121,9 +121,11 @@ export const en = {
       cancelFailed: "Failed to cancel subscription.",
     },
     nextActionModal: {
-      title: "Vendor Listing Form",
+      title: "Next Step: Benefit Listing",
       comingSoon: "Coming Soon",
-      description: "The external vendor listing form integration will be rendered here.",
+      description: "You've successfully completed your Vendor Listing! The next required step is to set up your VN Benefits profile.",
+      continue: "Start Benefit Listing",
+      later: "Do it later",
       close: "Close Window",
     },
     companyProfile: {
