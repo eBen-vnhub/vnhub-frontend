@@ -121,9 +121,11 @@ export const ar = {
       cancelFailed: "فشل إلغاء الاشتراك.",
     },
     nextActionModal: {
-      title: "نموذج بيانات المورد",
+      title: "الخطوة التالية: تسجيل المنافع",
       comingSoon: "قريباً",
-      description: "سيتم عرض نموذج بيانات المورد الخارجي هنا.",
+      description: "لقد أكملت تسجيل المورد بنجاح! الخطوة التالية المطلوبة هي إعداد ملف تعريف VN Benefits الخاص بك.",
+      continue: "ابدأ تسجيل المنافع",
+      later: "ذكرني لاحقاً",
       close: "إغلاق النافذة",
     },
     companyProfile: {

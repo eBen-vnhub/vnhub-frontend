@@ -3,6 +3,7 @@ import { useAuth } from '../../../contexts/AuthContext';
 import { useVendors } from '../../../contexts/VendorsContext';
 import { useLanguage } from '../../../i18n/LanguageContext';
 import SubscriptionCard from '../../../components/portal/SubscriptionCard';
+import VendorListingModal from '../../../components/portal/VendorListingModal';
 import NextActionModal from '../../../components/portal/NextActionModal';
 import EditSubscriptionModal from '../../../components/portal/EditSubscriptionModal';
 import InlineSubscriptionModal from '../../../components/portal/InlineSubscriptionModal';
@@ -19,6 +20,7 @@ export default function SubscriptionsPage() {
   const { vendor, subscriptions, isLoading, error, updateSubscriptionInContext, fetchDashboardData } = useVendors();
   const { t } = useLanguage();
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isNextActionModalOpen, setIsNextActionModalOpen] = useState(false);
   const [isInlineModalOpen, setIsInlineModalOpen] = useState(false);
   const [editingSubscription, setEditingSubscription] = useState<Subscription | null>(null);
   const [isSaving, setIsSaving] = useState(false);
@@ -59,6 +61,12 @@ export default function SubscriptionsPage() {
     setIsInlineModalOpen(false);
     toast.success("Subscription successfully added to your account!");
     await fetchDashboardData();
+  };
+
+  const handleVendorListingSuccess = async () => {
+    setIsModalOpen(false);
+    await fetchDashboardData();
+    setIsNextActionModalOpen(true);
   };
 
   if (isLoading) {
@@ -133,9 +141,19 @@ export default function SubscriptionsPage() {
         )}
       </section>
 
-      <NextActionModal
+      <VendorListingModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
+        onSuccess={handleVendorListingSuccess}
+      />
+
+      <NextActionModal
+        isOpen={isNextActionModalOpen}
+        onClose={() => setIsNextActionModalOpen(false)}
+        onContinue={() => {
+          setIsNextActionModalOpen(false);
+          toast.success("Benefit Listing will open soon!");
+        }}
       />
 
       <EditSubscriptionModal
