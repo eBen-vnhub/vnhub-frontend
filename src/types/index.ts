@@ -29,6 +29,8 @@ export interface User {
   companyName: string;
   firstName: string;
   lastName: string;
+  mobileCountryCode?: string;
+  mobileNumber?: string;
   role?: string;
 }
 
