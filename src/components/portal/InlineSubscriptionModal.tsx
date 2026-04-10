@@ -52,12 +52,13 @@ export default function InlineSubscriptionModal({ isOpen, onClose, onSuccess, ne
     if (iframeRef.current && iframeRef.current.contentWindow && vendor && user) {
       const payload = {
         type: 'SYNC_PORTAL_DATA',
+        existingVendorId: newBranch ? undefined : vendor.id,
         company: {
           companyName: vendor.companyName || '',
           companyWebsite: vendor.companyWebsite || '',
           country: newBranch ? '' : (vendor.companyCountry || ''),
-          businessTypeB2C: false,
-          businessTypeB2B: false,
+          businessTypeB2C: vendor.businessTypeB2C || false,
+          businessTypeB2B: vendor.businessTypeB2B || false,
           businessCategory: vendor.businessCategory || '',
         },
         personal: {

@@ -3,7 +3,7 @@ import { useAuth } from '../../../contexts/AuthContext';
 import { useVendors } from '../../../contexts/VendorsContext';
 import { useLanguage } from '../../../i18n/LanguageContext';
 import SubscriptionCard from '../../../components/portal/SubscriptionCard';
-import VendorListingModal from '../../../components/portal/VendorListingModal';
+import InlineSubscriptionModal from '../../../components/portal/InlineSubscriptionModal';
 import NextActionModal from '../../../components/portal/NextActionModal';
 import EditSubscriptionModal from '../../../components/portal/EditSubscriptionModal';
 import LoadingSpinner from '../../../components/ui/LoadingSpinner';
@@ -135,10 +135,11 @@ export default function SubscriptionsPage() {
         )}
       </section>
 
-      <VendorListingModal
+      <InlineSubscriptionModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         onSuccess={handleVendorListingSuccess}
+        newBranch={false}
       />
 
       <NextActionModal

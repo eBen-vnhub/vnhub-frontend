@@ -191,6 +191,9 @@ export const en = {
       updateSuccess: "Profile updated successfully.",
       updateFailed: "Failed to update profile.",
     },
+    footer: {
+      allRightsReserved: "© 2026 eBen All rights reserved",
+    },
   },
   common: {
     loading: "Loading...",

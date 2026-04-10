@@ -14,10 +14,13 @@ export function useCompanyProfile(initialData: Vendor, onUpdate: (vendor: Vendor
     companyCountry: initialData.companyCountry || '',
     businessCategory: initialData.businessCategory || '',
     companyWebsite: initialData.companyWebsite || '',
+    businessTypeB2C: initialData.businessTypeB2C || false,
+    businessTypeB2B: initialData.businessTypeB2B || false,
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+    const value = e.target.type === 'checkbox' ? e.target.checked : e.target.value;
+    setFormData((prev) => ({ ...prev, [e.target.name]: value }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {

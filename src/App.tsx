@@ -5,6 +5,7 @@ import LoginPage from './features/auth/pages/LoginPage';
 import ForgotPasswordPage from './features/auth/pages/ForgotPasswordPage';
 import ResetPasswordPage from './features/auth/pages/ResetPasswordPage';
 import SetPasswordPage from './features/auth/pages/SetPasswordPage';
+import WorkspaceSelectionPage from './features/portal/pages/WorkspaceSelectionPage';
 import PortalLayout from './layouts/PortalLayout';
 import SubscriptionsPage from './features/portal/pages/SubscriptionsPage';
 import CompanyProfilePage from './features/portal/pages/CompanyProfilePage';
@@ -22,6 +23,12 @@ export default function App() {
         <Route path="/forgot-password" element={<ForgotPasswordPage />} />
         <Route path="/reset-password" element={<ResetPasswordPage />} />
         <Route path="/set-password" element={<SetPasswordPage />} />
+        
+        <Route path="/select-workspace" element={
+          <ProtectedRoute>
+            <WorkspaceSelectionPage />
+          </ProtectedRoute>
+        } />
 
         <Route path="/portal" element={
           <ProtectedRoute>

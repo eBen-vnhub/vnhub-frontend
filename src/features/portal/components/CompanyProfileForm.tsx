@@ -89,22 +89,39 @@ export default function CompanyProfileForm({ initialData, onUpdate }: CompanyPro
           />
         </div>
 
-        {(initialData.businessTypeB2C || initialData.businessTypeB2B) && (
-          <div className="flex flex-wrap gap-2 pt-2">
-            {initialData.businessTypeB2C && (
-              <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-700 border border-emerald-500/20">
-                <Tag className="w-3 h-3" />
-                {t.portal.companyProfile.b2c}
-              </span>
-            )}
-            {initialData.businessTypeB2B && (
-              <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold bg-blue-500/10 text-blue-700 border border-blue-500/20">
-                <Tag className="w-3 h-3" />
-                {t.portal.companyProfile.b2b}
-              </span>
-            )}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2">
+          <div className={`flex items-center gap-3 p-4 rounded-xl border ${!canEditCompanyProfile ? 'bg-surface-hover/50 border-border/50' : 'bg-surface border-border hover:border-brand/30'}`}>
+            <input
+              type="checkbox"
+              id="businessTypeB2C"
+              name="businessTypeB2C"
+              checked={formData.businessTypeB2C}
+              onChange={handleChange}
+              disabled={!canEditCompanyProfile}
+              className="w-5 h-5 rounded border-border text-brand focus:ring-brand accent-brand disabled:opacity-50"
+            />
+            <label htmlFor="businessTypeB2C" className={`text-sm font-medium flex items-center gap-2 ${!canEditCompanyProfile ? 'text-muted-foreground' : 'text-main'}`}>
+              <Tag className="w-4 h-4 text-emerald-500" />
+              {t.portal.companyProfile.b2c}
+            </label>
           </div>
-        )}
+          
+          <div className={`flex items-center gap-3 p-4 rounded-xl border ${!canEditCompanyProfile ? 'bg-surface-hover/50 border-border/50' : 'bg-surface border-border hover:border-brand/30'}`}>
+            <input
+              type="checkbox"
+              id="businessTypeB2B"
+              name="businessTypeB2B"
+              checked={formData.businessTypeB2B}
+              onChange={handleChange}
+              disabled={!canEditCompanyProfile}
+              className="w-5 h-5 rounded border-border text-brand focus:ring-brand accent-brand disabled:opacity-50"
+            />
+            <label htmlFor="businessTypeB2B" className={`text-sm font-medium flex items-center gap-2 ${!canEditCompanyProfile ? 'text-muted-foreground' : 'text-main'}`}>
+              <Tag className="w-4 h-4 text-blue-500" />
+              {t.portal.companyProfile.b2b}
+            </label>
+          </div>
+        </div>
 
         {canEditCompanyProfile && (
           <div className="flex justify-end pt-4 border-t border-border">

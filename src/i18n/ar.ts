@@ -191,6 +191,9 @@ export const ar = {
       updateSuccess: "تم تحديث الملف الشخصي بنجاح.",
       updateFailed: "فشل تحديث الملف الشخصي.",
     },
+    footer: {
+      allRightsReserved: "© 2026 eBen جميع الحقوق محفوظة",
+    },
   },
   common: {
     loading: "جاري التحميل...",

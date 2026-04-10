@@ -1,29 +1,20 @@
-import { Outlet } from 'react-router-dom';
-import { useState, useEffect } from 'react';
+import { Navigate, Outlet, useLocation } from 'react-router-dom';
 import { useLanguage } from '../i18n/LanguageContext';
 import { useAuth } from '../contexts/AuthContext';
 import Header from '../components/portal/Header';
 import Sidebar from '../components/portal/Sidebar';
 import Footer from '../components/portal/Footer';
-import WorkspaceSelectionModal from '../components/portal/WorkspaceSelectionModal';
 
 export default function PortalLayout() {
   const { direction } = useLanguage();
   const { user } = useAuth();
-  const [showWorkspaceSelection, setShowWorkspaceSelection] = useState(false);
+  const location = useLocation();
 
-  useEffect(() => {
-    if (user && user.workspaces && user.workspaces.length > 1) {
-      if (!sessionStorage.getItem('workspace_selected')) {
-        setShowWorkspaceSelection(true);
-      }
+  if (user && user.workspaces && user.workspaces.length > 1) {
+    if (!sessionStorage.getItem('workspace_selected')) {
+      return <Navigate to="/select-workspace" state={{ from: location }} replace />;
     }
-  }, [user]);
-
-  const handleSelectionClose = () => {
-    sessionStorage.setItem('workspace_selected', 'true');
-    setShowWorkspaceSelection(false);
-  };
+  }
 
   return (
     <div dir={direction} className="min-h-screen flex flex-col bg-surface-hover">
@@ -39,11 +30,6 @@ export default function PortalLayout() {
           <Footer />
         </main>
       </div>
-
-      <WorkspaceSelectionModal 
-        isOpen={showWorkspaceSelection} 
-        onClose={handleSelectionClose} 
-      />
     </div>
   );
 }
