@@ -85,6 +85,11 @@ export const ar = {
       companyProfile: "ملف الشركة",
       vendorAdmin: "لوحة إدارة الفريق",
     },
+    workspace: {
+      switchWorkspace: "تبديل مساحة العمل",
+      addNewBranch: "إضافة فرع جديد",
+      currentWorkspace: "مساحة العمل الحالية",
+    },
     subscriptions: {
       greeting: "مرحباً،",
       welcomeTitle: "أهلاً بك في",

@@ -1,19 +1,24 @@
+import { useState } from 'react';
 import { Home, Building, Users } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
 import { useLanguage } from '../../i18n/LanguageContext';
+import WorkspaceSwitcher from './WorkspaceSwitcher';
+import VendorListingModal from './VendorListingModal';
 
 export default function Sidebar() {
   const { t } = useLanguage();
+  const [showListingModal, setShowListingModal] = useState(false);
 
   return (
     <aside className="w-64 flex-shrink-0 hidden md:block">
       <div className="sticky top-24 me-8">
+        <WorkspaceSwitcher onAddBranch={() => setShowListingModal(true)} />
+
         <nav className="space-y-2">
-          <NavLink 
-            to="/portal" 
-            className={({ isActive }) => 
-              `flex items-center gap-3 px-4 py-3 rounded-xl transition-all font-semibold text-sm ${
-                isActive ? 'bg-brand text-white shadow-md shadow-brand/20' : 'text-main hover:bg-surface-hover hover:text-brand'
+          <NavLink
+            to="/portal"
+            className={({ isActive }) =>
+              `flex items-center gap-3 px-4 py-3 rounded-xl transition-all font-semibold text-sm ${isActive ? 'bg-brand text-white shadow-md shadow-brand/20' : 'text-main hover:bg-surface-hover hover:text-brand'
               }`
             }
             end
@@ -22,11 +27,10 @@ export default function Sidebar() {
             <span>{t.portal.sidebar.home}</span>
           </NavLink>
 
-          <NavLink 
-            to="/portal/company-profile" 
-            className={({ isActive }) => 
-              `flex items-center gap-3 px-4 py-3 rounded-xl transition-all font-semibold text-sm ${
-                isActive ? 'bg-brand text-white shadow-md shadow-brand/20' : 'text-main hover:bg-surface-hover hover:text-brand'
+          <NavLink
+            to="/portal/company-profile"
+            className={({ isActive }) =>
+              `flex items-center gap-3 px-4 py-3 rounded-xl transition-all font-semibold text-sm ${isActive ? 'bg-brand text-white shadow-md shadow-brand/20' : 'text-main hover:bg-surface-hover hover:text-brand'
               }`
             }
           >
@@ -34,11 +38,10 @@ export default function Sidebar() {
             <span>{t.portal.sidebar.companyProfile}</span>
           </NavLink>
 
-          <NavLink 
-            to="/portal/admin" 
-            className={({ isActive }) => 
-              `flex items-center gap-3 px-4 py-3 rounded-xl transition-all font-semibold text-sm ${
-                isActive ? 'bg-brand text-white shadow-md shadow-brand/20' : 'text-main hover:bg-surface-hover hover:text-brand'
+          <NavLink
+            to="/portal/admin"
+            className={({ isActive }) =>
+              `flex items-center gap-3 px-4 py-3 rounded-xl transition-all font-semibold text-sm ${isActive ? 'bg-brand text-white shadow-md shadow-brand/20' : 'text-main hover:bg-surface-hover hover:text-brand'
               }`
             }
           >
@@ -47,6 +50,11 @@ export default function Sidebar() {
           </NavLink>
         </nav>
       </div>
+
+      <VendorListingModal
+        isOpen={showListingModal}
+        onClose={() => setShowListingModal(false)}
+      />
     </aside>
   );
 }
