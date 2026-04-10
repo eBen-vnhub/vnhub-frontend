@@ -89,6 +89,8 @@ export const en = {
       switchWorkspace: "Switch Workspace",
       addNewBranch: "Add New Branch",
       currentWorkspace: "Current Workspace",
+      selectWorkspace: "Select a Workspace",
+      selectWorkspaceDesc: "You belong to multiple workspaces. Please select one to continue.",
     },
     subscriptions: {
       greeting: "Hi,",
@@ -149,6 +151,8 @@ export const en = {
       updateFailed: "Failed to update company profile",
       loadingProfile: "Loading company profile...",
       loadFailed: "Failed to load company profile",
+      b2c: "B2C",
+      b2b: "B2B",
     },
     vendorAdmin: {
       title: "Vendor Administration",
@@ -176,6 +180,7 @@ export const en = {
       subtitle: "Manage your personal information.",
       firstName: "First Name",
       lastName: "Last Name",
+      jobTitle: "Job Title",
       email: "Email Address",
       role: "Current Role",
       primaryAdmin: "Primary Admin",

@@ -31,6 +31,7 @@ export default function UserProfileForm() {
           handleSubmit(e, {
             firstName: data.get('firstName') as string,
             lastName: data.get('lastName') as string,
+            jobTitle: data.get('jobTitle') as string,
           });
         }} 
         className="space-y-6"
@@ -48,6 +49,12 @@ export default function UserProfileForm() {
             name="lastName"
             defaultValue={userProfile.lastName || ''}
             required
+          />
+
+          <Input
+            label={t.portal.userProfile.jobTitle}
+            name="jobTitle"
+            defaultValue={userProfile.jobTitle || ''}
           />
 
           <Input

@@ -4,12 +4,15 @@ import { useAuth } from '../../contexts/AuthContext';
 import { useLanguage } from '../../i18n/LanguageContext';
 import EbenLogo from '../ui/EbenLogo';
 import LanguageSwitcher from '../ui/LanguageSwitcher';
+import WorkspaceSwitcher from './WorkspaceSwitcher';
+import InlineSubscriptionModal from './InlineSubscriptionModal';
 import { LogOut, ChevronDown, Lock, User as UserIcon } from 'lucide-react';
 
 export default function Header() {
   const { user, displayName, logout } = useAuth();
   const { t, direction } = useLanguage();
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
+  const [showBranchModal, setShowBranchModal] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -73,6 +76,10 @@ export default function Header() {
                         </p>
                       </div>
 
+                      <div className="block md:hidden px-3 pt-3">
+                         <WorkspaceSwitcher onAddBranch={() => { setIsProfileMenuOpen(false); setShowBranchModal(true); }} />
+                      </div>
+
                       <div className="p-2 space-y-0.5">
                         <Link
                           to="/portal/profile"
@@ -121,6 +128,16 @@ export default function Header() {
       </header>
 
       <div className="h-16" />
+
+      <InlineSubscriptionModal
+        isOpen={showBranchModal}
+        onClose={() => setShowBranchModal(false)}
+        onSuccess={() => {
+          setShowBranchModal(false);
+          window.location.reload();
+        }}
+        newBranch={true}
+      />
     </>
   );
 }
