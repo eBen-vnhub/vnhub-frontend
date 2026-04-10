@@ -85,6 +85,11 @@ export const en = {
       companyProfile: "Company Profile",
       vendorAdmin: "Vendor Administration Panel",
     },
+    workspace: {
+      switchWorkspace: "Switch Workspace",
+      addNewBranch: "Add New Branch",
+      currentWorkspace: "Current Workspace",
+    },
     subscriptions: {
       greeting: "Hi,",
       welcomeTitle: "Welcome to",

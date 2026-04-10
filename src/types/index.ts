@@ -23,6 +23,12 @@ export interface ChangePasswordData {
   new_password: string;
 }
 
+export interface Workspace {
+  id: number;
+  company_name: string;
+  company_country: string;
+}
+
 export interface User {
   id: string;
   email: string;
@@ -32,6 +38,7 @@ export interface User {
   mobileCountryCode?: string;
   mobileNumber?: string;
   role?: string;
+  workspaces?: Workspace[];
 }
 
 export interface AuthState {
