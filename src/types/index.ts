@@ -40,6 +40,7 @@ export interface User {
   mobileNumber?: string;
   role?: string;
   workspaces?: Workspace[];
+  vendor_profile?: Vendor;
 }
 
 export interface AuthState {
