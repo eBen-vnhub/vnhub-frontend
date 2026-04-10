@@ -19,7 +19,6 @@ export default function WorkspaceSwitcher({ onAddBranch }: WorkspaceSwitcherProp
   const workspaces: Workspace[] = user?.workspaces || [];
   const activeWorkspace = workspaces.find(w => w.id === vendor?.id);
   const displayName = activeWorkspace?.company_name || vendor?.companyName || '';
-  const displayCountry = activeWorkspace?.company_country || vendor?.companyCountry || '';
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
