@@ -4,12 +4,10 @@ import { useAuth } from '../../../contexts/AuthContext';
 import { Navigate, useNavigate } from 'react-router-dom';
 import vendorsService from '../../../services/vendors';
 import { useState } from 'react';
-import { useVendors } from '../../../contexts/VendorsContext';
 
 export default function WorkspaceSelectionPage() {
   const { t, direction } = useLanguage();
   const { user } = useAuth();
-  const { vendor } = useVendors();
   const navigate = useNavigate();
   const [isSwitching, setIsSwitching] = useState<number | null>(null);
 
@@ -24,7 +22,7 @@ export default function WorkspaceSelectionPage() {
     return <Navigate to="/portal" replace />;
   }
 
-  const currentVendorId = vendor?.id;
+  const currentVendorId = user.vendor_profile?.id;
 
   const handleSelect = async (workspaceId: number) => {
     if (workspaceId === currentVendorId) {
