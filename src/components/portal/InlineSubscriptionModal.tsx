@@ -8,9 +8,10 @@ interface InlineSubscriptionModalProps {
   isOpen: boolean;
   onClose: () => void;
   onSuccess: () => void;
+  newBranch?: boolean;
 }
 
-export default function InlineSubscriptionModal({ isOpen, onClose, onSuccess }: InlineSubscriptionModalProps) {
+export default function InlineSubscriptionModal({ isOpen, onClose, onSuccess, newBranch }: InlineSubscriptionModalProps) {
   const { user } = useAuth();
   const { vendor } = useVendors();
   const { language } = useLanguage();
@@ -34,7 +35,16 @@ export default function InlineSubscriptionModal({ isOpen, onClose, onSuccess }: 
       window.removeEventListener('message', handleMessage);
       setIsLoading(true);
     };
-  }, [isOpen, onSuccess, formUrl]);
+  }, [isOpen, onSuccess]);
+
+  useEffect(() => {
+    if (isOpen && iframeRef.current?.contentWindow) {
+      iframeRef.current.contentWindow.postMessage({
+        type: 'CHANGE_LANGUAGE',
+        language: language
+      }, '*');
+    }
+  }, [language, isOpen]);
 
   const handleIframeLoad = () => {
     setIsLoading(false);
@@ -45,7 +55,7 @@ export default function InlineSubscriptionModal({ isOpen, onClose, onSuccess }: 
         company: {
           companyName: vendor.companyName || '',
           companyWebsite: vendor.companyWebsite || '',
-          country: vendor.companyCountry || '',
+          country: newBranch ? '' : (vendor.companyCountry || ''),
           businessTypeB2C: false,
           businessTypeB2B: false,
           businessCategory: vendor.businessCategory || '',
@@ -94,7 +104,7 @@ export default function InlineSubscriptionModal({ isOpen, onClose, onSuccess }: 
 
         <iframe
           ref={iframeRef}
-          src={`${formUrl}?embed=true`}
+          src={`${formUrl}?embed=true${newBranch ? '&skipPersonal=true&newBranch=true' : ''}`}
           className="w-full flex-1 border-none bg-transparent relative z-0"
           onLoad={handleIframeLoad}
           title="Subscribe to new product"

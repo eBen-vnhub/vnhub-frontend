@@ -3,6 +3,7 @@ import { ChevronDown, Plus, Building2, Check } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
 import { useVendors } from '../../contexts/VendorsContext';
 import { useLanguage } from '../../i18n/LanguageContext';
+import vendorsService from '../../services/vendors';
 import type { Workspace } from '../../types';
 
 interface WorkspaceSwitcherProps {
@@ -34,6 +35,18 @@ export default function WorkspaceSwitcher({ onAddBranch }: WorkspaceSwitcherProp
     return null;
   }
 
+  const handleSwitchWorkspace = async (workspaceId: number) => {
+    setIsOpen(false);
+    if (workspaceId === vendor?.id) return;
+    
+    try {
+      await vendorsService.switchWorkspace(workspaceId);
+      window.location.reload();
+    } catch (err) {
+      console.error('Failed to switch workspace', err);
+    }
+  };
+
   return (
     <div ref={dropdownRef} className="relative mb-6">
       <button
@@ -56,7 +69,7 @@ export default function WorkspaceSwitcher({ onAddBranch }: WorkspaceSwitcherProp
             {workspaces.map((ws) => (
               <button
                 key={ws.id}
-                onClick={() => setIsOpen(false)}
+                onClick={() => handleSwitchWorkspace(ws.id)}
                 className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg transition-colors ${
                   ws.id === vendor?.id
                     ? 'bg-brand/10 text-brand'

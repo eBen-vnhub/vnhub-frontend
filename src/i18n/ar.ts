@@ -89,6 +89,8 @@ export const ar = {
       switchWorkspace: "تبديل مساحة العمل",
       addNewBranch: "إضافة فرع جديد",
       currentWorkspace: "مساحة العمل الحالية",
+      selectWorkspace: "اختر مساحة عمل",
+      selectWorkspaceDesc: "أنت تنتمي إلى مساحات عمل (شركات/فروع) متعددة. يرجى اختيار واحدة للمتابعة.",
     },
     subscriptions: {
       greeting: "مرحباً،",
@@ -149,6 +151,8 @@ export const ar = {
       updateFailed: "فشل تحديث ملف الشركة",
       loadingProfile: "جاري تحميل ملف الشركة...",
       loadFailed: "فشل تحميل ملف الشركة",
+      b2c: "من شركة إلى مستهلك",
+      b2b: "من شركة إلى شركة",
     },
     vendorAdmin: {
       title: "إدارة الفريق",
@@ -176,6 +180,7 @@ export const ar = {
       subtitle: "إدارة بياناتك الشخصية.",
       firstName: "الاسم الأول",
       lastName: "الاسم الأخير",
+      jobTitle: "المسمى الوظيفي",
       email: "البريد الإلكتروني",
       role: "الدور الحالي",
       primaryAdmin: "المسؤول الرئيسي",

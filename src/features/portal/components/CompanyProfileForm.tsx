@@ -89,6 +89,23 @@ export default function CompanyProfileForm({ initialData, onUpdate }: CompanyPro
           />
         </div>
 
+        {(initialData.businessTypeB2C || initialData.businessTypeB2B) && (
+          <div className="flex flex-wrap gap-2 pt-2">
+            {initialData.businessTypeB2C && (
+              <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-700 border border-emerald-500/20">
+                <Tag className="w-3 h-3" />
+                {t.portal.companyProfile.b2c}
+              </span>
+            )}
+            {initialData.businessTypeB2B && (
+              <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold bg-blue-500/10 text-blue-700 border border-blue-500/20">
+                <Tag className="w-3 h-3" />
+                {t.portal.companyProfile.b2b}
+              </span>
+            )}
+          </div>
+        )}
+
         {canEditCompanyProfile && (
           <div className="flex justify-end pt-4 border-t border-border">
             <Button

@@ -35,6 +35,7 @@ export interface User {
   companyName: string;
   firstName: string;
   lastName: string;
+  jobTitle?: string;
   mobileCountryCode?: string;
   mobileNumber?: string;
   role?: string;
@@ -66,6 +67,8 @@ export interface Vendor {
   companyWebsite: string;
   companyCountry: string;
   businessCategory: string;
+  businessTypeB2C?: boolean;
+  businessTypeB2B?: boolean;
 }
 
 export interface InviteTeamMemberData {

@@ -3,16 +3,16 @@ import { Home, Building, Users } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
 import { useLanguage } from '../../i18n/LanguageContext';
 import WorkspaceSwitcher from './WorkspaceSwitcher';
-import VendorListingModal from './VendorListingModal';
+import InlineSubscriptionModal from './InlineSubscriptionModal';
 
 export default function Sidebar() {
   const { t } = useLanguage();
-  const [showListingModal, setShowListingModal] = useState(false);
+  const [showBranchModal, setShowBranchModal] = useState(false);
 
   return (
     <aside className="w-64 flex-shrink-0 hidden md:block">
       <div className="sticky top-24 me-8">
-        <WorkspaceSwitcher onAddBranch={() => setShowListingModal(true)} />
+        <WorkspaceSwitcher onAddBranch={() => setShowBranchModal(true)} />
 
         <nav className="space-y-2">
           <NavLink
@@ -51,9 +51,14 @@ export default function Sidebar() {
         </nav>
       </div>
 
-      <VendorListingModal
-        isOpen={showListingModal}
-        onClose={() => setShowListingModal(false)}
+      <InlineSubscriptionModal
+        isOpen={showBranchModal}
+        onClose={() => setShowBranchModal(false)}
+        onSuccess={() => {
+          setShowBranchModal(false);
+          window.location.reload();
+        }}
+        newBranch={true}
       />
     </aside>
   );

@@ -51,6 +51,12 @@ const vendorsService = {
     request<ApiSuccessResponse & { subscription: Subscription }>(`/vendors/subscriptions/${subscriptionId}/`, {
       method: 'DELETE',
     }),
+
+  switchWorkspace: (workspaceId: number) =>
+    request<ApiSuccessResponse>('/vendors/workspace/switch/', {
+      method: 'POST',
+      body: JSON.stringify({ workspace_id: workspaceId }),
+    }),
 };
 
 export default vendorsService;

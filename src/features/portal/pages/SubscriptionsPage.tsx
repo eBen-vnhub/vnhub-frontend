@@ -6,7 +6,6 @@ import SubscriptionCard from '../../../components/portal/SubscriptionCard';
 import VendorListingModal from '../../../components/portal/VendorListingModal';
 import NextActionModal from '../../../components/portal/NextActionModal';
 import EditSubscriptionModal from '../../../components/portal/EditSubscriptionModal';
-import InlineSubscriptionModal from '../../../components/portal/InlineSubscriptionModal';
 import LoadingSpinner from '../../../components/ui/LoadingSpinner';
 import vendorsService from '../../../services/vendors';
 import toast from 'react-hot-toast';
@@ -21,7 +20,6 @@ export default function SubscriptionsPage() {
   const { t } = useLanguage();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isNextActionModalOpen, setIsNextActionModalOpen] = useState(false);
-  const [isInlineModalOpen, setIsInlineModalOpen] = useState(false);
   const [editingSubscription, setEditingSubscription] = useState<Subscription | null>(null);
   const [isSaving, setIsSaving] = useState(false);
   const [cancellingId, setCancellingId] = useState<number | null>(null);
@@ -57,11 +55,7 @@ export default function SubscriptionsPage() {
     }
   };
 
-  const handleInlineSuccess = async () => {
-    setIsInlineModalOpen(false);
-    toast.success("Subscription successfully added to your account!");
-    await fetchDashboardData();
-  };
+
 
   const handleVendorListingSuccess = async () => {
     setIsModalOpen(false);
@@ -99,7 +93,7 @@ export default function SubscriptionsPage() {
           </div>
           <Button
             className="flex items-center gap-2"
-            onClick={() => setIsInlineModalOpen(true)}
+            onClick={() => setIsModalOpen(true)}
           >
             <Plus className="w-4 h-4" />
             {t.portal.subscriptions.subscribeNew}
@@ -162,12 +156,6 @@ export default function SubscriptionsPage() {
         onClose={() => setEditingSubscription(null)}
         onSave={handleSaveEdit}
         isSaving={isSaving}
-      />
-
-      <InlineSubscriptionModal
-        isOpen={isInlineModalOpen}
-        onClose={() => setIsInlineModalOpen(false)}
-        onSuccess={handleInlineSuccess}
       />
     </div>
   );
