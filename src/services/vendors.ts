@@ -10,7 +10,7 @@ import type {
 
 const vendorsService = {
   getDashboardData: () =>
-    request<{ vendor: Vendor; subscriptions: Subscription[] }>('/vendors/company/'),
+    request<{ vendor: Vendor; subscriptions: Subscription[]; branches: string[] }>('/vendors/company/'),
 
   updateDashboardData: (data: Partial<Vendor>) =>
     request<ApiSuccessResponse & { vendor: Vendor }>('/vendors/company/', {

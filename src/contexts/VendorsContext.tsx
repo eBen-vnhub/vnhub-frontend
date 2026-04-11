@@ -5,6 +5,7 @@ import type { Vendor, Subscription } from '../types';
 interface VendorsContextType {
   vendor: Vendor | null;
   subscriptions: Subscription[];
+  branches: string[];
   isLoading: boolean;
   error: string | null;
   refresh: () => Promise<void>;
@@ -18,6 +19,7 @@ const VendorsContext = createContext<VendorsContextType | null>(null);
 export function VendorsProvider({ children }: { children: ReactNode }) {
   const [vendor, setVendor] = useState<Vendor | null>(null);
   const [subscriptions, setSubscriptions] = useState<Subscription[]>([]);
+  const [branches, setBranches] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -28,6 +30,7 @@ export function VendorsProvider({ children }: { children: ReactNode }) {
       const data = await vendorsService.getDashboardData();
       setVendor(data.vendor);
       setSubscriptions(data.subscriptions);
+      setBranches(data.branches || []);
     } catch (err: any) {
       if (err.status !== 404) {
         setError(err.message || 'Failed to load vendor data');
@@ -54,6 +57,7 @@ export function VendorsProvider({ children }: { children: ReactNode }) {
       value={{
         vendor,
         subscriptions,
+        branches,
         isLoading,
         error,
         refresh: fetchVendorData,

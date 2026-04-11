@@ -3,6 +3,7 @@ import Input from '../../../components/ui/Input';
 import Button from '../../../components/ui/Button';
 import { useCompanyProfile } from '../hooks/useCompanyProfile';
 import { useLanguage } from '../../../i18n/LanguageContext';
+import { useVendors } from '../../../contexts/VendorsContext';
 import type { Vendor } from '../../../types';
 
 interface CompanyProfileFormProps {
@@ -13,6 +14,7 @@ interface CompanyProfileFormProps {
 export default function CompanyProfileForm({ initialData, onUpdate }: CompanyProfileFormProps) {
   const { formData, isSubmitting, canEditCompanyProfile, handleChange, handleSubmit } = useCompanyProfile(initialData, onUpdate);
   const { t } = useLanguage();
+  const { branches } = useVendors();
 
   return (
     <div className="bg-surface border border-border shadow-sm rounded-3xl p-6 sm:p-8 animate-in fade-in duration-500">
@@ -60,9 +62,9 @@ export default function CompanyProfileForm({ initialData, onUpdate }: CompanyPro
             value={formData.companyCountry}
             onChange={handleChange}
             icon={<MapPin className="w-5 h-5" />}
-            disabled={!canEditCompanyProfile}
+            disabled
             required
-            className={!canEditCompanyProfile ? 'bg-surface-hover/50 text-muted-foreground select-none' : ''}
+            className="bg-surface-hover/50 text-muted-foreground select-none"
           />
 
           <Input
@@ -89,6 +91,26 @@ export default function CompanyProfileForm({ initialData, onUpdate }: CompanyPro
           />
         </div>
 
+        {branches.length > 0 && (
+          <div className="p-4 rounded-xl border border-border bg-surface-hover/30">
+            <p className="text-sm font-semibold text-main mb-2 flex items-center gap-2">
+              <MapPin className="w-4 h-4 text-brand" />
+              {t.portal.companyProfile.otherBranches || 'Other Branches'}
+            </p>
+            <div className="flex flex-wrap gap-2">
+              {branches.map((country) => (
+                <span
+                  key={country}
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium bg-brand/10 text-brand rounded-full"
+                >
+                  <MapPin className="w-3.5 h-3.5" />
+                  {country}
+                </span>
+              ))}
+            </div>
+          </div>
+        )}
+
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2">
           <div className={`flex items-center gap-3 p-4 rounded-xl border ${!canEditCompanyProfile ? 'bg-surface-hover/50 border-border/50' : 'bg-surface border-border hover:border-brand/30'}`}>
             <input
@@ -105,7 +127,7 @@ export default function CompanyProfileForm({ initialData, onUpdate }: CompanyPro
               {t.portal.companyProfile.b2c}
             </label>
           </div>
-          
+
           <div className={`flex items-center gap-3 p-4 rounded-xl border ${!canEditCompanyProfile ? 'bg-surface-hover/50 border-border/50' : 'bg-surface border-border hover:border-brand/30'}`}>
             <input
               type="checkbox"
