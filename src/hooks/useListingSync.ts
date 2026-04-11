@@ -29,6 +29,7 @@ export function useListingSync({ onSuccess }: UseListingSyncProps) {
         companyName: vendor.companyName || '',
         email: user.email || '',
         headquarterCountry: vendor.companyCountry || '',
+        companyWebsite: vendor.companyWebsite || '',
       },
       personal: {
         firstName: user.firstName || '',
