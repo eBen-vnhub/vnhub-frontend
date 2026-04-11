@@ -4,6 +4,7 @@ import { useVendors } from '../../../contexts/VendorsContext';
 import { useLanguage } from '../../../i18n/LanguageContext';
 import SubscriptionCard from '../../../components/portal/SubscriptionCard';
 import InlineSubscriptionModal from '../../../components/portal/InlineSubscriptionModal';
+import VendorListingModal from '../../../components/portal/VendorListingModal';
 import NextActionModal from '../../../components/portal/NextActionModal';
 import EditSubscriptionModal from '../../../components/portal/EditSubscriptionModal';
 import LoadingSpinner from '../../../components/ui/LoadingSpinner';
@@ -19,7 +20,9 @@ export default function SubscriptionsPage() {
   const { vendor, subscriptions, isLoading, error, updateSubscriptionInContext, fetchDashboardData } = useVendors();
   const { t } = useLanguage();
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isListingModalOpen, setIsListingModalOpen] = useState(false);
   const [isNextActionModalOpen, setIsNextActionModalOpen] = useState(false);
+  const [nextStepType, setNextStepType] = useState<'VENDOR_LISTING' | 'BENEFIT_LISTING'>('VENDOR_LISTING');
   const [editingSubscription, setEditingSubscription] = useState<Subscription | null>(null);
   const [isSaving, setIsSaving] = useState(false);
   const [cancellingId, setCancellingId] = useState<number | null>(null);
@@ -57,10 +60,31 @@ export default function SubscriptionsPage() {
 
 
 
-  const handleVendorListingSuccess = async () => {
+  const handleSubscriptionSuccess = async () => {
     setIsModalOpen(false);
     await fetchDashboardData();
+    setNextStepType('VENDOR_LISTING');
     setIsNextActionModalOpen(true);
+  };
+
+  const handleVendorListingSuccess = async () => {
+    setIsListingModalOpen(false);
+    await fetchDashboardData();
+    setNextStepType('BENEFIT_LISTING');
+    setIsNextActionModalOpen(true);
+  };
+
+  const handleNextActionClick = (step: string) => {
+    if (step === 'VENDOR_LISTING') {
+      setIsListingModalOpen(true);
+    } else {
+      toast.success("Benefit Listing will open soon!");
+    }
+  };
+
+  const handleModalContinue = () => {
+    setIsNextActionModalOpen(false);
+    handleNextActionClick(nextStepType);
   };
 
   if (isLoading) {
@@ -125,7 +149,7 @@ export default function SubscriptionsPage() {
                 key={sub.id}
                 subscription={sub}
                 companyName={vendor.companyName}
-                onNextAction={() => setIsModalOpen(true)}
+                onNextAction={() => handleNextActionClick(sub.nextStep || 'VENDOR_LISTING')}
                 onEdit={handleEdit}
                 onCancel={handleCancel}
                 isCancelling={cancellingId === sub.id}
@@ -138,17 +162,21 @@ export default function SubscriptionsPage() {
       <InlineSubscriptionModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
-        onSuccess={handleVendorListingSuccess}
+        onSuccess={handleSubscriptionSuccess}
         newBranch={false}
+      />
+
+      <VendorListingModal
+        isOpen={isListingModalOpen}
+        onClose={() => setIsListingModalOpen(false)}
+        onSuccess={handleVendorListingSuccess}
       />
 
       <NextActionModal
         isOpen={isNextActionModalOpen}
         onClose={() => setIsNextActionModalOpen(false)}
-        onContinue={() => {
-          setIsNextActionModalOpen(false);
-          toast.success("Benefit Listing will open soon!");
-        }}
+        onContinue={handleModalContinue}
+        nextStepType={nextStepType}
       />
 
       <EditSubscriptionModal

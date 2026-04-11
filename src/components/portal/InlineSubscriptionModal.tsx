@@ -7,7 +7,7 @@ import { useLanguage } from '../../i18n/LanguageContext';
 interface InlineSubscriptionModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onSuccess: () => void;
+  onSuccess: (vendorId?: number) => void;
   newBranch?: boolean;
 }
 
@@ -23,7 +23,7 @@ export default function InlineSubscriptionModal({ isOpen, onClose, onSuccess, ne
   useEffect(() => {
     const handleMessage = (event: MessageEvent) => {
       if (event.data?.type === 'SUBSCRIPTION_SUCCESS') {
-        onSuccess();
+        onSuccess(event.data.vendorId);
       }
     };
 

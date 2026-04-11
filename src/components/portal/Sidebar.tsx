@@ -54,9 +54,17 @@ export default function Sidebar() {
       <InlineSubscriptionModal
         isOpen={showBranchModal}
         onClose={() => setShowBranchModal(false)}
-        onSuccess={() => {
+        onSuccess={async (vendorId?: number) => {
           setShowBranchModal(false);
-          window.location.reload();
+          if (vendorId) {
+            import('../../services/vendors').then(v => {
+              v.default.switchWorkspace(vendorId).then(() => {
+                window.location.reload();
+              });
+            });
+          } else {
+            window.location.reload();
+          }
         }}
         newBranch={true}
       />

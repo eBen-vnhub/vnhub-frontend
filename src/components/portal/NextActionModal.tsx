@@ -6,12 +6,28 @@ interface NextActionModalProps {
   isOpen: boolean;
   onClose: () => void;
   onContinue: () => void;
+  nextStepType?: 'VENDOR_LISTING' | 'BENEFIT_LISTING';
 }
 
-export default function NextActionModal({ isOpen, onClose, onContinue }: NextActionModalProps) {
+export default function NextActionModal({ isOpen, onClose, onContinue, nextStepType = 'VENDOR_LISTING' }: NextActionModalProps) {
   const { t } = useLanguage();
+  const isAr = document.documentElement.dir === 'rtl';
 
   if (!isOpen) return null;
+
+  const content = nextStepType === 'VENDOR_LISTING' ? {
+    title: isAr ? 'الخطوة التالية: إكمال بيانات المورد' : 'Next Step: Complete Vendor Listing',
+    description: isAr 
+      ? 'لقد اشتركت بنجاح! الخطوة التالية هي ضبط إعدادات بياناتك كمورد.'
+      : 'You\'ve successfully subscribed! The next step is to set up your Vendor Listing profile.',
+    continue: isAr ? 'بدء إكمال البيانات' : 'Start Vendor Listing',
+    later: isAr ? 'لاحقاً' : 'Do it later'
+  } : {
+    title: t.portal.nextActionModal?.title || (isAr ? 'الخطوة التالية: إكمال العروض' : 'Next Step: Benefit Listing'),
+    description: t.portal.nextActionModal?.description || (isAr ? 'لقد أكملت بيانات المورد بنجاح! الخطوة التالية هي إضافة العروض والمزايا.' : 'You\'ve successfully completed your Vendor Listing! The next required step is to set up your VN Benefits profile.'),
+    continue: t.portal.nextActionModal?.continue || (isAr ? 'بدء إضافة العروض' : 'Start Benefit Listing'),
+    later: t.portal.nextActionModal?.later || (isAr ? 'لاحقاً' : 'Do it later')
+  };
 
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
@@ -32,18 +48,18 @@ export default function NextActionModal({ isOpen, onClose, onContinue }: NextAct
           <div className="w-16 h-16 bg-brand/10 text-brand rounded-full flex items-center justify-center mx-auto mb-4">
             <ArrowRight className="w-8 h-8" />
           </div>
-          <h2 className="text-2xl font-bold text-main mb-2">{t.portal.nextActionModal?.title || 'Next Step: Benefit Listing'}</h2>
+          <h2 className="text-2xl font-bold text-main mb-2">{content.title}</h2>
           <p className="text-muted">
-            {t.portal.nextActionModal?.description || 'You\'ve successfully completed your Vendor Listing! The next required step is to set up your VN Benefits profile.'}
+            {content.description}
           </p>
         </div>
 
         <div className="flex gap-3">
           <Button variant="outline" className="flex-1" onClick={onClose}>
-            {t.portal.nextActionModal?.later || 'Do it later'}
+            {content.later}
           </Button>
           <Button className="flex-1" onClick={onContinue}>
-            {t.portal.nextActionModal?.continue || 'Start Benefit Listing'}
+            {content.continue}
           </Button>
         </div>
       </div>
