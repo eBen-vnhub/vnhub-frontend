@@ -27,6 +27,8 @@ export function useListingSync({ onSuccess }: UseListingSyncProps) {
     const handleMessage = (event: MessageEvent) => {
       if (event.data?.type === 'LISTING_SUCCESS') {
         onSuccess();
+      } else if (event.data?.type === 'VENDOR_LISTING_READY') {
+        handleIframeLoad();
       }
     };
 
