@@ -153,6 +153,7 @@ export const ar = {
       loadFailed: "فشل تحميل ملف الشركة",
       b2c: "من شركة إلى مستهلك",
       b2b: "من شركة إلى شركة",
+      otherBranches: "فروع أخرى",
     },
     vendorAdmin: {
       title: "إدارة الفريق",

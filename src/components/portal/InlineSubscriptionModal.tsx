@@ -30,7 +30,7 @@ export default function InlineSubscriptionModal({ isOpen, onClose, onSuccess, ne
     if (isOpen) {
       window.addEventListener('message', handleMessage);
     }
-    
+
     return () => {
       window.removeEventListener('message', handleMessage);
       setIsLoading(true);
@@ -48,14 +48,15 @@ export default function InlineSubscriptionModal({ isOpen, onClose, onSuccess, ne
 
   const handleIframeLoad = () => {
     setIsLoading(false);
-    
+
     if (iframeRef.current && iframeRef.current.contentWindow && vendor && user) {
       const payload = {
         type: 'SYNC_PORTAL_DATA',
         existingVendorId: newBranch ? undefined : vendor.id,
+        newBranch: !!newBranch,
         company: {
           companyName: vendor.companyName || '',
-          companyWebsite: vendor.companyWebsite || '',
+          companyWebsite: newBranch ? '' : (vendor.companyWebsite || ''),
           country: newBranch ? '' : (vendor.companyCountry || ''),
           businessTypeB2C: vendor.businessTypeB2C || false,
           businessTypeB2B: vendor.businessTypeB2B || false,
@@ -65,26 +66,30 @@ export default function InlineSubscriptionModal({ isOpen, onClose, onSuccess, ne
           firstName: user.firstName || '',
           lastName: user.lastName || '',
           email: user.email || '',
-          mobileCountryCode: '',
-          mobileNumber: '',
-          jobTitle: '',
+          mobileCountryCode: user.mobileCountryCode || '',
+          mobileNumber: user.mobileNumber || '',
+          jobTitle: user.jobTitle || '',
         },
         language: language
       };
-      
+
       iframeRef.current.contentWindow.postMessage(payload, '*');
     }
   };
 
   if (!isOpen) return null;
 
+  const iframeSrc = newBranch
+    ? `${formUrl}?embed=true&newBranch=true&skipPersonal=true`
+    : `${formUrl}?embed=true&skipPersonal=true`;
+
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6 md:p-12">
-      <div 
+      <div
         className="absolute inset-0 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200"
         onClick={onClose}
       />
-      
+
       <div className="relative w-full max-w-5xl h-full max-h-[90vh] bg-surface rounded-3xl shadow-2xl flex flex-col overflow-hidden animate-in zoom-in-95 duration-300">
         <div className="absolute top-4 right-4 z-10 bg-surface/80 backdrop-blur-md rounded-full shadow-sm">
           <button
@@ -105,7 +110,7 @@ export default function InlineSubscriptionModal({ isOpen, onClose, onSuccess, ne
 
         <iframe
           ref={iframeRef}
-          src={`${formUrl}?embed=true${newBranch ? '&skipPersonal=true&newBranch=true' : ''}`}
+          src={iframeSrc}
           className="w-full flex-1 border-none bg-transparent relative z-0"
           onLoad={handleIframeLoad}
           title="Subscribe to new product"

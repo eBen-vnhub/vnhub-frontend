@@ -153,6 +153,7 @@ export const en = {
       loadFailed: "Failed to load company profile",
       b2c: "B2C",
       b2b: "B2B",
+      otherBranches: "Other Branches",
     },
     vendorAdmin: {
       title: "Vendor Administration",
