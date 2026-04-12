@@ -228,7 +228,7 @@ export default function CompanyProfileForm({ initialData, onUpdate, onUpdateVend
                 className="text-sm rounded-full py-1.5 px-4"
                 onClick={onUpdateVendorListing}
               >
-                {t.portal.companyProfile.updateVendorData || 'Update Vendor Data'}
+                {(t.portal.companyProfile as any).updateVendorData || 'Update Vendor Data'}
               </Button>
             )}
           </div>
@@ -257,7 +257,7 @@ export default function CompanyProfileForm({ initialData, onUpdate, onUpdateVend
                 className="text-sm rounded-full py-1.5 px-4"
                 onClick={onUpdateBenefitListing}
               >
-                {t.portal.companyProfile.updateBenefitData || 'Update Benefit Data'}
+                {(t.portal.companyProfile as any).updateBenefitData || 'Update Benefit Data'}
               </Button>
             )}
           </div>
