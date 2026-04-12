@@ -1,7 +1,7 @@
 import { AlertTriangle, ArrowRight, CheckCircle } from 'lucide-react';
-import { Button } from '../../components/ui/Button';
+import Button from '../../components/ui/Button';
 import { useLanguage } from '../../i18n/LanguageContext';
-import { Subscription } from '../../types';
+import type { Subscription } from '../../types';
 
 interface PendingAction {
   type: 'VENDOR_LISTING' | 'BENEFIT_LISTING';
@@ -30,16 +30,16 @@ function usePendingActions(subscriptions: Subscription[]): PendingAction[] {
   if (hasVendorListingPending) {
     actions.push({
       type: 'VENDOR_LISTING',
-      label: t.portal.pendingActions?.vendorListing || 'Complete Vendor Listing',
-      description: t.portal.pendingActions?.vendorListingDesc || 'Provide your company details to activate your workspace.',
+      label: (t.portal as any).pendingActions?.vendorListing || 'Complete Vendor Listing',
+      description: (t.portal as any).pendingActions?.vendorListingDesc || 'Provide your company details to activate your workspace.',
     });
   }
 
   if (hasBenefitListingPending) {
     actions.push({
       type: 'BENEFIT_LISTING',
-      label: t.portal.pendingActions?.benefitListing || 'Complete Benefit Listing',
-      description: t.portal.pendingActions?.benefitListingDesc || 'Set up your offers and discounts for the benefits center.',
+      label: (t.portal as any).pendingActions?.benefitListing || 'Complete Benefit Listing',
+      description: (t.portal as any).pendingActions?.benefitListingDesc || 'Set up your offers and discounts for the benefits center.',
     });
   }
 
@@ -59,11 +59,11 @@ export default function PendingActionsSection({ subscriptions, onAction }: Pendi
           <AlertTriangle className="w-5 h-5 text-amber-500" />
         </div>
         <div>
-          <h3 className="text-lg font-bold text-main">
-            {t.portal.pendingActions?.title || 'Pending Actions'}
+          <h3 className="text-xl font-bold text-portal-accent relative z-10">
+            {(t.portal as any).pendingActions?.title || 'Action Required'}
           </h3>
-          <p className="text-sm text-muted">
-            {t.portal.pendingActions?.subtitle || 'Complete these steps to activate your workspace.'}
+          <p className="text-sm text-portal-accent/80 font-medium relative z-10">
+            {(t.portal as any).pendingActions?.subtitle || 'Please complete the following steps to activate your workspace:'}
           </p>
         </div>
       </div>
@@ -85,9 +85,9 @@ export default function PendingActionsSection({ subscriptions, onAction }: Pendi
             </div>
             <Button
               onClick={() => onAction(action.type)}
-              className="whitespace-nowrap flex items-center gap-2"
+              className="bg-portal-accent text-white hover:bg-portal-accent/90 whitespace-nowrap flex items-center gap-2"
             >
-              {t.portal.pendingActions?.startAction || 'Start'}
+              {(t.portal as any).pendingActions?.startButton || 'Start'}
               <ArrowRight className="w-4 h-4" />
             </Button>
           </div>
