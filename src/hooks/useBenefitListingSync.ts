@@ -52,7 +52,6 @@ export function useBenefitListingSync({ onSuccess }: UseBenefitListingSyncProps)
       } else if (event.data?.type === 'BENEFIT_LISTING_READY') {
         iframeReadyRef.current = true;
         setIsLoading(false);
-        dataSentRef.current = false;
         sendSyncData();
       }
     };
