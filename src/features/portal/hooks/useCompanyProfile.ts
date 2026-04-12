@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { usePermissions } from '../../../hooks/usePermissions';
 import { useLanguage } from '../../../i18n/LanguageContext';
 import vendorsService from '../../../services/vendors';
@@ -17,6 +17,23 @@ export function useCompanyProfile(initialData: Vendor, onUpdate: (vendor: Vendor
     businessTypeB2C: initialData.businessTypeB2C || false,
     businessTypeB2B: initialData.businessTypeB2B || false,
   });
+
+  const [listingsData, setListingsData] = useState<{ vendorListing: any; benefitListing: any } | null>(null);
+  const [isLoadingListings, setIsLoadingListings] = useState(true);
+
+  useEffect(() => {
+    const fetchListings = async () => {
+      try {
+        const data = await vendorsService.getListingsData();
+        setListingsData(data);
+      } catch (err) {
+        console.error("Failed to load listings data", err);
+      } finally {
+        setIsLoadingListings(false);
+      }
+    };
+    fetchListings();
+  }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.type === 'checkbox' ? e.target.checked : e.target.value;
@@ -41,6 +58,8 @@ export function useCompanyProfile(initialData: Vendor, onUpdate: (vendor: Vendor
 
   return {
     formData,
+    listingsData,
+    isLoadingListings,
     isSubmitting,
     canEditCompanyProfile,
     handleChange,
