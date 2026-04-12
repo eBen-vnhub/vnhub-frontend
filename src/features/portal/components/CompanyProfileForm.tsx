@@ -285,7 +285,7 @@ export default function CompanyProfileForm({ initialData, onUpdate, onUpdateVend
           <div className="bg-surface-hover/30 rounded-xl p-4 border border-border">
             {listingsData?.benefitListing?.benefitOffers?.length > 0 ? (
                <div className="flex flex-col gap-2">
-                 {listingsData.benefitListing.benefitOffers.map((offer: any, idx: number) => (
+                 {listingsData?.benefitListing?.benefitOffers?.map((offer: any, idx: number) => (
                     <p key={idx} className="text-sm"><strong>{offer.benefitName || 'Offer'}:</strong> {offer.discountPercentage || 0}% discount</p>
                  ))}
                </div>
