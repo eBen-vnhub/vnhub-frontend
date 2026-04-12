@@ -1,7 +1,7 @@
 import { AlertTriangle, ArrowRight, CheckCircle } from 'lucide-react';
-import Button from '../../../components/ui/Button';
-import { useLanguage } from '../../../i18n/LanguageContext';
-import type { Subscription } from '../../../types';
+import { Button } from '../../components/ui/Button';
+import { useLanguage } from '../../i18n/LanguageContext';
+import { Subscription } from '../../types';
 
 interface PendingAction {
   type: 'VENDOR_LISTING' | 'BENEFIT_LISTING';

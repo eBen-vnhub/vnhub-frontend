@@ -95,7 +95,7 @@ export default function SubscriptionsPage() {
     closeModal();
     await completeStepLocally('BENEFIT_LISTING');
     await fetchDashboardData();
-    toast.success(t.portal.pendingActions?.benefitSuccess || 'Benefit listing submitted successfully!');
+    toast.success((t.portal as any).pendingActions?.benefitSuccess || 'Benefit listing submitted successfully!');
   };
 
   const handlePendingAction = (actionType: string) => {
@@ -182,7 +182,6 @@ export default function SubscriptionsPage() {
                 key={sub.id}
                 subscription={sub}
                 companyName={vendor.companyName}
-                onNextAction={() => handlePendingAction(sub.nextStep || 'VENDOR_LISTING')}
                 onEdit={handleEdit}
                 onCancel={handleCancel}
                 isCancelling={cancellingId === sub.id}

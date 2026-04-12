@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { User, Shield, UserCheck, Edit2, X, Phone } from 'lucide-react';
+import { User, Shield, UserCheck, Edit2, X } from 'lucide-react';
 import Input from '../../../components/ui/Input';
 import Button from '../../../components/ui/Button';
 import { useLanguage } from '../../../i18n/LanguageContext';
@@ -45,7 +45,7 @@ export default function UserProfileForm() {
             onClick={() => setIsEditing(true)}
           >
             <Edit2 className="w-4 h-4" />
-            {t.portal.companyProfile?.editProfile || 'Edit Profile'}
+            {(t.portal.companyProfile as any).editProfile || 'Edit Profile'}
           </Button>
         ) : (
           <button
@@ -93,7 +93,7 @@ export default function UserProfileForm() {
 
           <div className="grid grid-cols-3 gap-3">
             <Input
-              label={t.portal.userProfile.mobileCode || 'Code'}
+              label={(t.portal.userProfile as any).mobileCode || 'Code'}
               name="mobileCountryCode"
               defaultValue={userProfile.mobileCountryCode || '+20'}
               disabled={!isEditing}
@@ -101,7 +101,7 @@ export default function UserProfileForm() {
             />
             <div className="col-span-2">
               <Input
-                label={t.portal.userProfile.mobileNumber || 'Mobile'}
+                label={(t.portal.userProfile as any).mobileNumber || 'Mobile Number'}
                 name="mobileNumber"
                 defaultValue={userProfile.mobileNumber || ''}
                 disabled={!isEditing}

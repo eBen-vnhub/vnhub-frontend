@@ -2,12 +2,11 @@ import { useState } from 'react';
 import type { Subscription } from '../../types';
 import { useLanguage } from '../../i18n/LanguageContext';
 import Button from '../ui/Button';
-import { ArrowRight, CheckCircle2, Clock, XCircle, MapPin, Calendar, Edit3, Trash2 } from 'lucide-react';
+import { CheckCircle2, Clock, XCircle, MapPin, Calendar, Edit3, Trash2 } from 'lucide-react';
 
 interface SubscriptionCardProps {
   subscription: Subscription;
   companyName: string;
-  onNextAction: () => void;
   onEdit: (subscription: Subscription) => void;
   onCancel: (subscriptionId: number) => void;
   isCancelling: boolean;
@@ -19,7 +18,7 @@ const STATUS_CONFIG: Record<string, { icon: typeof CheckCircle2; className: stri
   cancelled: { icon: XCircle, className: 'bg-error/10 text-error' },
 };
 
-export default function SubscriptionCard({ subscription, companyName, onNextAction, onEdit, onCancel, isCancelling }: SubscriptionCardProps) {
+export default function SubscriptionCard({ subscription, companyName, onEdit, onCancel, isCancelling }: SubscriptionCardProps) {
   const { t } = useLanguage();
   const [showCancelConfirm, setShowCancelConfirm] = useState(false);
   const statusKey = subscription.status?.toLowerCase() || 'pending';
