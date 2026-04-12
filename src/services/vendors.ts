@@ -12,6 +12,9 @@ const vendorsService = {
   getDashboardData: () =>
     request<{ vendor: Vendor; subscriptions: Subscription[]; branches: string[] }>('/vendors/company/'),
 
+  getListingsData: () =>
+    request<{ vendorListing: any; benefitListing: any }>('/vendors/company/listings-data/'),
+
   updateDashboardData: (data: Partial<Vendor>) =>
     request<ApiSuccessResponse & { vendor: Vendor }>('/vendors/company/', {
       method: 'PUT',

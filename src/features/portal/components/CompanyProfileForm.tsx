@@ -214,11 +214,11 @@ export default function CompanyProfileForm({ initialData, onUpdate, onUpdateVend
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-2">
               <h3 className="text-sm font-bold text-main uppercase tracking-wide">
-                Vendor Listing Data
+                {(t.portal.companyProfile as any).vendorListingData || 'Vendor Listing Data'}
               </h3>
               <span className="text-[10px] font-semibold text-muted bg-surface-hover px-2 py-0.5 rounded-full flex items-center gap-1">
                 <Building className="w-3 h-3" />
-                Company Profile
+                {(t.portal.companyProfile as any).companyProfileSection || 'Company Profile'}
               </span>
             </div>
             {canEditCompanyProfile && (
@@ -232,9 +232,25 @@ export default function CompanyProfileForm({ initialData, onUpdate, onUpdateVend
               </Button>
             )}
           </div>
-          <p className="text-sm text-muted">
-            Manage your company logo, trade license, specific brand information, and social media links.
+          <p className="text-sm text-muted mb-4">
+            {(t.portal.companyProfile as any).vendorListingDesc || 'Manage your company logo, trade license, specific brand information, and social media links.'}
           </p>
+          
+          {/* Display Real Vendor Data */}
+          <div className="bg-surface-hover/30 rounded-xl p-4 border border-border">
+            {listingsData?.vendorListing ? (
+               <div className="flex flex-col gap-2">
+                 {listingsData.vendorListing.companyLocations?.length > 0 && (
+                   <p className="text-sm"><strong>Status:</strong> {listingsData.vendorListing.formStatus}</p>
+                 )}
+                 <p className="text-sm text-muted">Data synchronized from vendor module.</p>
+               </div>
+            ) : isLoadingListings ? (
+               <p className="text-sm text-muted animate-pulse">Loading data...</p>
+            ) : (
+               <p className="text-sm text-muted">No vendor data provided yet.</p>
+            )}
+          </div>
         </section>
 
         <hr className="border-border" />
@@ -243,11 +259,11 @@ export default function CompanyProfileForm({ initialData, onUpdate, onUpdateVend
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-2">
               <h3 className="text-sm font-bold text-main uppercase tracking-wide">
-                Benefit Listing Data
+                {(t.portal.companyProfile as any).benefitListingData || 'Benefit Listing Data'}
               </h3>
               <span className="text-[10px] font-semibold text-muted bg-surface-hover px-2 py-0.5 rounded-full flex items-center gap-1">
                 <Tag className="w-3 h-3" />
-                Discount Offers
+                {(t.portal.companyProfile as any).discountOffers || 'Discount Offers'}
               </span>
             </div>
             {canEditCompanyProfile && (
@@ -261,9 +277,24 @@ export default function CompanyProfileForm({ initialData, onUpdate, onUpdateVend
               </Button>
             )}
           </div>
-          <p className="text-sm text-muted">
-            Manage your specific discount offers, vouchers, and benefit rules.
+          <p className="text-sm text-muted mb-4">
+            {(t.portal.companyProfile as any).benefitListingDesc || 'Manage your specific discount offers, vouchers, and benefit rules.'}
           </p>
+          
+          {/* Display Real Benefit Data */}
+          <div className="bg-surface-hover/30 rounded-xl p-4 border border-border">
+            {listingsData?.benefitListing?.benefitOffers?.length > 0 ? (
+               <div className="flex flex-col gap-2">
+                 {listingsData.benefitListing.benefitOffers.map((offer: any, idx: number) => (
+                    <p key={idx} className="text-sm"><strong>{offer.benefitName || 'Offer'}:</strong> {offer.discountPercentage || 0}% discount</p>
+                 ))}
+               </div>
+            ) : isLoadingListings ? (
+               <p className="text-sm text-muted animate-pulse">Loading data...</p>
+            ) : (
+               <p className="text-sm text-muted">No offers configured yet.</p>
+            )}
+          </div>
         </section>
 
         {isEditing && (
