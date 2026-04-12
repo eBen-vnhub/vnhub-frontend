@@ -5,8 +5,10 @@ import { useLanguage } from '../../../i18n/LanguageContext';
 import SubscriptionCard from '../../../components/portal/SubscriptionCard';
 import InlineSubscriptionModal from '../../../components/portal/InlineSubscriptionModal';
 import VendorListingModal from '../../../components/portal/VendorListingModal';
+import BenefitListingModal from '../../../components/portal/BenefitListingModal';
 import NextActionModal from '../../../components/portal/NextActionModal';
 import EditSubscriptionModal from '../../../components/portal/EditSubscriptionModal';
+import PendingActionsSection from '../../../components/portal/PendingActionsSection';
 import LoadingSpinner from '../../../components/ui/LoadingSpinner';
 import vendorsService from '../../../services/vendors';
 import toast from 'react-hot-toast';
@@ -15,20 +17,26 @@ import { Plus } from 'lucide-react';
 import Button from '../../../components/ui/Button';
 import type { Subscription } from '../../../types';
 
+type ModalState =
+  | { type: 'none' }
+  | { type: 'subscribe' }
+  | { type: 'vendor-listing' }
+  | { type: 'benefit-listing' }
+  | { type: 'next-action'; stepType: 'VENDOR_LISTING' | 'BENEFIT_LISTING' }
+  | { type: 'edit-subscription'; subscription: Subscription };
+
 export default function SubscriptionsPage() {
   const { displayName } = useAuth();
   const { vendor, subscriptions, isLoading, error, updateSubscriptionInContext, fetchDashboardData } = useVendors();
   const { t } = useLanguage();
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isListingModalOpen, setIsListingModalOpen] = useState(false);
-  const [isNextActionModalOpen, setIsNextActionModalOpen] = useState(false);
-  const [nextStepType, setNextStepType] = useState<'VENDOR_LISTING' | 'BENEFIT_LISTING'>('VENDOR_LISTING');
-  const [editingSubscription, setEditingSubscription] = useState<Subscription | null>(null);
+  const [modal, setModal] = useState<ModalState>({ type: 'none' });
   const [isSaving, setIsSaving] = useState(false);
   const [cancellingId, setCancellingId] = useState<number | null>(null);
 
+  const closeModal = () => setModal({ type: 'none' });
+
   const handleEdit = (subscription: Subscription) => {
-    setEditingSubscription(subscription);
+    setModal({ type: 'edit-subscription', subscription });
   };
 
   const handleSaveEdit = async (subscriptionId: number, data: { plan?: string; billingCycle?: string; locations?: string[] }) => {
@@ -36,7 +44,7 @@ export default function SubscriptionsPage() {
     try {
       const response = await vendorsService.updateSubscription(subscriptionId, data);
       updateSubscriptionInContext(response.subscription);
-      setEditingSubscription(null);
+      closeModal();
       toast.success(t.portal.subscriptionCard.updateSuccess);
     } catch (err: any) {
       toast.error(err.response?.data?.error || t.portal.subscriptionCard.updateFailed);
@@ -58,33 +66,51 @@ export default function SubscriptionsPage() {
     }
   };
 
-
-
   const handleSubscriptionSuccess = async () => {
-    setIsModalOpen(false);
+    closeModal();
     await fetchDashboardData();
-    setNextStepType('VENDOR_LISTING');
-    setIsNextActionModalOpen(true);
+    setModal({ type: 'next-action', stepType: 'VENDOR_LISTING' });
+  };
+
+  const completeStepLocally = async (stepType: string) => {
+    const targetSub = subscriptions.find(s => s.nextStep === stepType && s.status !== 'CANCELLED');
+    if (targetSub) {
+      try {
+        const response = await vendorsService.completeSubscriptionStep(targetSub.id, stepType);
+        updateSubscriptionInContext(response.subscription);
+      } catch (err) {
+        console.error('Failed to complete step', err);
+      }
+    }
   };
 
   const handleVendorListingSuccess = async () => {
-    setIsListingModalOpen(false);
+    closeModal();
+    await completeStepLocally('VENDOR_LISTING');
     await fetchDashboardData();
-    setNextStepType('BENEFIT_LISTING');
-    setIsNextActionModalOpen(true);
+    setModal({ type: 'next-action', stepType: 'BENEFIT_LISTING' });
   };
 
-  const handleNextActionClick = (step: string) => {
-    if (step === 'VENDOR_LISTING') {
-      setIsListingModalOpen(true);
-    } else {
-      toast.success("Benefit Listing will open soon!");
+  const handleBenefitListingSuccess = async () => {
+    closeModal();
+    await completeStepLocally('BENEFIT_LISTING');
+    await fetchDashboardData();
+    toast.success(t.portal.pendingActions?.benefitSuccess || 'Benefit listing submitted successfully!');
+  };
+
+  const handlePendingAction = (actionType: string) => {
+    if (actionType === 'VENDOR_LISTING') {
+      setModal({ type: 'vendor-listing' });
+    } else if (actionType === 'BENEFIT_LISTING') {
+      setModal({ type: 'benefit-listing' });
     }
   };
 
   const handleModalContinue = () => {
-    setIsNextActionModalOpen(false);
-    handleNextActionClick(nextStepType);
+    if (modal.type !== 'next-action') return;
+    const stepType = modal.stepType;
+    closeModal();
+    handlePendingAction(stepType);
   };
 
   if (isLoading) {
@@ -94,6 +120,8 @@ export default function SubscriptionsPage() {
       </div>
     );
   }
+
+  const editingSubscription = modal.type === 'edit-subscription' ? modal.subscription : null;
 
   return (
     <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
@@ -109,6 +137,11 @@ export default function SubscriptionsPage() {
         </p>
       </section>
 
+      <PendingActionsSection
+        subscriptions={subscriptions}
+        onAction={handlePendingAction}
+      />
+
       <section>
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
           <div>
@@ -117,7 +150,7 @@ export default function SubscriptionsPage() {
           </div>
           <Button
             className="flex items-center gap-2"
-            onClick={() => setIsModalOpen(true)}
+            onClick={() => setModal({ type: 'subscribe' })}
           >
             <Plus className="w-4 h-4" />
             {t.portal.subscriptions.subscribeNew}
@@ -149,7 +182,7 @@ export default function SubscriptionsPage() {
                 key={sub.id}
                 subscription={sub}
                 companyName={vendor.companyName}
-                onNextAction={() => handleNextActionClick(sub.nextStep || 'VENDOR_LISTING')}
+                onNextAction={() => handlePendingAction(sub.nextStep || 'VENDOR_LISTING')}
                 onEdit={handleEdit}
                 onCancel={handleCancel}
                 isCancelling={cancellingId === sub.id}
@@ -160,29 +193,35 @@ export default function SubscriptionsPage() {
       </section>
 
       <InlineSubscriptionModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
+        isOpen={modal.type === 'subscribe'}
+        onClose={closeModal}
         onSuccess={handleSubscriptionSuccess}
         newBranch={false}
       />
 
       <VendorListingModal
-        isOpen={isListingModalOpen}
-        onClose={() => setIsListingModalOpen(false)}
+        isOpen={modal.type === 'vendor-listing'}
+        onClose={closeModal}
         onSuccess={handleVendorListingSuccess}
       />
 
+      <BenefitListingModal
+        isOpen={modal.type === 'benefit-listing'}
+        onClose={closeModal}
+        onSuccess={handleBenefitListingSuccess}
+      />
+
       <NextActionModal
-        isOpen={isNextActionModalOpen}
-        onClose={() => setIsNextActionModalOpen(false)}
+        isOpen={modal.type === 'next-action'}
+        onClose={closeModal}
         onContinue={handleModalContinue}
-        nextStepType={nextStepType}
+        nextStepType={modal.type === 'next-action' ? modal.stepType : 'VENDOR_LISTING'}
       />
 
       <EditSubscriptionModal
         isOpen={!!editingSubscription}
         subscription={editingSubscription}
-        onClose={() => setEditingSubscription(null)}
+        onClose={closeModal}
         onSave={handleSaveEdit}
         isSaving={isSaving}
       />

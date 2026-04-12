@@ -10,9 +10,11 @@ import type { Vendor } from '../../../types';
 interface CompanyProfileFormProps {
   initialData: Vendor;
   onUpdate: (vendor: Vendor) => void;
+  onUpdateVendorListing?: () => void;
+  onUpdateBenefitListing?: () => void;
 }
 
-export default function CompanyProfileForm({ initialData, onUpdate }: CompanyProfileFormProps) {
+export default function CompanyProfileForm({ initialData, onUpdate, onUpdateVendorListing, onUpdateBenefitListing }: CompanyProfileFormProps) {
   const { formData, isSubmitting, canEditCompanyProfile, handleChange, handleSubmit } = useCompanyProfile(initialData, onUpdate);
   const { t } = useLanguage();
   const { branches } = useVendors();
@@ -106,13 +108,14 @@ export default function CompanyProfileForm({ initialData, onUpdate }: CompanyPro
             />
 
             <Input
-              label={t.portal.companyProfile.businessCategory}
-              name="businessCategory"
-              value={formData.businessCategory}
+              label={t.portal.companyProfile.companyWebsite}
+              name="companyWebsite"
+              type="url"
+              value={formData.companyWebsite}
               onChange={handleChange}
-              icon={<Tag className="w-5 h-5" />}
+              icon={<Globe className="w-5 h-5" />}
               disabled={isViewOnly}
-              required
+              placeholder={t.portal.companyProfile.websitePlaceholder}
               className={isViewOnly ? disabledFieldClass : ''}
             />
           </div>
@@ -147,14 +150,13 @@ export default function CompanyProfileForm({ initialData, onUpdate }: CompanyPro
             />
 
             <Input
-              label={t.portal.companyProfile.companyWebsite}
-              name="companyWebsite"
-              type="url"
-              value={formData.companyWebsite}
+              label={t.portal.companyProfile.businessCategory}
+              name="businessCategory"
+              value={formData.businessCategory}
               onChange={handleChange}
-              icon={<Globe className="w-5 h-5" />}
+              icon={<Tag className="w-5 h-5" />}
               disabled={isViewOnly}
-              placeholder={t.portal.companyProfile.websitePlaceholder}
+              required
               className={isViewOnly ? disabledFieldClass : ''}
             />
 
@@ -205,6 +207,64 @@ export default function CompanyProfileForm({ initialData, onUpdate }: CompanyPro
             </div>
           </div>
         )}
+
+        <hr className="border-border" />
+
+        <section>
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center gap-2">
+              <h3 className="text-sm font-bold text-main uppercase tracking-wide">
+                Vendor Listing Data
+              </h3>
+              <span className="text-[10px] font-semibold text-muted bg-surface-hover px-2 py-0.5 rounded-full flex items-center gap-1">
+                <Building className="w-3 h-3" />
+                Company Profile
+              </span>
+            </div>
+            {canEditCompanyProfile && (
+              <Button
+                type="button"
+                variant="outline"
+                className="text-sm rounded-full py-1.5 px-4"
+                onClick={onUpdateVendorListing}
+              >
+                {t.portal.companyProfile.updateVendorData || 'Update Vendor Data'}
+              </Button>
+            )}
+          </div>
+          <p className="text-sm text-muted">
+            Manage your company logo, trade license, specific brand information, and social media links.
+          </p>
+        </section>
+
+        <hr className="border-border" />
+
+        <section>
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center gap-2">
+              <h3 className="text-sm font-bold text-main uppercase tracking-wide">
+                Benefit Listing Data
+              </h3>
+              <span className="text-[10px] font-semibold text-muted bg-surface-hover px-2 py-0.5 rounded-full flex items-center gap-1">
+                <Tag className="w-3 h-3" />
+                Discount Offers
+              </span>
+            </div>
+            {canEditCompanyProfile && (
+              <Button
+                type="button"
+                variant="outline"
+                className="text-sm rounded-full py-1.5 px-4"
+                onClick={onUpdateBenefitListing}
+              >
+                {t.portal.companyProfile.updateBenefitData || 'Update Benefit Data'}
+              </Button>
+            )}
+          </div>
+          <p className="text-sm text-muted">
+            Manage your specific discount offers, vouchers, and benefit rules.
+          </p>
+        </section>
 
         {isEditing && (
           <div className="flex justify-end pt-4 border-t border-border gap-3 animate-in slide-in-from-bottom-2 duration-300">

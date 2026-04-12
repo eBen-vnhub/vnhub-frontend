@@ -27,6 +27,7 @@ jobs:
       env:
         VITE_REGISTRATION_FORM_URL: ${{ vars.REGISTRATION_FORM_URL }}
         VITE_VENDOR_LISTING_URL: ${{ vars.VENDOR_LISTING_URL }}
+        VITE_BENEFIT_LISTING_URL: ${{ vars.BENEFIT_LISTING_URL }}
 
     - name: Setup SSH
       run: |

@@ -57,6 +57,12 @@ const vendorsService = {
       method: 'POST',
       body: JSON.stringify({ workspace_id: workspaceId }),
     }),
+
+  completeSubscriptionStep: (subscriptionId: number, stepType: string) =>
+    request<ApiSuccessResponse & { subscription: Subscription }>(`/vendors/subscriptions/${subscriptionId}/complete-step/`, {
+      method: 'POST',
+      body: JSON.stringify({ stepType }),
+    }),
 };
 
 export default vendorsService;

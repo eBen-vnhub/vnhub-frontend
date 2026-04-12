@@ -1,10 +1,15 @@
+import { useState } from 'react';
 import { useVendors } from '../../../contexts/VendorsContext';
 import { useLanguage } from '../../../i18n/LanguageContext';
 import CompanyProfileForm from '../components/CompanyProfileForm';
+import VendorListingModal from '../../../components/portal/VendorListingModal';
+import BenefitListingModal from '../../../components/portal/BenefitListingModal';
 
 export default function CompanyProfilePage() {
-  const { vendor, isLoading, error, updateVendorContext } = useVendors();
+  const { vendor, isLoading, error, updateVendorContext, fetchDashboardData } = useVendors();
   const { t } = useLanguage();
+  const [isVendorModalOpen, setIsVendorModalOpen] = useState(false);
+  const [isBenefitModalOpen, setIsBenefitModalOpen] = useState(false);
 
   if (isLoading) {
     return (
@@ -35,8 +40,22 @@ export default function CompanyProfilePage() {
           onUpdate={(updatedData) => {
             updateVendorContext(updatedData);
           }}
+          onUpdateVendorListing={() => setIsVendorModalOpen(true)}
+          onUpdateBenefitListing={() => setIsBenefitModalOpen(true)}
         />
       </div>
+
+      <VendorListingModal
+        isOpen={isVendorModalOpen}
+        onClose={() => setIsVendorModalOpen(false)}
+        onSuccess={() => fetchDashboardData()}
+      />
+
+      <BenefitListingModal
+        isOpen={isBenefitModalOpen}
+        onClose={() => setIsBenefitModalOpen(false)}
+        onSuccess={() => fetchDashboardData()}
+      />
     </div>
   );
 }
