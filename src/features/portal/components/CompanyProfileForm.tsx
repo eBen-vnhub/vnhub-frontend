@@ -15,7 +15,7 @@ interface CompanyProfileFormProps {
 }
 
 export default function CompanyProfileForm({ initialData, onUpdate, onUpdateVendorListing, onUpdateBenefitListing }: CompanyProfileFormProps) {
-  const { formData, isSubmitting, canEditCompanyProfile, handleChange, handleSubmit } = useCompanyProfile(initialData, onUpdate);
+  const { formData, listingsData, isLoadingListings, isSubmitting, canEditCompanyProfile, handleChange, handleSubmit } = useCompanyProfile(initialData, onUpdate);
   const { t } = useLanguage();
   const { branches } = useVendors();
   const [isEditing, setIsEditing] = useState(false);
