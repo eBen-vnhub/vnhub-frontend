@@ -105,20 +105,7 @@ export default function SubscriptionCard({ subscription, companyName, onNextActi
         </div>
       )}
 
-      {!isCancelled && subscription.nextStep && subscription.nextStep !== 'COMPLETED' && (
-        <div className="border-t border-border-subtle pt-4 mt-4">
-          <h4 className="text-sm font-bold text-main mb-3">{t.portal.subscriptionCard.requiredAction}</h4>
-          <div className="bg-surface-hover rounded-xl p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-            <div>
-              <p className="font-semibold text-main">{t.portal.subscriptionCard.completeVendorListing}</p>
-              <p className="text-sm text-muted mt-0.5">{t.portal.subscriptionCard.provideDetails}</p>
-            </div>
-            <Button onClick={onNextAction} className="whitespace-nowrap">
-              {t.portal.subscriptionCard.openForm} <ArrowRight className="w-4 h-4" />
-            </Button>
-          </div>
-        </div>
-      )}
+
     </div>
   );
 }
