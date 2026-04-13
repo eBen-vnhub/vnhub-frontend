@@ -1,5 +1,6 @@
 import { useState, useCallback } from 'react';
-import backofficeService, { BackofficeVendorSummary, BackofficeVendorDetail } from '../../../services/backoffice';
+import backofficeService from '../../../services/backoffice';
+import type { BackofficeVendorSummary, BackofficeVendorDetail } from '../../../services/backoffice';
 import toast from 'react-hot-toast';
 import { useLanguage } from '../../../i18n/LanguageContext';
 
@@ -17,7 +18,7 @@ export function useBackofficeVendors() {
       const data = await backofficeService.getVendors();
       setVendors(data);
     } catch (err: any) {
-      toast.error(t.error?.general || 'Failed to fetch vendors');
+      toast.error(t.common?.error || 'Failed to fetch vendors');
     } finally {
       setIsLoading(false);
     }

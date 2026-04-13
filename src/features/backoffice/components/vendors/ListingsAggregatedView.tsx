@@ -1,4 +1,4 @@
-import { Image, FileText, Share2, Ticket, Percent, Users, Building, ShieldAlert } from 'lucide-react';
+import { Image, FileText, Share2, Ticket, Percent, Users, Building, ShieldAlert, MapPin } from 'lucide-react';
 
 interface Props {
   data: { vendorListing: any; benefitListing: any } | null;

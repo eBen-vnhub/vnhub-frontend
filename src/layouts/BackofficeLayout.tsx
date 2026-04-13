@@ -1,4 +1,4 @@
-import { Navigate, Outlet, useLocation } from 'react-router-dom';
+import { Navigate, Outlet } from 'react-router-dom';
 import { useLanguage } from '../i18n/LanguageContext';
 import { useAuth } from '../contexts/AuthContext';
 import Header from '../components/portal/Header';
@@ -7,7 +7,6 @@ import BackofficeSidebar from '../features/backoffice/components/layout/Backoffi
 export default function BackofficeLayout() {
   const { direction } = useLanguage();
   const { user } = useAuth();
-  const location = useLocation();
 
   if (user && user.userType !== 'INTERNAL') {
     return <Navigate to="/portal" replace />;

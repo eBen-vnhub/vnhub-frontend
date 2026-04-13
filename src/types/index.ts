@@ -39,6 +39,7 @@ export interface User {
   mobileCountryCode?: string;
   mobileNumber?: string;
   role?: string;
+  userType?: string;
   workspaces?: Workspace[];
   vendor_profile?: Vendor;
 }

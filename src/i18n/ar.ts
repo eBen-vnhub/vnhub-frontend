@@ -218,6 +218,23 @@ export const ar = {
       allRightsReserved: "© 2026 جميع الحقوق محفوظة لشركة eBen",
     },
   },
+  backoffice: {
+    sidebar: {
+      adminSection: "إدارة VNHub",
+      dashboard: "لوحة التحكم",
+      vendorsDirectory: "دليل الشركات والموردين",
+      systemSettings: "إعدادات النظام",
+    },
+    vendors: {
+      title: "دليل الشركات والموردين",
+      subtitle: "إدارة ومراقبة جميع الشركات المدرجة وعروضها على المنصة.",
+      searchPlaceholder: "البحث عن مورد...",
+      allRegistered: "جميع الشركات المسجلة",
+      noVendorsAvailable: "لا توجد شركات",
+      noVendorsStored: "لا يوجد حالياً أي مورد مسجل في النظام.",
+      unnamedVendor: "مورد غير معروف",
+    },
+  },
   common: {
     loading: "جاري التحميل...",
     error: "حدث خطأ ما",

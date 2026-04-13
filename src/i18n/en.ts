@@ -218,6 +218,23 @@ export const en = {
       allRightsReserved: "© 2026 eBen All rights reserved",
     },
   },
+  backoffice: {
+    sidebar: {
+      adminSection: "VNHub Administration",
+      dashboard: "Dashboard",
+      vendorsDirectory: "Vendors Directory",
+      systemSettings: "System Settings",
+    },
+    vendors: {
+      title: "Vendors Directory",
+      subtitle: "Manage and monitor all platform vendors and their listings.",
+      searchPlaceholder: "Search vendors...",
+      allRegistered: "All Registered Vendors",
+      noVendorsAvailable: "No Vendors Available",
+      noVendorsStored: "There are currently no registered vendors in the system.",
+      unnamedVendor: "Unnamed Vendor",
+    },
+  },
   common: {
     loading: "Loading...",
     error: "Something went wrong",
