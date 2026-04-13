@@ -42,7 +42,11 @@ export default function LoginForm() {
       const response = await authService.login({ email, password });
       login(response.user);
       showToast.success(t.common.success);
-      navigate('/');
+      if (response.user.userType === 'INTERNAL') {
+        navigate('/backoffice');
+      } else {
+        navigate('/portal');
+      }
     } catch (err: any) {
       showToast.error(err.response?.data?.message || t.common.error);
     } finally {
