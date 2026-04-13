@@ -237,18 +237,73 @@ export default function CompanyProfileForm({ initialData, onUpdate, onUpdateVend
           </p>
           
           {/* Display Real Vendor Data */}
-          <div className="bg-surface-hover/30 rounded-xl p-4 border border-border">
+          <div className="bg-surface border border-border hover:border-brand/30 transition-colors rounded-xl p-5 shadow-sm">
             {listingsData?.vendorListing ? (
-               <div className="flex flex-col gap-2">
-                 {listingsData.vendorListing.companyLocations?.length > 0 && (
-                   <p className="text-sm"><strong>Status:</strong> {listingsData.vendorListing.formStatus}</p>
+               <div className="space-y-5">
+                 <div className="flex items-center justify-between border-b border-border pb-3">
+                   <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-lg bg-brand/10 text-brand flex items-center justify-center font-bold text-lg">
+                        {listingsData.vendorListing.companyProfile?.brandName?.charAt(0)?.toUpperCase() || <Building className="w-5 h-5" />}
+                      </div>
+                      <div>
+                        <h4 className="text-sm font-bold text-main">{listingsData.vendorListing.companyProfile?.brandName || 'N/A'}</h4>
+                        <p className="text-xs text-muted-foreground line-clamp-1">{listingsData.vendorListing.companyProfile?.brandDescription || 'No description provided'}</p>
+                      </div>
+                   </div>
+                   <span className={`text-[10px] uppercase tracking-wider font-bold px-2.5 py-1 rounded-full ${
+                      listingsData.vendorListing.formStatus === 'SUBMITTED' ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-700'
+                   }`}>
+                     {listingsData.vendorListing.formStatus || 'DRAFT'}
+                   </span>
+                 </div>
+
+                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div className="space-y-1">
+                      <p className="text-xs text-muted-foreground uppercase flex items-center gap-1"><MapPin className="w-3 h-3" /> HQ Address</p>
+                      <p className="text-sm text-main font-medium">
+                        {listingsData.vendorListing.hqAddressEntity ? (
+                           `${listingsData.vendorListing.hqAddressEntity.building || ''} ${listingsData.vendorListing.hqAddressEntity.street || ''}, ${listingsData.vendorListing.hqAddressEntity.city || ''}`
+                        ) : 'Not specified'}
+                      </p>
+                    </div>
+                    <div className="space-y-1">
+                      <p className="text-xs text-muted-foreground uppercase flex items-center gap-1"><Globe className="w-3 h-3" /> Website</p>
+                      <p className="text-sm text-main font-medium text-brand truncate">
+                        {listingsData.vendorListing.companyProfile?.websiteUrl || formData.companyWebsite || 'Not specified'}
+                      </p>
+                    </div>
+                 </div>
+
+                 {/* Files */}
+                 {listingsData.vendorListing.files && listingsData.vendorListing.files.length > 0 && (
+                   <div className="pt-3 border-t border-border">
+                     <p className="text-xs text-muted-foreground uppercase mb-2">Documents</p>
+                     <div className="flex flex-wrap gap-2">
+                       {listingsData.vendorListing.files.map((f: any, idx: number) => (
+                         <div key={idx} className="flex items-center gap-2 bg-surface-hover px-3 py-1.5 rounded-lg border border-border text-xs text-main">
+                           <Tag className="w-3.5 h-3.5 text-muted-foreground" />
+                           <span className="font-medium truncate max-w-[120px]" title={f.fileName}>{f.fileName}</span>
+                           <span className="text-[9px] bg-brand/10 text-brand px-1.5 py-0.5 rounded">{f.fileType?.replace('_', ' ')}</span>
+                         </div>
+                       ))}
+                     </div>
+                   </div>
                  )}
-                 <p className="text-sm text-muted">Data synchronized from vendor module.</p>
+
                </div>
             ) : isLoadingListings ? (
-               <p className="text-sm text-muted animate-pulse">Loading data...</p>
+               <div className="flex items-center gap-3 p-2">
+                 <div className="w-5 h-5 border-2 border-brand border-t-transparent rounded-full animate-spin"></div>
+                 <p className="text-sm text-muted animate-pulse">Loading vendor data...</p>
+               </div>
             ) : (
-               <p className="text-sm text-muted">No vendor data provided yet.</p>
+               <div className="flex flex-col flex-center items-center justify-center p-6 text-center">
+                 <div className="w-12 h-12 bg-surface-hover rounded-full flex items-center justify-center mb-3">
+                    <Building className="w-5 h-5 text-muted-foreground/50" />
+                 </div>
+                 <p className="text-sm font-medium text-main">No vendor data provided yet.</p>
+                 {canEditCompanyProfile && <p className="text-xs text-muted-foreground mt-1">Click &quot;Update Vendor Data&quot; to complete your profile.</p>}
+               </div>
             )}
           </div>
         </section>
@@ -270,9 +325,10 @@ export default function CompanyProfileForm({ initialData, onUpdate, onUpdateVend
               <Button
                 type="button"
                 variant="outline"
-                className="text-sm rounded-full py-1.5 px-4"
+                className="text-sm rounded-full py-1.5 px-4 flex items-center gap-2"
                 onClick={onUpdateBenefitListing}
               >
+                <Edit2 className="w-3.5 h-3.5" />
                 {(t.portal.companyProfile as any).updateBenefitData || 'Update Benefit Data'}
               </Button>
             )}
@@ -282,17 +338,48 @@ export default function CompanyProfileForm({ initialData, onUpdate, onUpdateVend
           </p>
           
           {/* Display Real Benefit Data */}
-          <div className="bg-surface-hover/30 rounded-xl p-4 border border-border">
-            {listingsData?.benefitListing?.benefitOffers?.length > 0 ? (
-               <div className="flex flex-col gap-2">
-                 {listingsData?.benefitListing?.benefitOffers?.map((offer: any, idx: number) => (
-                    <p key={idx} className="text-sm"><strong>{offer.benefitName || 'Offer'}:</strong> {offer.discountPercentage || 0}% discount</p>
-                 ))}
+          <div className="bg-surface border border-border hover:border-brand/30 transition-colors rounded-xl p-5 shadow-sm">
+            {listingsData?.benefitListing ? (
+               <div className="space-y-4">
+                 <div className="flex items-center justify-between pb-3 border-b border-border border-dashed">
+                   <div className="flex items-center gap-2 text-sm text-main">
+                     <Lock className="w-4 h-4 mt-0.5 text-muted-foreground" />
+                     <span><strong>Goal:</strong> {listingsData.benefitListing.listingGoal?.replace('_', ' ').toUpperCase() || 'Not Specified'}</span>
+                   </div>
+                 </div>
+                 
+                 {listingsData.benefitListing.benefitOffers && listingsData.benefitListing.benefitOffers.length > 0 ? (
+                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                     {listingsData.benefitListing.benefitOffers.map((offer: any, idx: number) => (
+                        <div key={idx} className="bg-surface-hover/50 border border-border p-3 rounded-lg flex flex-col justify-between group">
+                          <div>
+                            <span className="text-xs font-bold text-brand bg-brand/10 px-2 py-0.5 rounded uppercase mb-1.5 inline-block">Offer {idx + 1}</span>
+                            <h5 className="text-sm font-bold text-main">{offer.benefitName || 'Standard Discount'}</h5>
+                            <p className="text-xs text-muted-foreground line-clamp-2 mt-1">{offer.benefitDescription || 'No description available for this offer.'}</p>
+                          </div>
+                          <div className="mt-3 flex items-center justify-between">
+                            <span className="text-[10px] text-muted-foreground">Type: {offer.discountType || 'N/A'}</span>
+                            <span className="text-sm font-black text-main bg-white px-2 py-1 rounded shadow-sm border border-border/50">{offer.discountPercentage || 0}% OFF</span>
+                          </div>
+                        </div>
+                     ))}
+                   </div>
+                 ) : (
+                   <p className="text-sm text-muted-foreground text-center py-4">No active offers configured.</p>
+                 )}
                </div>
             ) : isLoadingListings ? (
-               <p className="text-sm text-muted animate-pulse">Loading data...</p>
+               <div className="flex items-center gap-3 p-2">
+                 <div className="w-5 h-5 border-2 border-brand border-t-transparent rounded-full animate-spin"></div>
+                 <p className="text-sm text-muted animate-pulse">Loading benefit data...</p>
+               </div>
             ) : (
-               <p className="text-sm text-muted">No offers configured yet.</p>
+               <div className="flex flex-col items-center justify-center p-6 text-center">
+                 <div className="w-12 h-12 bg-surface-hover rounded-full flex items-center justify-center mb-3">
+                    <Tag className="w-5 h-5 text-muted-foreground/50" />
+                 </div>
+                 <p className="text-sm font-medium text-main">No offers configured yet.</p>
+               </div>
             )}
           </div>
         </section>

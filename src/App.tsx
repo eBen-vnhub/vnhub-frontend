@@ -13,6 +13,9 @@ import VendorAdminPage from './features/portal/pages/VendorAdminPage';
 import ChangePasswordPage from './features/auth/pages/ChangePasswordPage';
 import UserProfilePage from './features/portal/pages/UserProfilePage';
 import ProtectedRoute from './components/guards/ProtectedRoute';
+import BackofficeLayout from './layouts/BackofficeLayout';
+import VendorsListPage from './features/backoffice/pages/VendorsListPage';
+import VendorDetailPage from './features/backoffice/pages/VendorDetailPage';
 
 export default function App() {
   return (
@@ -23,7 +26,7 @@ export default function App() {
         <Route path="/forgot-password" element={<ForgotPasswordPage />} />
         <Route path="/reset-password" element={<ResetPasswordPage />} />
         <Route path="/set-password" element={<SetPasswordPage />} />
-        
+
         <Route path="/select-workspace" element={
           <ProtectedRoute>
             <WorkspaceSelectionPage />
@@ -42,6 +45,17 @@ export default function App() {
           <Route path="admin" element={<VendorAdminPage />} />
           <Route path="profile" element={<UserProfilePage />} />
           <Route path="change-password" element={<ChangePasswordPage />} />
+        </Route>
+
+        <Route path="/backoffice" element={
+          <ProtectedRoute>
+            <BackofficeLayout />
+          </ProtectedRoute>
+        }>
+          <Route index element={<Navigate to="vendors" replace />} />
+          <Route path="vendors" element={<VendorsListPage />} />
+          <Route path="vendors/:id" element={<VendorDetailPage />} />
+          <Route path="settings" element={<div className="p-8 text-center text-muted mt-12 font-medium">System Settings Coming Soon in Phase 3</div>} />
         </Route>
 
         <Route path="/" element={<Navigate to="/portal" replace />} />
