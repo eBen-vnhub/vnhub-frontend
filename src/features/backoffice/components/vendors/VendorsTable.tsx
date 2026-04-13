@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { Building2, MapPin, Tag, ArrowRight, Activity, Users } from 'lucide-react';
 import type { BackofficeVendorSummary } from '../../../../services/backoffice';
+import { useLanguage } from '../../../../i18n/LanguageContext';
 
 interface Props {
   vendors: BackofficeVendorSummary[];
@@ -8,6 +9,8 @@ interface Props {
 }
 
 export default function VendorsTable({ vendors, isLoading }: Props) {
+  const { t } = useLanguage();
+
   if (isLoading) {
     return (
       <div className="space-y-4">
@@ -22,8 +25,8 @@ export default function VendorsTable({ vendors, isLoading }: Props) {
     return (
       <div className="bg-surface rounded-2xl p-12 text-center border border-border">
         <Building2 className="w-12 h-12 text-muted mx-auto mb-4 opacity-50" />
-        <h3 className="text-lg font-bold text-main mb-2">No Vendors Available</h3>
-        <p className="text-muted">There are currently no registered vendors in the system.</p>
+        <h3 className="text-lg font-bold text-main mb-2">{t.backoffice.vendors.noVendorsAvailable}</h3>
+        <p className="text-muted">{t.backoffice.vendors.noVendorsStored}</p>
       </div>
     );
   }

@@ -10,7 +10,7 @@ export default function BackofficeSidebar() {
       <div className="sticky top-24 me-8">
         <div className="mb-6 px-4">
           <h2 className="text-xs font-bold text-muted uppercase tracking-wider">
-            VNHub Administration
+            {t.backoffice.sidebar.adminSection}
           </h2>
         </div>
         
@@ -24,7 +24,7 @@ export default function BackofficeSidebar() {
             }
           >
             <Home className="w-5 h-5" />
-            <span>Dashboard</span>
+            <span>{t.backoffice.sidebar.dashboard}</span>
           </NavLink>
 
           <NavLink
@@ -35,7 +35,7 @@ export default function BackofficeSidebar() {
             }
           >
             <Users className="w-5 h-5" />
-            <span>Vendors Directory</span>
+            <span>{t.backoffice.sidebar.vendorsDirectory}</span>
           </NavLink>
 
           <NavLink
@@ -46,7 +46,7 @@ export default function BackofficeSidebar() {
             }
           >
             <Settings className="w-5 h-5" />
-            <span>System Settings</span>
+            <span>{t.backoffice.sidebar.systemSettings}</span>
           </NavLink>
         </nav>
       </div>
