@@ -22,7 +22,8 @@ export default function VendorListingModal({ isOpen, onClose, onSuccess }: Vendo
     onSuccess: handleSuccess
   });
 
-  const formUrl = (import.meta.env.VITE_VENDOR_LISTING_URL || '').replace(/\/+$/, '');
+  const rawFormUrl = import.meta.env.VITE_VENDOR_LISTING_URL || '';
+  const formUrl = rawFormUrl.endsWith('/') ? rawFormUrl : `${rawFormUrl}/`;
   const vendorId = vendor?.id;
   const iframeSrc = formUrl ? `${formUrl}?embed=true${vendorId ? `&vnhubVendorId=${vendorId}` : ''}` : '';
 
