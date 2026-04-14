@@ -42,6 +42,23 @@ export function useBackofficeVendors() {
     }
   }, []);
 
+  const updateTeamMember = async (userId: string | number, data: any) => {
+    try {
+      const updatedUser = await backofficeService.updateUser(userId, data);
+      if (vendorDetail) {
+        setVendorDetail({
+          ...vendorDetail,
+          teamMembers: vendorDetail.teamMembers.map(m => m.id === updatedUser.id ? updatedUser : m)
+        });
+      }
+      toast.success(t.common?.success || 'Updated successfully');
+      return true;
+    } catch (err: any) {
+      toast.error('Failed to update user');
+      return false;
+    }
+  };
+
   return {
     vendors,
     vendorDetail,
@@ -50,5 +67,6 @@ export function useBackofficeVendors() {
     isLoadingDetails,
     fetchVendors,
     fetchVendorDetail,
+    updateTeamMember,
   };
 }
