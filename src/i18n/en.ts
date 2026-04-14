@@ -264,7 +264,7 @@ export const en = {
       documents: "Documents",
       viewDocument: "View Document",
       noDocuments: "No documents uploaded",
-      webSocial: "Web & Social",
+      webSocial: "WebSite & Social",
       website: "Website",
       watchVideo: "Watch Video",
       noLinks: "No web or social links provided",
@@ -282,5 +282,14 @@ export const en = {
     loading: "Loading...",
     error: "Something went wrong",
     success: "Success",
+    documentTypes: {
+      TRADE_LICENSE: "Trade License",
+      LOGO: "Logo",
+      COMMERCIAL_REGISTER: "Commercial Register",
+      TAX_CERTIFICATE: "Tax Certificate",
+      CIVIL_ID: "Civil ID",
+      POWER_OF_ATTORNEY: "Power of Attorney",
+      OTHER: "Other"
+    }
   },
 };

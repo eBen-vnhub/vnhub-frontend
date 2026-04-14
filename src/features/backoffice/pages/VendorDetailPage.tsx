@@ -60,9 +60,18 @@ export default function VendorDetailPage() {
 
       <div className="bg-surface rounded-3xl p-6 sm:p-8 shadow-sm border border-border">
         <div className="flex flex-col sm:flex-row items-center gap-6">
-          <div className="w-24 h-24 rounded-2xl bg-gradient-to-br from-brand/20 to-brand/5 text-brand flex items-center justify-center font-bold text-4xl shadow-inner border border-brand/10">
-            {vendorDetail.companyName?.charAt(0) || 'V'}
-          </div>
+          {(() => {
+            const logoFile = listingsData?.vendorListing?.files?.find((f: any) => f.fileType === 'LOGO');
+            return logoFile?.fileUrl ? (
+              <div className="w-24 h-24 rounded-2xl bg-surface-hover border border-border flex items-center justify-center p-2 overflow-hidden">
+                <img src={logoFile.fileUrl} alt="Logo" className="max-w-full max-h-full object-contain" />
+              </div>
+            ) : (
+              <div className="w-24 h-24 rounded-2xl bg-gradient-to-br from-brand/20 to-brand/5 text-brand flex items-center justify-center font-bold text-4xl shadow-inner border border-brand/10">
+                {vendorDetail.companyName?.charAt(0) || 'V'}
+              </div>
+            );
+          })()}
 
           <div className="flex-1 text-center sm:text-start">
             <h1 className="text-3xl font-bold text-main mb-2">
