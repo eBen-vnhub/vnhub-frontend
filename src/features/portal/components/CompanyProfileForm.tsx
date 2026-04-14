@@ -342,7 +342,7 @@ export default function CompanyProfileForm({ initialData, onUpdate, onUpdateVend
                     <div className="flex flex-wrap gap-2">
                       {listingsData.vendorListing.socialLinks.map((link: any, idx: number) => (
                         <a key={idx} href={link.url || link.link} target="_blank" rel="noreferrer" className="text-xs bg-surface-hover border border-border px-2 py-1 rounded-lg text-brand hover:underline capitalize">
-                          {link.platform || link.type || 'Social'}
+                          {typeof link.platform === 'object' ? link.platform.platformName : (link.platform || link.type || 'Social')}
                         </a>
                       ))}
                     </div>
