@@ -1,8 +1,20 @@
 import { useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
-import { ArrowLeft, Building2, MapPin, Globe, Loader2, ShieldCheck, Tag, Users } from 'lucide-react';
+import { ArrowLeft, Building2, MapPin, Globe, Loader2, ShieldCheck, Tag, Users, Shield, UserCheck } from 'lucide-react';
 import { useBackofficeVendors } from '../hooks/useBackofficeVendors';
 import ListingsAggregatedView from '../components/vendors/ListingsAggregatedView';
+
+function MemberRoleBadge({ role }: { role: string }) {
+  const isPrimary = role === 'SUPER_ADMIN';
+  return (
+    <span className={`inline-flex items-center gap-1 text-[10px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wider ${
+      isPrimary ? 'bg-brand/10 text-brand border border-brand/20' : 'bg-surface-hover text-muted border border-border'
+    }`}>
+      {isPrimary ? <Shield className="w-3 h-3" /> : <UserCheck className="w-3 h-3" />}
+      {isPrimary ? 'Primary Admin' : 'Standard User'}
+    </span>
+  );
+}
 
 export default function VendorDetailPage() {
   const { id } = useParams<{ id: string }>();
@@ -50,7 +62,7 @@ export default function VendorDetailPage() {
             {vendorDetail.companyName?.charAt(0) || 'V'}
           </div>
 
-          <div className="flex-1 text-center sm:text-left">
+          <div className="flex-1 text-center sm:text-start">
             <h1 className="text-3xl font-bold text-main mb-2">
               {vendorDetail.companyName || 'Unnamed Vendor'}
             </h1>
@@ -117,17 +129,14 @@ export default function VendorDetailPage() {
                   <div className="font-bold text-main">{member.firstName} {member.lastName}</div>
                   <div className="text-xs text-muted mt-1">{member.email}</div>
                 </div>
-                <span className="px-3 py-1 bg-surface border border-border text-muted text-xs font-bold rounded-full uppercase">{member.role}</span>
+                <MemberRoleBadge role={member.role} />
               </div>
             ))}
           </div>
         </div>
       </div>
 
-      <div className="bg-surface border border-border rounded-3xl p-6">
-        <h3 className="text-lg font-bold text-main mb-6">Aggregated Listings Data</h3>
-        <ListingsAggregatedView data={listingsData} />
-      </div>
+      <ListingsAggregatedView data={listingsData} />
     </div>
   );
 }
