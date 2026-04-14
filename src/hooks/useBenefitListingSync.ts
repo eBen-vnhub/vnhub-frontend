@@ -60,7 +60,6 @@ export function useBenefitListingSync({ onSuccess }: UseBenefitListingSyncProps)
 
     return () => {
       window.removeEventListener('message', handleMessage);
-      setIsLoading(true);
       iframeReadyRef.current = false;
       dataSentRef.current = false;
     };
