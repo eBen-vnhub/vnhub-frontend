@@ -19,7 +19,9 @@ export default function VendorDocumentsCard({ files }: Props) {
                 <FileText className="w-5 h-5" />
               </div>
               <div className="min-w-0 flex-1">
-                <div className="text-xs text-muted font-medium mb-0.5">{file.fileType?.replace(/_/g, ' ')}</div>
+                <div className="text-xs text-muted font-medium mb-0.5">
+                  {(t.common.documentTypes as any)?.[file.fileType] || file.fileType?.replace(/_/g, ' ')}
+                </div>
                 {file.fileUrl || file.url ? (
                   <a href={file.fileUrl || file.url} target="_blank" rel="noreferrer" className="text-sm font-semibold text-brand hover:underline truncate block">
                     {file.fileName || t.backoffice.listing.viewDocument}

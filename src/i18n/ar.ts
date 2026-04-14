@@ -264,7 +264,7 @@ export const ar = {
       documents: "المستندات",
       viewDocument: "عرض المستند",
       noDocuments: "لم يتم رفع مستندات",
-      webSocial: "الويب والتواصل",
+      webSocial: "الموقع الالكتروني والتواصل الاجتماعي",
       website: "الموقع الإلكتروني",
       watchVideo: "مشاهدة الفيديو",
       noLinks: "لا توجد روابط ويب أو تواصل اجتماعي",
@@ -282,5 +282,15 @@ export const ar = {
     loading: "جاري التحميل...",
     error: "حدث خطأ ما",
     success: "تم بنجاح",
+    documentTypes: {
+      TRADE_LICENSE: "الرخصة التجارية",
+      LOGO: "الشعار",
+      COMMERCIAL_REGISTER: "السجل التجاري",
+      TAX_CERTIFICATE: "الشهادة الضريبية",
+      CIVIL_ID: "البطاقة المدنية",
+      POWER_OF_ATTORNEY: "توكيل عام",
+      OTHER: "أخرى"
+    }
   },
 };
+

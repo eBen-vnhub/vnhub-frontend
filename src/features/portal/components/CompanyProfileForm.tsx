@@ -242,12 +242,21 @@ export default function CompanyProfileForm({ initialData, onUpdate, onUpdateVend
                <div className="space-y-5">
                  <div className="flex items-center justify-between border-b border-border pb-3">
                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-lg bg-brand/10 text-brand flex items-center justify-center font-bold text-lg">
-                        {listingsData.vendorListing.companyProfile?.brandName?.charAt(0)?.toUpperCase() || <Building className="w-5 h-5" />}
-                      </div>
+                      {(() => {
+                        const logoFile = listingsData.vendorListing.files?.find((f: any) => f.fileType === 'LOGO');
+                        return logoFile?.fileUrl ? (
+                          <div className="w-10 h-10 rounded-lg bg-surface-hover border border-border flex items-center justify-center p-1 overflow-hidden">
+                            <img src={logoFile.fileUrl} alt="Logo" className="max-w-full max-h-full object-contain" />
+                          </div>
+                        ) : (
+                          <div className="w-10 h-10 rounded-lg bg-brand/10 text-brand flex items-center justify-center font-bold text-lg">
+                            {listingsData.vendorListing.companyProfile?.brandName?.charAt(0)?.toUpperCase() || <Building className="w-5 h-5" />}
+                          </div>
+                        );
+                      })()}
                       <div>
                         <h4 className="text-sm font-bold text-main">{listingsData.vendorListing.companyProfile?.brandName || 'N/A'}</h4>
-                        <p className="text-xs text-muted-foreground line-clamp-1">{listingsData.vendorListing.companyProfile?.brandDescription || 'No description provided'}</p>
+                        <p className="text-xs text-muted-foreground line-clamp-1">{listingsData.vendorListing.companyProfile?.brandDescription || t.backoffice.listing.noDescription}</p>
                       </div>
                    </div>
                    <span className={`text-[10px] uppercase tracking-wider font-bold px-2.5 py-1 rounded-full ${
@@ -257,34 +266,103 @@ export default function CompanyProfileForm({ initialData, onUpdate, onUpdateVend
                    </span>
                  </div>
 
+                 {listingsData.vendorListing.administrator && (
+                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                     <div className="space-y-1">
+                       <p className="text-xs text-muted-foreground uppercase">{t.backoffice.listing.administrator}</p>
+                       <p className="text-sm text-main font-medium">
+                         {listingsData.vendorListing.administrator.firstName} {listingsData.vendorListing.administrator.lastName}
+                       </p>
+                       <p className="text-xs text-muted">{listingsData.vendorListing.administrator.email}</p>
+                       <p className="text-xs text-muted">{listingsData.vendorListing.administrator.phoneCountryCode} {listingsData.vendorListing.administrator.phoneNumber}</p>
+                     </div>
+                     <div className="space-y-1">
+                       <p className="text-xs text-muted-foreground uppercase">{t.backoffice.listing.companyPhones}</p>
+                       {listingsData.vendorListing.companyPhones ? (
+                         <div className="space-y-1">
+                           <p className="text-sm text-main font-medium">{t.backoffice.listing.landline}: {listingsData.vendorListing.companyPhones.hqLandlineCountryCode} {listingsData.vendorListing.companyPhones.hqLandlineNumber}</p>
+                           <p className="text-sm text-main font-medium">{t.backoffice.listing.mobile}: {listingsData.vendorListing.companyPhones.companyMobileCountryCode} {listingsData.vendorListing.companyPhones.companyMobileNumber}</p>
+                         </div>
+                       ) : (
+                         <p className="text-sm text-muted">{t.backoffice.listing.noPhoneInfo}</p>
+                       )}
+                     </div>
+                   </div>
+                 )}
+
                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div className="space-y-1">
-                      <p className="text-xs text-muted-foreground uppercase flex items-center gap-1"><MapPin className="w-3 h-3" /> HQ Address</p>
+                      <p className="text-xs text-muted-foreground uppercase flex items-center gap-1"><MapPin className="w-3 h-3" /> {t.backoffice.listing.hqAddress}</p>
                       <p className="text-sm text-main font-medium">
                         {listingsData.vendorListing.hqAddressEntity ? (
                            `${listingsData.vendorListing.hqAddressEntity.building || ''} ${listingsData.vendorListing.hqAddressEntity.street || ''}, ${listingsData.vendorListing.hqAddressEntity.city || ''}`
-                        ) : 'Not specified'}
+                        ) : t.backoffice.listing.noAddress}
                       </p>
                     </div>
                     <div className="space-y-1">
-                      <p className="text-xs text-muted-foreground uppercase flex items-center gap-1"><Globe className="w-3 h-3" /> Website</p>
-                      <p className="text-sm text-main font-medium text-brand truncate">
-                        {listingsData.vendorListing.companyProfile?.websiteUrl || formData.companyWebsite || 'Not specified'}
-                      </p>
+                      <p className="text-xs text-muted-foreground uppercase flex items-center gap-1"><Globe className="w-3 h-3" /> {t.backoffice.listing.website}</p>
+                      {listingsData.vendorListing.companyProfile?.websiteUrl ? (
+                        <a href={listingsData.vendorListing.companyProfile.websiteUrl} target="_blank" rel="noreferrer" className="text-sm text-brand font-medium truncate block hover:underline">
+                          {listingsData.vendorListing.companyProfile.websiteUrl}
+                        </a>
+                      ) : (
+                        <p className="text-sm text-muted">{formData.companyWebsite || t.backoffice.listing.noLinks}</p>
+                      )}
                     </div>
                  </div>
 
-                 {/* Files */}
+                 {(listingsData.vendorListing.companyLocations?.length > 0 || listingsData.vendorListing.deliveryLocations?.length > 0) && (
+                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                     {listingsData.vendorListing.companyLocations?.length > 0 && (
+                       <div className="space-y-1">
+                         <p className="text-xs text-muted-foreground uppercase">{t.backoffice.listing.companyLocations}</p>
+                         <div className="flex flex-wrap gap-1">
+                           {listingsData.vendorListing.companyLocations.map((loc: any) => (
+                             <span key={loc.id} className="text-xs bg-brand/10 text-brand px-2 py-0.5 rounded-full">{loc.country?.countryName || loc.country?.countryCode}</span>
+                           ))}
+                         </div>
+                       </div>
+                     )}
+                     {listingsData.vendorListing.deliveryLocations?.length > 0 && (
+                       <div className="space-y-1">
+                         <p className="text-xs text-muted-foreground uppercase">{t.backoffice.listing.deliveryCoverage}</p>
+                         <div className="flex flex-wrap gap-1">
+                           {listingsData.vendorListing.deliveryLocations.map((dl: any) => (
+                             <span key={dl.id} className="text-xs bg-emerald-500/10 text-emerald-700 px-2 py-0.5 rounded-full">
+                               {dl.isWorldwide ? `🌍 ${t.backoffice.listing.worldwide}` : (dl.country?.countryName || dl.country?.countryCode)}
+                             </span>
+                           ))}
+                         </div>
+                       </div>
+                     )}
+                   </div>
+                 )}
+
+                 {listingsData.vendorListing.socialLinks?.length > 0 && (
+                   <div className="space-y-1">
+                     <p className="text-xs text-muted-foreground uppercase">{t.backoffice.listing.webSocial}</p>
+                     <div className="flex flex-wrap gap-2">
+                       {listingsData.vendorListing.socialLinks.map((link: any, idx: number) => (
+                         <a key={idx} href={link.url || link.link} target="_blank" rel="noreferrer" className="text-xs bg-surface-hover border border-border px-2 py-1 rounded-lg text-brand hover:underline capitalize">
+                           {link.platform || link.type || 'Social'}
+                         </a>
+                       ))}
+                     </div>
+                   </div>
+                 )}
+
                  {listingsData.vendorListing.files && listingsData.vendorListing.files.length > 0 && (
                    <div className="pt-3 border-t border-border">
-                     <p className="text-xs text-muted-foreground uppercase mb-2">Documents</p>
+                     <p className="text-xs text-muted-foreground uppercase mb-2">{t.backoffice.listing.documents}</p>
                      <div className="flex flex-wrap gap-2">
                        {listingsData.vendorListing.files.map((f: any, idx: number) => (
-                         <div key={idx} className="flex items-center gap-2 bg-surface-hover px-3 py-1.5 rounded-lg border border-border text-xs text-main">
+                         <a key={idx} href={f.fileUrl || f.url || '#'} target="_blank" rel="noreferrer" className="flex items-center gap-2 bg-surface-hover px-3 py-1.5 rounded-lg border border-border text-xs text-main hover:border-brand/30 transition-colors">
                            <Tag className="w-3.5 h-3.5 text-muted-foreground" />
                            <span className="font-medium truncate max-w-[120px]" title={f.fileName}>{f.fileName}</span>
-                           <span className="text-[9px] bg-brand/10 text-brand px-1.5 py-0.5 rounded">{f.fileType?.replace('_', ' ')}</span>
-                         </div>
+                           <span className="text-[9px] bg-brand/10 text-brand px-1.5 py-0.5 rounded">
+                             {(t.common.documentTypes as any)?.[f.fileType] || f.fileType?.replace(/_/g, ' ')}
+                           </span>
+                         </a>
                        ))}
                      </div>
                    </div>
@@ -294,15 +372,15 @@ export default function CompanyProfileForm({ initialData, onUpdate, onUpdateVend
             ) : isLoadingListings ? (
                <div className="flex items-center gap-3 p-2">
                  <div className="w-5 h-5 border-2 border-brand border-t-transparent rounded-full animate-spin"></div>
-                 <p className="text-sm text-muted animate-pulse">Loading vendor data...</p>
+                 <p className="text-sm text-muted animate-pulse">{t.common.loading}</p>
                </div>
             ) : (
                <div className="flex flex-col flex-center items-center justify-center p-6 text-center">
                  <div className="w-12 h-12 bg-surface-hover rounded-full flex items-center justify-center mb-3">
                     <Building className="w-5 h-5 text-muted-foreground/50" />
                  </div>
-                 <p className="text-sm font-medium text-main">No vendor data provided yet.</p>
-                 {canEditCompanyProfile && <p className="text-xs text-muted-foreground mt-1">Click &quot;Update Vendor Data&quot; to complete your profile.</p>}
+                 <p className="text-sm font-medium text-main">{t.backoffice.listing.noVendorData}</p>
+                 {canEditCompanyProfile && <p className="text-xs text-muted-foreground mt-1">{(t.portal.companyProfile as any).clickToUpdate || 'Click "Update Vendor Data" to complete your profile.'}</p>}
                </div>
             )}
           </div>
