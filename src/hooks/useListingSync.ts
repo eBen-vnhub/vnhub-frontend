@@ -67,7 +67,6 @@ export function useListingSync({ onSuccess }: UseListingSyncProps) {
 
     return () => {
       window.removeEventListener('message', handleMessage);
-      setIsLoading(true);
       iframeReadyRef.current = false;
       dataSentRef.current = false;
     };
