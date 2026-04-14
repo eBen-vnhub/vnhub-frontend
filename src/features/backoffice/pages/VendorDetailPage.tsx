@@ -2,16 +2,17 @@ import { useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { ArrowLeft, Building2, MapPin, Globe, Loader2, ShieldCheck, Tag, Users, Shield, UserCheck } from 'lucide-react';
 import { useBackofficeVendors } from '../hooks/useBackofficeVendors';
+import { useLanguage } from '../../../i18n/LanguageContext';
 import ListingsAggregatedView from '../components/vendors/ListingsAggregatedView';
 
-function MemberRoleBadge({ role }: { role: string }) {
+function MemberRoleBadge({ role, t }: { role: string; t: any }) {
   const isPrimary = role === 'SUPER_ADMIN';
   return (
     <span className={`inline-flex items-center gap-1 text-[10px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wider ${
       isPrimary ? 'bg-brand/10 text-brand border border-brand/20' : 'bg-surface-hover text-muted border border-border'
     }`}>
       {isPrimary ? <Shield className="w-3 h-3" /> : <UserCheck className="w-3 h-3" />}
-      {isPrimary ? 'Primary Admin' : 'Standard User'}
+      {isPrimary ? t.backoffice.vendors.primaryAdmin : t.backoffice.vendors.standardUser}
     </span>
   );
 }
@@ -19,6 +20,7 @@ function MemberRoleBadge({ role }: { role: string }) {
 export default function VendorDetailPage() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const { t } = useLanguage();
   const { vendorDetail, listingsData, isLoadingDetails, fetchVendorDetail } = useBackofficeVendors();
 
   useEffect(() => {
@@ -36,9 +38,9 @@ export default function VendorDetailPage() {
   if (!vendorDetail) {
     return (
       <div className="text-center py-12">
-        <h2 className="text-2xl font-bold text-main mb-4">Vendor Not Found</h2>
+        <h2 className="text-2xl font-bold text-main mb-4">{t.backoffice.vendors.vendorNotFound}</h2>
         <button onClick={() => navigate('/backoffice/vendors')} className="text-brand hover:underline">
-          Return to directory
+          {t.backoffice.vendors.returnToDirectory}
         </button>
       </div>
     );
@@ -52,7 +54,7 @@ export default function VendorDetailPage() {
           className="inline-flex items-center gap-2 text-sm text-muted hover:text-brand font-medium transition-colors"
         >
           <ArrowLeft className="w-4 h-4" />
-          Back to Directory
+          {t.backoffice.vendors.backToDirectory}
         </Link>
       </div>
 
@@ -64,7 +66,7 @@ export default function VendorDetailPage() {
 
           <div className="flex-1 text-center sm:text-start">
             <h1 className="text-3xl font-bold text-main mb-2">
-              {vendorDetail.companyName || 'Unnamed Vendor'}
+              {vendorDetail.companyName || t.backoffice.vendors.unnamedVendor}
             </h1>
 
             <div className="flex flex-wrap items-center justify-center sm:justify-start gap-4 text-sm text-muted">
@@ -83,7 +85,7 @@ export default function VendorDetailPage() {
               {vendorDetail.companyWebsite && (
                 <a href={vendorDetail.companyWebsite} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 bg-surface-hover hover:bg-brand/10 hover:text-brand px-3 py-1.5 rounded-lg transition-colors">
                   <Globe className="w-4 h-4" />
-                  <span className="font-medium">Website</span>
+                  <span className="font-medium">{t.backoffice.listing.website}</span>
                 </a>
               )}
             </div>
@@ -92,7 +94,7 @@ export default function VendorDetailPage() {
           <div className="flex items-center gap-3">
             <button className="flex items-center gap-2 px-6 py-3 rounded-xl bg-brand text-white font-bold hover:bg-brand-hover shadow-lg shadow-brand/20 transition-all">
               <ShieldCheck className="w-5 h-5" />
-              Review & Approve
+              {t.backoffice.vendors.reviewApprove}
             </button>
           </div>
         </div>
@@ -102,7 +104,7 @@ export default function VendorDetailPage() {
         <div className="bg-surface border border-border rounded-3xl p-6">
           <h3 className="text-lg font-bold text-main mb-4 flex items-center gap-2">
             <Building2 className="text-brand w-5 h-5" />
-            Subscriptions ({vendorDetail.subscriptions.length})
+            {t.backoffice.vendors.subscriptions} ({vendorDetail.subscriptions.length})
           </h3>
           <div className="space-y-3">
             {vendorDetail.subscriptions.map((sub) => (
@@ -120,7 +122,7 @@ export default function VendorDetailPage() {
         <div className="bg-surface border border-border rounded-3xl p-6">
           <h3 className="text-lg font-bold text-main mb-4 flex items-center gap-2">
             <Users className="text-brand w-5 h-5" />
-            Team Members ({vendorDetail.teamMembers.length})
+            {t.backoffice.vendors.teamMembers} ({vendorDetail.teamMembers.length})
           </h3>
           <div className="space-y-3">
             {vendorDetail.teamMembers.map((member) => (
@@ -129,7 +131,7 @@ export default function VendorDetailPage() {
                   <div className="font-bold text-main">{member.firstName} {member.lastName}</div>
                   <div className="text-xs text-muted mt-1">{member.email}</div>
                 </div>
-                <MemberRoleBadge role={member.role} />
+                <MemberRoleBadge role={member.role} t={t} />
               </div>
             ))}
           </div>
