@@ -18,7 +18,7 @@ export default function VendorsListPage() {
             <Building2 className="w-7 h-7 text-brand" />
             <h1 className="text-3xl font-bold text-main">Vendors Directory</h1>
           </div>
-          <p className="text-muted">Manage and monitor all platform vendors and their listings.</p>
+          <p className="text-muted">Manage and monitor all vendors and their listings.</p>
         </div>
 
         <div className="w-full sm:w-72 relative">
