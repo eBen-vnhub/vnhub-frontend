@@ -1,9 +1,11 @@
-import { useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
-import { ArrowLeft, Building2, MapPin, Globe, Loader2, ShieldCheck, Tag, Users, Shield, UserCheck } from 'lucide-react';
+import { ArrowLeft, Building2, MapPin, Globe, Loader2, ShieldCheck, Tag, Users, Shield, UserCheck, Edit2 } from 'lucide-react';
 import { useBackofficeVendors } from '../hooks/useBackofficeVendors';
 import { useLanguage } from '../../../i18n/LanguageContext';
 import ListingsAggregatedView from '../components/vendors/ListingsAggregatedView';
+import EditTeamMemberModal from '../components/vendors/EditTeamMemberModal';
+import type { BackofficeTeamMember } from '../../../services/backoffice';
 
 function MemberRoleBadge({ role, t }: { role: string; t: any }) {
   const isPrimary = role === 'SUPER_ADMIN';
@@ -21,7 +23,8 @@ export default function VendorDetailPage() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { t } = useLanguage();
-  const { vendorDetail, listingsData, isLoadingDetails, fetchVendorDetail } = useBackofficeVendors();
+  const { vendorDetail, listingsData, isLoadingDetails, fetchVendorDetail, updateTeamMember } = useBackofficeVendors();
+  const [editingMember, setEditingMember] = useState<BackofficeTeamMember | null>(null);
 
   useEffect(() => {
     if (id) fetchVendorDetail(id);
@@ -135,19 +138,33 @@ export default function VendorDetailPage() {
           </h3>
           <div className="space-y-3">
             {vendorDetail.teamMembers.map((member) => (
-              <div key={member.id} className="p-4 rounded-xl border border-border bg-surface-hover/30 flex justify-between items-center">
+              <button 
+                key={member.id} 
+                className="w-full p-4 rounded-xl border border-border bg-surface-hover/30 hover:bg-surface-hover hover:border-brand/30 flex justify-between items-center transition-all cursor-pointer text-left group"
+                onClick={() => setEditingMember(member)}
+              >
                 <div>
-                  <div className="font-bold text-main">{member.firstName} {member.lastName}</div>
+                  <div className="font-bold text-main group-hover:text-brand transition-colors">{member.firstName} {member.lastName}</div>
                   <div className="text-xs text-muted mt-1">{member.email}</div>
                 </div>
-                <MemberRoleBadge role={member.role} t={t} />
-              </div>
+                <div className="flex items-center gap-3">
+                  <MemberRoleBadge role={member.role} t={t} />
+                  <Edit2 className="w-4 h-4 text-muted group-hover:text-brand transition-colors opacity-0 group-hover:opacity-100" />
+                </div>
+              </button>
             ))}
           </div>
         </div>
       </div>
 
       <ListingsAggregatedView data={listingsData} />
+
+      <EditTeamMemberModal
+        isOpen={!!editingMember}
+        onClose={() => setEditingMember(null)}
+        user={editingMember}
+        onUpdate={updateTeamMember}
+      />
     </div>
   );
 }

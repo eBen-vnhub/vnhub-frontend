@@ -1,6 +1,7 @@
 import { X, Loader2 } from 'lucide-react';
 import { useLanguage } from '../../i18n/LanguageContext';
 import { useListingSync } from '../../hooks/useListingSync';
+import { useVendors } from '../../contexts/VendorsContext';
 
 interface VendorListingModalProps {
   isOpen: boolean;
@@ -10,6 +11,7 @@ interface VendorListingModalProps {
 
 export default function VendorListingModal({ isOpen, onClose, onSuccess }: VendorListingModalProps) {
   const { t } = useLanguage();
+  const { vendor } = useVendors();
 
   const handleSuccess = () => {
     onClose();
@@ -51,7 +53,7 @@ export default function VendorListingModal({ isOpen, onClose, onSuccess }: Vendo
 
         <iframe
           ref={iframeRef}
-          src={`${formUrl}?embed=true`}
+          src={`${formUrl}?embed=true${vendor ? `&vnhubVendorId=${vendor.id}` : ''}`}
           className="w-full flex-1 border-none bg-transparent relative z-0"
           onLoad={handleIframeLoad}
           title="Vendor Listing Form"

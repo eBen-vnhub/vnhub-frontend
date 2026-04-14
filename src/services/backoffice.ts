@@ -46,6 +46,12 @@ const backofficeService = {
 
   getVendorListings: (vendorId: string | number) => 
     request<{ vendorListing: any; benefitListing: any }>(`/backoffice/vendors/${vendorId}/listings/`),
+
+  updateUser: (userId: string | number, data: Partial<BackofficeTeamMember>) =>
+    request<BackofficeTeamMember>(`/backoffice/users/${userId}/`, {
+      method: 'PUT',
+      body: JSON.stringify(data),
+    }),
 };
 
 export default backofficeService;
