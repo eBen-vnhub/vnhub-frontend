@@ -1,13 +1,16 @@
 import { FileText } from 'lucide-react';
+import { useLanguage } from '../../../../../i18n/LanguageContext';
 
 interface Props {
   files: any[];
 }
 
 export default function VendorDocumentsCard({ files }: Props) {
+  const { t } = useLanguage();
+
   return (
     <div>
-      <h4 className="text-xs font-bold text-brand uppercase tracking-wider mb-3">Documents</h4>
+      <h4 className="text-xs font-bold text-brand uppercase tracking-wider mb-3">{t.backoffice.listing.documents}</h4>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
         {files && files.length > 0 ? (
           files.map((file: any) => (
@@ -19,7 +22,7 @@ export default function VendorDocumentsCard({ files }: Props) {
                 <div className="text-xs text-muted font-medium mb-0.5">{file.fileType?.replace(/_/g, ' ')}</div>
                 {file.fileUrl || file.url ? (
                   <a href={file.fileUrl || file.url} target="_blank" rel="noreferrer" className="text-sm font-semibold text-brand hover:underline truncate block">
-                    {file.fileName || 'View Document'}
+                    {file.fileName || t.backoffice.listing.viewDocument}
                   </a>
                 ) : (
                   <span className="text-sm font-semibold text-main truncate block">{file.fileName}</span>
@@ -29,7 +32,7 @@ export default function VendorDocumentsCard({ files }: Props) {
           ))
         ) : (
           <div className="col-span-2 text-sm text-muted bg-surface rounded-xl p-4 border border-dashed border-border text-center">
-            No documents uploaded
+            {t.backoffice.listing.noDocuments}
           </div>
         )}
       </div>

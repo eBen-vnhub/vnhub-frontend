@@ -1,14 +1,17 @@
 import { User, Mail, Phone } from 'lucide-react';
+import { useLanguage } from '../../../../../i18n/LanguageContext';
 
 interface Props {
   administrator: any;
 }
 
 export default function VendorAdminCard({ administrator }: Props) {
+  const { t } = useLanguage();
+
   return (
     <div className="bg-surface rounded-2xl border border-border p-4">
       <h4 className="text-xs font-bold text-brand uppercase tracking-wider mb-3 flex items-center gap-1.5">
-        <User className="w-3.5 h-3.5" /> Administrator
+        <User className="w-3.5 h-3.5" /> {t.backoffice.listing.administrator}
       </h4>
       {administrator ? (
         <div className="space-y-2">
@@ -25,7 +28,7 @@ export default function VendorAdminCard({ administrator }: Props) {
           </div>
         </div>
       ) : (
-        <div className="text-sm text-muted">No admin info available</div>
+        <div className="text-sm text-muted">{t.backoffice.listing.noAdminInfo}</div>
       )}
     </div>
   );

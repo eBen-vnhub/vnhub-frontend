@@ -1,4 +1,5 @@
 import { Share2, Globe, Play } from 'lucide-react';
+import { useLanguage } from '../../../../../i18n/LanguageContext';
 
 interface Props {
   companyProfile: any;
@@ -6,6 +7,7 @@ interface Props {
 }
 
 export default function VendorSocialCard({ companyProfile, socialLinks }: Props) {
+  const { t } = useLanguage();
   const websiteUrl = companyProfile?.websiteUrl;
   const youtubeUrl = companyProfile?.youtubeVideoUrl;
   const hasSocial = socialLinks && socialLinks.length > 0;
@@ -14,13 +16,13 @@ export default function VendorSocialCard({ companyProfile, socialLinks }: Props)
   return (
     <div>
       <h4 className="text-xs font-bold text-brand uppercase tracking-wider mb-3 flex items-center gap-1.5">
-        <Share2 className="w-3.5 h-3.5" /> Web & Social
+        <Share2 className="w-3.5 h-3.5" /> {t.backoffice.listing.webSocial}
       </h4>
       <div className="bg-surface rounded-xl border border-border divide-y divide-border/50">
         {websiteUrl && (
           <div className="px-4 py-3 flex items-center justify-between">
             <div className="flex items-center gap-2 text-sm font-medium text-main">
-              <Globe className="w-4 h-4 text-brand" /> Website
+              <Globe className="w-4 h-4 text-brand" /> {t.backoffice.listing.website}
             </div>
             <a href={websiteUrl} target="_blank" rel="noreferrer" className="text-sm text-brand hover:underline truncate max-w-[250px]">
               {websiteUrl}
@@ -33,7 +35,7 @@ export default function VendorSocialCard({ companyProfile, socialLinks }: Props)
               <Play className="w-4 h-4 text-red-500" /> YouTube
             </div>
             <a href={youtubeUrl} target="_blank" rel="noreferrer" className="text-sm text-brand hover:underline truncate max-w-[250px]">
-              Watch Video
+              {t.backoffice.listing.watchVideo}
             </a>
           </div>
         )}
@@ -46,7 +48,7 @@ export default function VendorSocialCard({ companyProfile, socialLinks }: Props)
           </div>
         ))}
         {!hasAny && (
-          <div className="px-4 py-3 text-sm text-muted text-center">No web or social links provided</div>
+          <div className="px-4 py-3 text-sm text-muted text-center">{t.backoffice.listing.noLinks}</div>
         )}
       </div>
     </div>

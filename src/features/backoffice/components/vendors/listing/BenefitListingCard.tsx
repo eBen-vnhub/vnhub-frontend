@@ -1,4 +1,5 @@
 import { Ticket, Percent, Users, MapPin } from 'lucide-react';
+import { useLanguage } from '../../../../../i18n/LanguageContext';
 import ListingCardHeader from './ListingCardHeader';
 
 interface Props {
@@ -6,11 +7,13 @@ interface Props {
 }
 
 export default function BenefitListingCard({ benefitListing }: Props) {
+  const { t } = useLanguage();
+
   return (
     <div className="bg-gradient-to-br from-surface to-surface-hover/30 border border-border rounded-3xl overflow-hidden shadow-sm">
       <ListingCardHeader
         icon={<Ticket className="w-5 h-5 text-emerald-600" />}
-        title="Benefit Listing Data"
+        title={t.backoffice.listing.benefitListingData}
         status={benefitListing ? benefitListing.formStatus || 'SUBMITTED' : null}
         submittedAt={benefitListing?.submittedAt}
         accentClass="bg-emerald-500/10"
@@ -19,14 +22,14 @@ export default function BenefitListingCard({ benefitListing }: Props) {
       <div className="p-6">
         {!benefitListing ? (
           <div className="text-center py-8 text-muted border border-dashed border-border rounded-2xl bg-surface/50">
-            No offers configured yet.
+            {t.backoffice.listing.noOffersConfigured}
           </div>
         ) : (
           <div className="space-y-6">
             <div>
-              <h4 className="text-xs font-bold text-emerald-600 uppercase tracking-wider mb-2">Campaign Goal</h4>
+              <h4 className="text-xs font-bold text-emerald-600 uppercase tracking-wider mb-2">{t.backoffice.listing.campaignGoal}</h4>
               <div className="bg-surface border border-border px-4 py-3 rounded-xl text-sm font-medium text-main">
-                {benefitListing.listingGoal?.replace(/_/g, ' ') || 'No specific goal mentioned'}
+                {benefitListing.listingGoal?.replace(/_/g, ' ') || t.backoffice.listing.noGoal}
               </div>
             </div>
 
@@ -34,26 +37,26 @@ export default function BenefitListingCard({ benefitListing }: Props) {
               <div className="bg-surface border border-border rounded-xl p-4">
                 <div className="flex items-center gap-2 mb-1">
                   <Users className="w-4 h-4 text-emerald-600" />
-                  <span className="text-xs font-bold text-muted uppercase">Target Group</span>
+                  <span className="text-xs font-bold text-muted uppercase">{t.backoffice.listing.targetGroup}</span>
                 </div>
                 <div className="font-semibold text-main mt-2">
-                  {benefitListing.targetAudience || 'All Users'}
+                  {benefitListing.targetAudience || t.backoffice.listing.allUsers}
                 </div>
               </div>
               <div className="bg-surface border border-border rounded-xl p-4">
                 <div className="flex items-center gap-2 mb-1">
                   <MapPin className="w-4 h-4 text-emerald-600" />
-                  <span className="text-xs font-bold text-muted uppercase">Offers</span>
+                  <span className="text-xs font-bold text-muted uppercase">{t.backoffice.listing.offers}</span>
                 </div>
                 <div className="font-semibold text-main mt-2">
                   {benefitListing.benefitOffers?.length > 0
-                    ? `${benefitListing.benefitOffers.length} Active Offers` : 'No Offers Configured'}
+                    ? `${benefitListing.benefitOffers.length} ${t.backoffice.listing.activeOffers}` : t.backoffice.listing.noOffers}
                 </div>
               </div>
             </div>
 
             <div>
-              <h4 className="text-xs font-bold text-emerald-600 uppercase tracking-wider mb-3">Active Offers</h4>
+              <h4 className="text-xs font-bold text-emerald-600 uppercase tracking-wider mb-3">{t.backoffice.listing.activeOffers}</h4>
               {benefitListing.benefitOffers && benefitListing.benefitOffers.length > 0 ? (
                 <div className="space-y-3">
                   {benefitListing.benefitOffers.map((offer: any, idx: number) => (
@@ -67,7 +70,7 @@ export default function BenefitListingCard({ benefitListing }: Props) {
                           <span className="font-bold text-main">{offer.offerType || 'Voucher'}</span>
                         </div>
                         <div className="text-sm font-semibold text-main mt-2 break-words">
-                          {offer.offerDescription || 'No description provided'}
+                          {offer.offerDescription || t.backoffice.listing.noDescription}
                         </div>
                         <div className="text-xs text-muted mt-2 space-y-1">
                           {offer.discountValue && <div><span className="font-medium text-main">Value:</span> {offer.discountValue}</div>}
@@ -79,7 +82,7 @@ export default function BenefitListingCard({ benefitListing }: Props) {
                 </div>
               ) : (
                 <div className="bg-surface-hover/50 border border-border rounded-xl p-4 text-center text-sm text-muted">
-                  No specific offers detailed
+                  {t.backoffice.listing.noOffersDetailed}
                 </div>
               )}
             </div>
