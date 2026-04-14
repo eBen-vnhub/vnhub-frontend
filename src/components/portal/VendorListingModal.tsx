@@ -23,43 +23,43 @@ export default function VendorListingModal({ isOpen, onClose, onSuccess }: Vendo
   });
 
   const formUrl = import.meta.env.VITE_VENDOR_LISTING_URL;
+  const vendorId = vendor?.id;
+  const iframeSrc = formUrl ? `${formUrl}/vendor-listing/?embed=true${vendorId ? `&vnhubVendorId=${vendorId}` : ''}` : '';
 
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6 md:p-12">
-      <div
-        className="absolute inset-0 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200"
-        onClick={onClose}
-      />
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+      <div className="absolute inset-0 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200" onClick={onClose} />
 
-      <div className="relative w-full max-w-5xl h-full max-h-[90vh] bg-surface rounded-3xl shadow-2xl flex flex-col overflow-hidden animate-in zoom-in-95 duration-300">
-        <div className="absolute top-4 right-4 z-10 bg-surface/80 backdrop-blur-md rounded-full shadow-sm">
-          <button
-            onClick={onClose}
-            className="p-2.5 text-muted hover:text-main hover:bg-surface-hover rounded-full transition-colors flex items-center justify-center bg-surface border border-border"
-            title={t.portal.nextActionModal?.close || "Close"}
-          >
+      <div className="relative w-full max-w-4xl h-[90vh] bg-surface rounded-3xl shadow-xl overflow-hidden animate-in zoom-in-95 duration-300 flex flex-col">
+        <div className="flex items-center justify-between p-4 border-b border-border">
+          <h3 className="text-lg font-bold text-main">{t.portal.companyProfile.updateVendorData}</h3>
+          <button onClick={onClose} className="p-2 text-muted hover:text-main hover:bg-surface-hover rounded-full transition-colors">
             <X className="w-5 h-5" />
           </button>
         </div>
 
-        {isLoading && (
-          <div className="absolute inset-0 flex flex-col items-center justify-center bg-surface z-0">
-            <Loader2 className="w-10 h-10 text-brand animate-spin mb-4" />
-            <p className="text-muted font-medium animate-pulse">Loading listing form...</p>
-          </div>
-        )}
-
-        <iframe
-          ref={iframeRef}
-          src={`${formUrl}?embed=true${vendor ? `&vnhubVendorId=${vendor.id}` : ''}`}
-          className="w-full flex-1 border-none bg-transparent relative z-0"
-          onLoad={handleIframeLoad}
-          title="Vendor Listing Form"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-          sandbox="allow-scripts allow-same-origin allow-forms allow-popups"
-        />
+        <div className="relative flex-1">
+          {isLoading && (
+            <div className="absolute inset-0 flex items-center justify-center bg-surface z-10">
+              <Loader2 className="w-8 h-8 text-brand animate-spin" />
+            </div>
+          )}
+          {formUrl ? (
+            <iframe
+              ref={iframeRef}
+              src={iframeSrc}
+              className="w-full h-full border-0"
+              title="Vendor Listing Form"
+              onLoad={handleIframeLoad}
+            />
+          ) : (
+            <div className="flex items-center justify-center h-full">
+              <p className="text-muted">Form URL not configured</p>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );
