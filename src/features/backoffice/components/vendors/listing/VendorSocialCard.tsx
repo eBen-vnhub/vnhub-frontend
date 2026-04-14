@@ -41,7 +41,9 @@ export default function VendorSocialCard({ companyProfile, socialLinks }: Props)
         )}
         {hasSocial && socialLinks.map((link: any, idx: number) => (
           <div key={idx} className="px-4 py-3 flex items-center justify-between">
-            <span className="text-sm font-medium text-main capitalize">{link.platform || link.type || 'Social'}</span>
+            <span className="text-sm font-medium text-main capitalize">
+              {typeof link.platform === 'object' ? link.platform.platformName : (link.platform || link.type || 'Social')}
+            </span>
             <a href={link.url || link.link} target="_blank" rel="noreferrer" className="text-sm text-brand hover:underline truncate max-w-[250px]">
               {(link.url || link.link || '').replace(/^https?:\/\/(www\.)?/, '')}
             </a>
