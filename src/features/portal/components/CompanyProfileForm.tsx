@@ -309,7 +309,7 @@ export default function CompanyProfileForm({ initialData, onUpdate, onUpdateVend
                       <div className="space-y-1">
                         <p className="text-xs text-muted-foreground uppercase">{t.backoffice.listing.deliveryCoverage}</p>
                         <p className="text-sm text-main font-medium">
-                          {listingsData.vendorListing.deliveryLocations.map((dl: any) => 
+                          {listingsData.vendorListing.deliveryLocations.map((dl: any) =>
                             dl.isWorldwide ? `🌍 ${t.backoffice.listing.worldwide}` : (dl.country?.countryName || dl.country?.countryCode)
                           ).join(', ')}
                         </p>
@@ -396,32 +396,244 @@ export default function CompanyProfileForm({ initialData, onUpdate, onUpdateVend
 
           <div className="bg-surface border border-border hover:border-brand/30 transition-colors rounded-xl p-5 shadow-sm">
             {listingsData?.benefitListing ? (
-              <div className="space-y-4">
-                <div className="flex items-center justify-between pb-3 border-b border-border border-dashed">
-                  <div className="flex items-center gap-2 text-sm text-main">
-                    <Lock className="w-4 h-4 mt-0.5 text-muted-foreground" />
-                    <span><strong>Goal:</strong> {listingsData.benefitListing.listingGoal?.replace('_', ' ').toUpperCase() || 'Not Specified'}</span>
+              <div className="space-y-5">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pb-4 border-b border-border">
+                  <div className="space-y-1">
+                    <p className="text-xs text-muted-foreground uppercase">{(t.portal.companyProfile as any).listingGoal || 'Listing Goal'}</p>
+                    <p className="text-sm text-main font-medium">{listingsData.benefitListing.listingGoal?.replace(/_/g, ' ') || 'N/A'}</p>
+                  </div>
+                  <div className="space-y-1">
+                    <p className="text-xs text-muted-foreground uppercase">{(t.portal.companyProfile as any).advertisingFor || 'Advertising For'}</p>
+                    <p className="text-sm text-main font-medium">{listingsData.benefitListing.advertisingFor?.replace(/_/g, ' ') || 'N/A'}</p>
+                  </div>
+                  <div className="space-y-1">
+                    <p className="text-xs text-muted-foreground uppercase">{(t.portal.companyProfile as any).preferredLang || 'Preferred Language'}</p>
+                    <p className="text-sm text-main font-medium">{listingsData.benefitListing.preferredLanguage === 'ar' ? 'العربية' : 'English'}</p>
                   </div>
                 </div>
 
                 {listingsData.benefitListing.benefitOffers && listingsData.benefitListing.benefitOffers.length > 0 ? (
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div className="space-y-4">
                     {listingsData.benefitListing.benefitOffers.map((offer: any, idx: number) => (
-                      <div key={idx} className="bg-surface-hover/50 border border-border p-3 rounded-lg flex flex-col justify-between group">
-                        <div>
-                          <span className="text-xs font-bold text-brand bg-brand/10 px-2 py-0.5 rounded uppercase mb-1.5 inline-block">Offer {idx + 1}</span>
-                          <h5 className="text-sm font-bold text-main">{offer.benefitName || 'Standard Discount'}</h5>
-                          <p className="text-xs text-muted-foreground line-clamp-2 mt-1">{offer.benefitDescription || 'No description available for this offer.'}</p>
+                      <div key={idx} className="border border-border rounded-xl p-4 space-y-4 bg-surface-hover/20">
+                        <div className="flex items-start justify-between gap-3 pb-3 border-b border-border">
+                          <div>
+                            <h4 className="text-sm font-bold text-main">{offer.benefitName || 'N/A'}</h4>
+                            <p className="text-xs text-muted-foreground mt-1">{offer.benefitDescription || ''}</p>
+                          </div>
+                          {offer.discountPercentage > 0 && (
+                            <span className="text-sm font-black text-brand bg-brand/10 px-3 py-1 rounded-lg whitespace-nowrap">{offer.discountPercentage}% OFF</span>
+                          )}
                         </div>
-                        <div className="mt-3 flex items-center justify-between">
-                          <span className="text-[10px] text-muted-foreground">Type: {offer.discountType || 'N/A'}</span>
-                          <span className="text-sm font-black text-main bg-white px-2 py-1 rounded shadow-sm border border-border/50">{offer.discountPercentage || 0}% OFF</span>
+
+                        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                          {offer.currency && (
+                            <div className="space-y-1">
+                              <p className="text-xs text-muted-foreground uppercase">{(t.portal.companyProfile as any).currency || 'Currency'}</p>
+                              <p className="text-sm text-main font-medium">{offer.currency}</p>
+                            </div>
+                          )}
+                          {offer.productUnits && (
+                            <div className="space-y-1">
+                              <p className="text-xs text-muted-foreground uppercase">{(t.portal.companyProfile as any).productUnits || 'Product Units'}</p>
+                              <p className="text-sm text-main font-medium">{offer.productUnits}</p>
+                            </div>
+                          )}
+                          {offer.originalPrice != null && (
+                            <div className="space-y-1">
+                              <p className="text-xs text-muted-foreground uppercase">{(t.portal.companyProfile as any).originalPrice || 'Original Price'}</p>
+                              <p className="text-sm text-main font-medium">{offer.originalPrice} {offer.currency}</p>
+                            </div>
+                          )}
+                          {offer.discountedPrice != null && (
+                            <div className="space-y-1">
+                              <p className="text-xs text-muted-foreground uppercase">{(t.portal.companyProfile as any).discountedPrice || 'Discounted Price'}</p>
+                              <p className="text-sm text-main font-medium">{offer.discountedPrice} {offer.currency}</p>
+                            </div>
+                          )}
                         </div>
+
+                        {offer.valueProposition && (
+                          <div className="space-y-1">
+                            <p className="text-xs text-muted-foreground uppercase">{(t.portal.companyProfile as any).valueProposition || 'Value Proposition'}</p>
+                            <p className="text-sm text-main font-medium">{offer.valueProposition.replace(/_/g, ' ')}</p>
+                          </div>
+                        )}
+
+                        {(offer.brandIntro || offer.brandDifferentiator) && (
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            {offer.brandIntro && (
+                              <div className="space-y-1">
+                                <p className="text-xs text-muted-foreground uppercase">{(t.portal.companyProfile as any).brandIntro || 'Brand Introduction'}</p>
+                                <p className="text-sm text-main">{offer.brandIntro}</p>
+                              </div>
+                            )}
+                            {offer.brandDifferentiator && (
+                              <div className="space-y-1">
+                                <p className="text-xs text-muted-foreground uppercase">{(t.portal.companyProfile as any).brandDifferentiator || 'Brand Differentiator'}</p>
+                                <p className="text-sm text-main">{offer.brandDifferentiator}</p>
+                              </div>
+                            )}
+                          </div>
+                        )}
+
+                        {offer.detailedContent && (
+                          <div className="space-y-1">
+                            <p className="text-xs text-muted-foreground uppercase">{(t.portal.companyProfile as any).detailedContent || 'Detailed Content'}</p>
+                            <p className="text-sm text-main">{offer.detailedContent}</p>
+                          </div>
+                        )}
+
+                        {(offer.featuresContent || offer.limitationsContent) && (
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            {offer.featuresContent && (
+                              <div className="space-y-1">
+                                <p className="text-xs text-muted-foreground uppercase">{(t.portal.companyProfile as any).features || 'Features'}</p>
+                                <p className="text-sm text-main">{offer.featuresContent}</p>
+                              </div>
+                            )}
+                            {offer.limitationsContent && (
+                              <div className="space-y-1">
+                                <p className="text-xs text-muted-foreground uppercase">{(t.portal.companyProfile as any).limitations || 'Limitations'}</p>
+                                <p className="text-sm text-main">{offer.limitationsContent}</p>
+                              </div>
+                            )}
+                          </div>
+                        )}
+
+                        {offer.hasFreeGift && offer.freeGiftDescription && (
+                          <div className="space-y-1">
+                            <p className="text-xs text-muted-foreground uppercase">{(t.portal.companyProfile as any).freeGift || 'Free Gift'}</p>
+                            <p className="text-sm text-main">{offer.freeGiftDescription}</p>
+                          </div>
+                        )}
+
+                        {offer.referenceUrl && (
+                          <div className="space-y-1">
+                            <p className="text-xs text-muted-foreground uppercase">{(t.portal.companyProfile as any).referenceUrl || 'Reference URL'}</p>
+                            <a href={offer.referenceUrl} target="_blank" rel="noreferrer" className="text-sm text-brand hover:underline truncate block">{offer.referenceUrl}</a>
+                          </div>
+                        )}
+
+                        {offer.targeting && (
+                          <div className="pt-3 border-t border-border">
+                            <p className="text-xs text-muted-foreground uppercase mb-2">{(t.portal.companyProfile as any).targeting || 'Targeting'}</p>
+                            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                              <div className="space-y-1">
+                                <p className="text-[10px] text-muted-foreground uppercase">{(t.portal.companyProfile as any).geoTargeting || 'Geographic'}</p>
+                                <p className="text-sm text-main font-medium">{offer.targeting.geoTargetingType?.replace(/_/g, ' ') || 'N/A'}</p>
+                              </div>
+                              <div className="space-y-1">
+                                <p className="text-[10px] text-muted-foreground uppercase">{(t.portal.companyProfile as any).genderTargeting || 'Gender'}</p>
+                                <p className="text-sm text-main font-medium">{offer.targeting.genderTargeting || 'ALL'}</p>
+                              </div>
+                              <div className="space-y-1">
+                                <p className="text-[10px] text-muted-foreground uppercase">{(t.portal.companyProfile as any).parentTargeting || 'Parent Status'}</p>
+                                <p className="text-sm text-main font-medium">{offer.targeting.parentTargeting || 'ALL'}</p>
+                              </div>
+                            </div>
+                          </div>
+                        )}
+
+                        {offer.claimSettings && (
+                          <div className="pt-3 border-t border-border">
+                            <p className="text-xs text-muted-foreground uppercase mb-2">{(t.portal.companyProfile as any).claimSettings || 'Claim Settings'}</p>
+                            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                              <div className="space-y-1">
+                                <p className="text-[10px] text-muted-foreground uppercase">{(t.portal.companyProfile as any).claimMethod || 'Claim Method'}</p>
+                                <p className="text-sm text-main font-medium">{offer.claimSettings.claimMethod?.replace(/_/g, ' ') || 'N/A'}</p>
+                              </div>
+                              {offer.claimSettings.discountCodeType && (
+                                <div className="space-y-1">
+                                  <p className="text-[10px] text-muted-foreground uppercase">{(t.portal.companyProfile as any).codeType || 'Code Type'}</p>
+                                  <p className="text-sm text-main font-medium">{offer.claimSettings.discountCodeType?.replace(/_/g, ' ')}</p>
+                                </div>
+                              )}
+                              {offer.claimSettings.paymentCollection && (
+                                <div className="space-y-1">
+                                  <p className="text-[10px] text-muted-foreground uppercase">{(t.portal.companyProfile as any).payment || 'Payment'}</p>
+                                  <p className="text-sm text-main font-medium">{offer.claimSettings.paymentCollection?.replace(/_/g, ' ')}</p>
+                                </div>
+                              )}
+                              {offer.claimSettings.purchaseMethod && (
+                                <div className="space-y-1">
+                                  <p className="text-[10px] text-muted-foreground uppercase">{(t.portal.companyProfile as any).purchaseMethod || 'Purchase Method'}</p>
+                                  <p className="text-sm text-main font-medium">{offer.claimSettings.purchaseMethod?.replace(/,/g, ', ')}</p>
+                                </div>
+                              )}
+                              {offer.claimSettings.receiveMethod && (
+                                <div className="space-y-1">
+                                  <p className="text-[10px] text-muted-foreground uppercase">{(t.portal.companyProfile as any).receiveMethod || 'Receive Method'}</p>
+                                  <p className="text-sm text-main font-medium">{offer.claimSettings.receiveMethod?.replace(/,/g, ', ')}</p>
+                                </div>
+                              )}
+                              {offer.claimSettings.claimButtonText && (
+                                <div className="space-y-1">
+                                  <p className="text-[10px] text-muted-foreground uppercase">{(t.portal.companyProfile as any).claimButton || 'CTA Button'}</p>
+                                  <p className="text-sm text-main font-medium">{offer.claimSettings.claimButtonText}</p>
+                                </div>
+                              )}
+                            </div>
+                            {offer.claimSettings.claimTermsUrl && (
+                              <div className="mt-2">
+                                <a href={offer.claimSettings.claimTermsUrl} target="_blank" rel="noreferrer" className="text-xs text-brand hover:underline">
+                                  {(t.portal.companyProfile as any).viewTerms || 'View Terms & Conditions'}
+                                </a>
+                              </div>
+                            )}
+                          </div>
+                        )}
+
+                        {offer.mediaAssets && offer.mediaAssets.length > 0 && (
+                          <div className="pt-3 border-t border-border">
+                            <p className="text-xs text-muted-foreground uppercase mb-2">{(t.portal.companyProfile as any).mediaAssets || 'Media'}</p>
+                            <div className="flex flex-wrap gap-2">
+                              {offer.mediaAssets.map((asset: any) => (
+                                <a key={asset.id} href={asset.fileUrl} target="_blank" rel="noreferrer" className="block w-16 h-16 rounded-lg border border-border overflow-hidden hover:border-brand/50 transition-colors">
+                                  {asset.mediaType === 'IMAGE' ? (
+                                    <img src={asset.fileUrl} alt={asset.altText || asset.mediaCategory} className="w-full h-full object-cover" />
+                                  ) : (
+                                    <div className="w-full h-full bg-surface-hover flex items-center justify-center text-[10px] text-muted-foreground">{asset.mediaType}</div>
+                                  )}
+                                </a>
+                              ))}
+                            </div>
+                          </div>
+                        )}
                       </div>
                     ))}
                   </div>
                 ) : (
-                  <p className="text-sm text-muted-foreground text-center py-4">{(t.portal.companyProfile as any).noBenefitData || 'No active offers configured.'}</p>
+                  <p className="text-sm text-muted-foreground text-center py-4">{(t.portal.companyProfile as any).noBenefitData || 'No Benefit Listing Data'}</p>
+                )}
+
+                {listingsData.benefitListing.socialMedia && listingsData.benefitListing.socialMedia.hasSocialMedia && (
+                  <div className="pt-3 border-t border-border">
+                    <p className="text-xs text-muted-foreground uppercase mb-2">{t.backoffice.listing.webSocial}</p>
+                    <div className="flex flex-wrap gap-2">
+                      {listingsData.benefitListing.socialMedia.websiteUrl && (
+                        <a href={listingsData.benefitListing.socialMedia.websiteUrl} target="_blank" rel="noreferrer" className="text-xs bg-surface-hover border border-border px-2 py-1 rounded-lg text-brand hover:underline">Website</a>
+                      )}
+                      {listingsData.benefitListing.socialMedia.facebookUrl && (
+                        <a href={listingsData.benefitListing.socialMedia.facebookUrl} target="_blank" rel="noreferrer" className="text-xs bg-surface-hover border border-border px-2 py-1 rounded-lg text-brand hover:underline">Facebook</a>
+                      )}
+                      {listingsData.benefitListing.socialMedia.instagramUrl && (
+                        <a href={listingsData.benefitListing.socialMedia.instagramUrl} target="_blank" rel="noreferrer" className="text-xs bg-surface-hover border border-border px-2 py-1 rounded-lg text-brand hover:underline">Instagram</a>
+                      )}
+                      {listingsData.benefitListing.socialMedia.twitterUrl && (
+                        <a href={listingsData.benefitListing.socialMedia.twitterUrl} target="_blank" rel="noreferrer" className="text-xs bg-surface-hover border border-border px-2 py-1 rounded-lg text-brand hover:underline">X (Twitter)</a>
+                      )}
+                      {listingsData.benefitListing.socialMedia.linkedinUrl && (
+                        <a href={listingsData.benefitListing.socialMedia.linkedinUrl} target="_blank" rel="noreferrer" className="text-xs bg-surface-hover border border-border px-2 py-1 rounded-lg text-brand hover:underline">LinkedIn</a>
+                      )}
+                      {listingsData.benefitListing.socialMedia.tiktokUrl && (
+                        <a href={listingsData.benefitListing.socialMedia.tiktokUrl} target="_blank" rel="noreferrer" className="text-xs bg-surface-hover border border-border px-2 py-1 rounded-lg text-brand hover:underline">TikTok</a>
+                      )}
+                      {listingsData.benefitListing.socialMedia.youtubeUrl && (
+                        <a href={listingsData.benefitListing.socialMedia.youtubeUrl} target="_blank" rel="noreferrer" className="text-xs bg-surface-hover border border-border px-2 py-1 rounded-lg text-brand hover:underline">YouTube</a>
+                      )}
+                    </div>
+                  </div>
                 )}
               </div>
             ) : isLoadingListings ? (
