@@ -245,7 +245,12 @@ export default function CompanyProfileForm({ initialData, onUpdate, onUpdateVend
                       const logoFile = listingsData.vendorListing.files?.find((f: any) => f.fileType === 'LOGO');
                       return logoFile?.fileUrl ? (
                         <div className="w-10 h-10 rounded-lg bg-surface-hover border border-border flex items-center justify-center p-1 overflow-hidden">
-                          <img src={logoFile.fileUrl} alt="Logo" className="max-w-full max-h-full object-contain" />
+                          <img 
+                            src={logoFile.fileUrl} 
+                            alt="" 
+                            onError={(e) => { e.currentTarget.style.display = 'none'; }} 
+                            className="max-w-full max-h-full object-contain" 
+                          />
                         </div>
                       ) : (
                         <div className="w-10 h-10 rounded-lg bg-brand/10 text-brand flex items-center justify-center font-bold text-lg">
