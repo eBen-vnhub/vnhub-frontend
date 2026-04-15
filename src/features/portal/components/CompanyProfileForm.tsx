@@ -228,7 +228,9 @@ export default function CompanyProfileForm({ initialData, onUpdate, onUpdateVend
                 className="text-sm rounded-full py-1.5 px-4"
                 onClick={onUpdateVendorListing}
               >
-                {(t.portal.companyProfile as any).updateVendorData || 'Update Vendor Data'}
+                {listingsData?.vendorListing
+                  ? ((t.portal.companyProfile as any).updateVendorData || 'Update Vendor listing Data')
+                  : ((t.portal.companyProfile as any).createVendorData || 'Complete Vendor listing Profile')}
               </Button>
             )}
           </div>
@@ -245,11 +247,11 @@ export default function CompanyProfileForm({ initialData, onUpdate, onUpdateVend
                       const logoFile = listingsData.vendorListing.files?.find((f: any) => f.fileType === 'LOGO');
                       return logoFile?.fileUrl ? (
                         <div className="w-10 h-10 rounded-lg bg-surface-hover border border-border flex items-center justify-center p-1 overflow-hidden">
-                          <img 
-                            src={logoFile.fileUrl} 
-                            alt="" 
-                            onError={(e) => { e.currentTarget.style.display = 'none'; }} 
-                            className="max-w-full max-h-full object-contain" 
+                          <img
+                            src={logoFile.fileUrl}
+                            alt=""
+                            onError={(e) => { e.currentTarget.style.display = 'none'; }}
+                            className="max-w-full max-h-full object-contain"
                           />
                         </div>
                       ) : (
@@ -410,7 +412,9 @@ export default function CompanyProfileForm({ initialData, onUpdate, onUpdateVend
                 onClick={onUpdateBenefitListing}
               >
                 <Edit2 className="w-3.5 h-3.5" />
-                {(t.portal.companyProfile as any).updateBenefitData || 'Update Benefit Data'}
+                {listingsData?.benefitListing
+                  ? ((t.portal.companyProfile as any).updateBenefitData || 'Update Benefit listing Data')
+                  : ((t.portal.companyProfile as any).createBenefitData || 'Create Benefit Listing')}
               </Button>
             )}
           </div>
@@ -418,7 +422,6 @@ export default function CompanyProfileForm({ initialData, onUpdate, onUpdateVend
             {(t.portal.companyProfile as any).benefitListingDesc || 'Manage your specific discount offers, vouchers, and benefit rules.'}
           </p>
 
-          {/* Display Real Benefit Data */}
           <div className="bg-surface border border-border hover:border-brand/30 transition-colors rounded-xl p-5 shadow-sm">
             {listingsData?.benefitListing ? (
               <div className="space-y-4">
