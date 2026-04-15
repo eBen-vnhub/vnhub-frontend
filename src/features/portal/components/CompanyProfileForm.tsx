@@ -243,32 +243,11 @@ export default function CompanyProfileForm({ initialData, onUpdate, onUpdateVend
               <div className="space-y-5">
                 <div className="flex items-center justify-between border-b border-border pb-3">
                   <div className="flex items-center gap-3">
-                    {(() => {
-                      const logoFile = listingsData.vendorListing.files?.find((f: any) => f.fileType === 'LOGO');
-                      return logoFile?.fileUrl ? (
-                        <div className="w-10 h-10 rounded-lg bg-surface-hover border border-border flex items-center justify-center p-1 overflow-hidden">
-                          <img
-                            src={logoFile.fileUrl}
-                            alt=""
-                            onError={(e) => { e.currentTarget.style.display = 'none'; }}
-                            className="max-w-full max-h-full object-contain"
-                          />
-                        </div>
-                      ) : (
-                        <div className="w-10 h-10 rounded-lg bg-brand/10 text-brand flex items-center justify-center font-bold text-lg">
-                          {listingsData.vendorListing.companyProfile?.brandName?.charAt(0)?.toUpperCase() || <Building className="w-5 h-5" />}
-                        </div>
-                      );
-                    })()}
                     <div>
                       <h4 className="text-sm font-bold text-main">{listingsData.vendorListing.companyProfile?.brandName || 'N/A'}</h4>
                       <p className="text-xs text-muted-foreground line-clamp-1">{listingsData.vendorListing.companyProfile?.brandDescription || t.backoffice.listing.noDescription}</p>
                     </div>
                   </div>
-                  <span className={`text-[10px] uppercase tracking-wider font-bold px-2.5 py-1 rounded-full ${listingsData.vendorListing.formStatus === 'SUBMITTED' ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-700'
-                    }`}>
-                    {listingsData.vendorListing.formStatus || 'DRAFT'}
-                  </span>
                 </div>
 
                 {listingsData.vendorListing.administrator && (
@@ -321,23 +300,19 @@ export default function CompanyProfileForm({ initialData, onUpdate, onUpdateVend
                     {listingsData.vendorListing.companyLocations?.length > 0 && (
                       <div className="space-y-1">
                         <p className="text-xs text-muted-foreground uppercase">{t.backoffice.listing.companyLocations}</p>
-                        <div className="flex flex-wrap gap-1">
-                          {listingsData.vendorListing.companyLocations.map((loc: any) => (
-                            <span key={loc.id} className="text-xs bg-brand/10 text-brand px-2 py-0.5 rounded-full">{loc.country?.countryName || loc.country?.countryCode}</span>
-                          ))}
-                        </div>
+                        <p className="text-sm text-main font-medium">
+                          {listingsData.vendorListing.companyLocations.map((loc: any) => (loc.country?.countryName || loc.country?.countryCode)).join(', ')}
+                        </p>
                       </div>
                     )}
                     {listingsData.vendorListing.deliveryLocations?.length > 0 && (
                       <div className="space-y-1">
                         <p className="text-xs text-muted-foreground uppercase">{t.backoffice.listing.deliveryCoverage}</p>
-                        <div className="flex flex-wrap gap-1">
-                          {listingsData.vendorListing.deliveryLocations.map((dl: any) => (
-                            <span key={dl.id} className="text-xs bg-emerald-500/10 text-emerald-700 px-2 py-0.5 rounded-full">
-                              {dl.isWorldwide ? `🌍 ${t.backoffice.listing.worldwide}` : (dl.country?.countryName || dl.country?.countryCode)}
-                            </span>
-                          ))}
-                        </div>
+                        <p className="text-sm text-main font-medium">
+                          {listingsData.vendorListing.deliveryLocations.map((dl: any) => 
+                            dl.isWorldwide ? `🌍 ${t.backoffice.listing.worldwide}` : (dl.country?.countryName || dl.country?.countryCode)
+                          ).join(', ')}
+                        </p>
                       </div>
                     )}
                   </div>
@@ -384,8 +359,8 @@ export default function CompanyProfileForm({ initialData, onUpdate, onUpdateVend
                 <div className="w-12 h-12 bg-surface-hover rounded-full flex items-center justify-center mb-3">
                   <Building className="w-5 h-5 text-muted-foreground/50" />
                 </div>
-                <p className="text-sm font-medium text-main">{t.backoffice.listing.noVendorData}</p>
-                {canEditCompanyProfile && <p className="text-xs text-muted-foreground mt-1">{(t.portal.companyProfile as any).clickToUpdate || 'Click "Update Vendor Data" to complete your profile.'}</p>}
+                <p className="text-sm font-medium text-main">{(t.portal.companyProfile as any).noVendorData || 'No vendor listing data provided yet.'}</p>
+                {canEditCompanyProfile && <p className="text-xs text-muted-foreground mt-1">{(t.portal.companyProfile as any).clickToUpdate || 'Click "Update Vendor listing Data" to complete your profile.'}</p>}
               </div>
             )}
           </div>
@@ -418,9 +393,6 @@ export default function CompanyProfileForm({ initialData, onUpdate, onUpdateVend
               </Button>
             )}
           </div>
-          <p className="text-sm text-muted mb-4">
-            {(t.portal.companyProfile as any).benefitListingDesc || 'Manage your specific discount offers, vouchers, and benefit rules.'}
-          </p>
 
           <div className="bg-surface border border-border hover:border-brand/30 transition-colors rounded-xl p-5 shadow-sm">
             {listingsData?.benefitListing ? (
@@ -449,20 +421,20 @@ export default function CompanyProfileForm({ initialData, onUpdate, onUpdateVend
                     ))}
                   </div>
                 ) : (
-                  <p className="text-sm text-muted-foreground text-center py-4">No active offers configured.</p>
+                  <p className="text-sm text-muted-foreground text-center py-4">{(t.portal.companyProfile as any).noBenefitData || 'No active offers configured.'}</p>
                 )}
               </div>
             ) : isLoadingListings ? (
               <div className="flex items-center gap-3 p-2">
                 <div className="w-5 h-5 border-2 border-brand border-t-transparent rounded-full animate-spin"></div>
-                <p className="text-sm text-muted animate-pulse">Loading benefit data...</p>
+                <p className="text-sm text-muted animate-pulse">{t.common.loading}</p>
               </div>
             ) : (
               <div className="flex flex-col items-center justify-center p-6 text-center">
                 <div className="w-12 h-12 bg-surface-hover rounded-full flex items-center justify-center mb-3">
                   <Tag className="w-5 h-5 text-muted-foreground/50" />
                 </div>
-                <p className="text-sm font-medium text-main">No offers configured yet.</p>
+                <p className="text-sm font-medium text-main">{(t.portal.companyProfile as any).noBenefitData || 'No Benefit Listing Data'}</p>
               </div>
             )}
           </div>
