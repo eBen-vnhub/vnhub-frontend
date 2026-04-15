@@ -197,6 +197,77 @@ export const ar = {
       b2c: "من شركة إلى مستهلك",
       b2b: "من شركة إلى شركة",
       otherBranches: "فروع أخرى",
+      mediaCategory: {
+        IMAGE: "صورة",
+        DOCUMENT: "مستند التعاقد",
+        TERMS: "الشروط والأحكام",
+        PROFILE: "الصورة الشخصية",
+        GALLERY: "المعرض",
+      },
+      enums: {
+        listingGoal: {
+          VISIBILITY_AWARENESS: "الرؤية والوعي",
+          COMPETITIVE_ADVANTAGE: "ميزة تنافسية",
+          CUSTOMER_ENGAGEMENT: "تفاعل العملاء",
+          MARKET_PENETRATION: "اختراق السوق",
+          B2B_LEAD_GENERATION: "جلب عملاء B2B"
+        },
+        advertisingFor: {
+          COMPANY: "شركة",
+          BRAND: "علامة تجارية",
+          PHYSICAL_PRODUCT: "منتج ملموس",
+          ONLINE_SERVICE: "خدمة أونلاين",
+          IN_OUTLET_SERVICE: "خدمة داخل الفرع"
+        },
+        gender: {
+          MALE: "ذكور",
+          FEMALE: "إناث",
+          ALL: "ذكور وإناث"
+        },
+        parent: {
+          PARENTS: "آباء فقط",
+          ALL: "آباء وعزاب"
+        },
+        receiveMethod: {
+          ONLINE: "أونلاين",
+          DELIVERY: "توصيل",
+          OUTLET: "في الفرع",
+          CUSTOMER_SITE: "موقع العميل"
+        },
+        purchaseMethod: {
+          ONLINE: "أونلاين",
+          BY_PHONE: "تليفونياً",
+          OUTLET: "في الفرع"
+        },
+        discountCodeType: {
+          SINGLE_USE: "كود خصم للاستخدام مرة واحدة",
+          OPEN: "كود خصم مفتوح"
+        },
+        payment: {
+          UPFRONT: "التحصيل عبر خدمة دفع ePN",
+          OTHER: "التحصيل المباشر للمورد"
+        },
+        claimMethod: {
+          DISCOUNT_CODE: "كود الخصم",
+          IN_STORE: "اتصال / في الفرع",
+          EMAIL: "يتواصل المستخدم عبر (إيميل / واتساب أو تليفون)",
+          ONLINE: "تأكيد أونلاين / حجز"
+        },
+        geo: {
+          WORLDWIDE: "عالمي",
+          REGIONAL_MENA: "الشرق الأوسط (MENA)",
+          REGIONAL_GCC: "الخليج (GCC)",
+          COUNTRIES: "دول محددة",
+          CITIES: "مدن محددة",
+          NEIGHBORHOODS: "أحياء محددة"
+        },
+        valueProp: {
+          EXCLUSIVE_CORPORATE_RATE: "سعر حصري للشركات",
+          ELSEWHERE_DISCOUNT: "خصم متوفر في أماكن أخرى",
+          EXCLUSIVE_FREE_TRIAL: "تجربة مجانية حصرية",
+          FREE_TRIAL_AVAILABLE_ELSEWHERE: "تجربة مجانية تتوفر في أماكن أخرى"
+        }
+      }
     },
     vendorAdmin: {
       title: "إدارة الفريق",

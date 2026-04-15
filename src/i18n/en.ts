@@ -197,6 +197,77 @@ export const en = {
       b2c: "B2C",
       b2b: "B2B",
       otherBranches: "Other Branches",
+      mediaCategory: {
+        IMAGE: "Image",
+        DOCUMENT: "Document",
+        TERMS: "Terms & Conditions",
+        PROFILE: "Profile Photo",
+        GALLERY: "Gallery",
+      },
+      enums: {
+        listingGoal: {
+          VISIBILITY_AWARENESS: "Visibility & Awareness",
+          COMPETITIVE_ADVANTAGE: "Competitive advantage",
+          CUSTOMER_ENGAGEMENT: "Customer engagement",
+          MARKET_PENETRATION: "Market penetration",
+          B2B_LEAD_GENERATION: "B2B lead generation"
+        },
+        advertisingFor: {
+          COMPANY: "Company",
+          BRAND: "Brand",
+          PHYSICAL_PRODUCT: "Physical Product",
+          ONLINE_SERVICE: "Online Service",
+          IN_OUTLET_SERVICE: "In-outlet Service"
+        },
+        gender: {
+          MALE: "Male",
+          FEMALE: "Female",
+          ALL: "Male & Female"
+        },
+        parent: {
+          PARENTS: "Only parents",
+          ALL: "Parents & singles"
+        },
+        receiveMethod: {
+          ONLINE: "Online",
+          DELIVERY: "Delivery",
+          OUTLET: "Outlet",
+          CUSTOMER_SITE: "Customer Site"
+        },
+        purchaseMethod: {
+          ONLINE: "Online",
+          BY_PHONE: "By Phone",
+          OUTLET: "Outlet"
+        },
+        discountCodeType: {
+          SINGLE_USE: "Single-use discount code",
+          OPEN: "Open discount code"
+        },
+        payment: {
+          UPFRONT: "Collect using ePN Payment Service",
+          OTHER: "Collect payment directly to the Vendor"
+        },
+        claimMethod: {
+          DISCOUNT_CODE: "Discount code",
+          IN_STORE: "Vendor call / in-store",
+          EMAIL: "User contacts vendor (email/phone/WhatsApp)",
+          ONLINE: "Online confirmation / booking"
+        },
+        geo: {
+          WORLDWIDE: "Worldwide",
+          REGIONAL_MENA: "Regional (MENA)",
+          REGIONAL_GCC: "Regional (GCC)",
+          COUNTRIES: "Specific Countries",
+          CITIES: "Specific Cities",
+          NEIGHBORHOODS: "Specific Neighborhoods"
+        },
+        valueProp: {
+          EXCLUSIVE_CORPORATE_RATE: "Exclusive Corporate Rate",
+          ELSEWHERE_DISCOUNT: "Elsewhere Discount",
+          EXCLUSIVE_FREE_TRIAL: "Exclusive Free Trial",
+          FREE_TRIAL_AVAILABLE_ELSEWHERE: "Free Trial Available Elsewhere"
+        }
+      }
     },
     vendorAdmin: {
       title: "Vendor Administration",
