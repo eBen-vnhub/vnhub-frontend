@@ -416,13 +416,26 @@ export default function CompanyProfileForm({ initialData, onUpdate, onUpdateVend
                   <div className="space-y-4">
                     {listingsData.benefitListing.benefitOffers.map((offer: any, idx: number) => (
                       <div key={idx} className="border border-border rounded-xl p-4 space-y-4 bg-surface-hover/20">
-                        <div className="flex items-start justify-between gap-3 pb-3 border-b border-border">
-                          <div>
-                            <h4 className="text-sm font-bold text-main">{offer.benefitName || 'N/A'}</h4>
-                            <p className="text-xs text-muted-foreground mt-1">{offer.benefitDescription || ''}</p>
+                        <div className="flex flex-col gap-2 pb-3 border-b border-border">
+                          <div className="flex items-start justify-between gap-3">
+                            <div>
+                              <p className="text-xs text-muted-foreground uppercase">{(t.portal.companyProfile as any).benefitName || 'Benefit Name'}</p>
+                              <h4 className="text-sm font-bold text-main mt-0.5">{offer.benefitName || 'N/A'}</h4>
+                            </div>
+                            {offer.discountPercentage > 0 && (
+                              <div className="text-right">
+                                <p className="text-[10px] text-muted-foreground uppercase opacity-0 select-none">.</p>
+                                <span className="text-sm font-black text-brand bg-brand/10 px-3 py-1 rounded-lg whitespace-nowrap mt-0.5 block border border-brand/20">
+                                  {offer.discountPercentage}% OFF
+                                </span>
+                              </div>
+                            )}
                           </div>
-                          {offer.discountPercentage > 0 && (
-                            <span className="text-sm font-black text-brand bg-brand/10 px-3 py-1 rounded-lg whitespace-nowrap">{offer.discountPercentage}% OFF</span>
+                          {offer.benefitDescription && (
+                            <div className="mt-1">
+                              <p className="text-xs text-muted-foreground uppercase">{(t.portal.companyProfile as any).benefitDescription || 'Short Description'}</p>
+                              <p className="text-xs text-muted-foreground mt-0.5">{offer.benefitDescription}</p>
+                            </div>
                           )}
                         </div>
 
@@ -525,11 +538,16 @@ export default function CompanyProfileForm({ initialData, onUpdate, onUpdateVend
                               </div>
                               <div className="space-y-1">
                                 <p className="text-[10px] text-muted-foreground uppercase">{(t.portal.companyProfile as any).genderTargeting || 'Gender'}</p>
-                                <p className="text-sm text-main font-medium">{offer.targeting.genderTargeting || 'ALL'}</p>
+                                <p className="text-sm text-main font-medium">
+                                  {offer.targeting.genderTargeting === 'ALL' ? 'Male & Female' : offer.targeting.genderTargeting || 'Male & Female'}
+                                </p>
                               </div>
                               <div className="space-y-1">
                                 <p className="text-[10px] text-muted-foreground uppercase">{(t.portal.companyProfile as any).parentTargeting || 'Parent Status'}</p>
-                                <p className="text-sm text-main font-medium">{offer.targeting.parentTargeting || 'ALL'}</p>
+                                <p className="text-sm text-main font-medium">
+                                  {offer.targeting.parentTargeting === 'ALL' ? 'Parents & Singles' : 
+                                   offer.targeting.parentTargeting === 'PARENTS' ? 'Only Parents' : 'Non-Parents'}
+                                </p>
                               </div>
                             </div>
                           </div>
@@ -586,16 +604,23 @@ export default function CompanyProfileForm({ initialData, onUpdate, onUpdateVend
 
                         {offer.mediaAssets && offer.mediaAssets.length > 0 && (
                           <div className="pt-3 border-t border-border">
-                            <p className="text-xs text-muted-foreground uppercase mb-2">{(t.portal.companyProfile as any).mediaAssets || 'Media'}</p>
-                            <div className="flex flex-wrap gap-2">
+                            <p className="text-xs text-muted-foreground uppercase mb-2">{(t.portal.companyProfile as any).mediaAssets || 'Documents & Media'}</p>
+                            <div className="flex flex-wrap gap-4">
                               {offer.mediaAssets.map((asset: any) => (
-                                <a key={asset.id} href={asset.fileUrl} target="_blank" rel="noreferrer" className="block w-16 h-16 rounded-lg border border-border overflow-hidden hover:border-brand/50 transition-colors">
-                                  {asset.mediaType === 'IMAGE' ? (
-                                    <img src={asset.fileUrl} alt={asset.altText || asset.mediaCategory} className="w-full h-full object-cover" />
-                                  ) : (
-                                    <div className="w-full h-full bg-surface-hover flex items-center justify-center text-[10px] text-muted-foreground">{asset.mediaType}</div>
-                                  )}
-                                </a>
+                                <div key={asset.id} className="flex flex-col gap-1 items-center">
+                                  <a href={asset.fileUrl} target="_blank" rel="noreferrer" className="block w-20 h-20 rounded-lg border border-border overflow-hidden hover:border-brand/50 transition-colors bg-surface-hover">
+                                    {asset.mediaType === 'IMAGE' ? (
+                                      <img src={asset.fileUrl} alt={asset.altText || asset.mediaCategory} className="w-full h-full object-cover" />
+                                    ) : (
+                                      <div className="w-full h-full flex items-center justify-center text-[10px] font-bold text-muted-foreground uppercase break-words px-1 text-center">
+                                        {asset.mediaType}
+                                      </div>
+                                    )}
+                                  </a>
+                                  <span className="text-[10px] text-muted-foreground uppercase max-w-[5rem] text-center truncate" title={asset.mediaCategory?.replace(/_/g, ' ')}>
+                                    {asset.mediaCategory?.replace(/_/g, ' ')}
+                                  </span>
+                                </div>
                               ))}
                             </div>
                           </div>
@@ -607,33 +632,6 @@ export default function CompanyProfileForm({ initialData, onUpdate, onUpdateVend
                   <p className="text-sm text-muted-foreground text-center py-4">{(t.portal.companyProfile as any).noBenefitData || 'No Benefit Listing Data'}</p>
                 )}
 
-                {listingsData.benefitListing.socialMedia && listingsData.benefitListing.socialMedia.hasSocialMedia && (
-                  <div className="pt-3 border-t border-border">
-                    <p className="text-xs text-muted-foreground uppercase mb-2">{t.backoffice.listing.webSocial}</p>
-                    <div className="flex flex-wrap gap-2">
-                      {listingsData.benefitListing.socialMedia.websiteUrl && (
-                        <a href={listingsData.benefitListing.socialMedia.websiteUrl} target="_blank" rel="noreferrer" className="text-xs bg-surface-hover border border-border px-2 py-1 rounded-lg text-brand hover:underline">Website</a>
-                      )}
-                      {listingsData.benefitListing.socialMedia.facebookUrl && (
-                        <a href={listingsData.benefitListing.socialMedia.facebookUrl} target="_blank" rel="noreferrer" className="text-xs bg-surface-hover border border-border px-2 py-1 rounded-lg text-brand hover:underline">Facebook</a>
-                      )}
-                      {listingsData.benefitListing.socialMedia.instagramUrl && (
-                        <a href={listingsData.benefitListing.socialMedia.instagramUrl} target="_blank" rel="noreferrer" className="text-xs bg-surface-hover border border-border px-2 py-1 rounded-lg text-brand hover:underline">Instagram</a>
-                      )}
-                      {listingsData.benefitListing.socialMedia.twitterUrl && (
-                        <a href={listingsData.benefitListing.socialMedia.twitterUrl} target="_blank" rel="noreferrer" className="text-xs bg-surface-hover border border-border px-2 py-1 rounded-lg text-brand hover:underline">X (Twitter)</a>
-                      )}
-                      {listingsData.benefitListing.socialMedia.linkedinUrl && (
-                        <a href={listingsData.benefitListing.socialMedia.linkedinUrl} target="_blank" rel="noreferrer" className="text-xs bg-surface-hover border border-border px-2 py-1 rounded-lg text-brand hover:underline">LinkedIn</a>
-                      )}
-                      {listingsData.benefitListing.socialMedia.tiktokUrl && (
-                        <a href={listingsData.benefitListing.socialMedia.tiktokUrl} target="_blank" rel="noreferrer" className="text-xs bg-surface-hover border border-border px-2 py-1 rounded-lg text-brand hover:underline">TikTok</a>
-                      )}
-                      {listingsData.benefitListing.socialMedia.youtubeUrl && (
-                        <a href={listingsData.benefitListing.socialMedia.youtubeUrl} target="_blank" rel="noreferrer" className="text-xs bg-surface-hover border border-border px-2 py-1 rounded-lg text-brand hover:underline">YouTube</a>
-                      )}
-                    </div>
-                  </div>
                 )}
               </div>
             ) : isLoadingListings ? (
