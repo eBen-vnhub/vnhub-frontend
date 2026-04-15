@@ -631,8 +631,6 @@ export default function CompanyProfileForm({ initialData, onUpdate, onUpdateVend
                 ) : (
                   <p className="text-sm text-muted-foreground text-center py-4">{(t.portal.companyProfile as any).noBenefitData || 'No Benefit Listing Data'}</p>
                 )}
-
-                )}
               </div>
             ) : isLoadingListings ? (
               <div className="flex items-center gap-3 p-2">
