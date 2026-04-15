@@ -14,9 +14,35 @@ interface CompanyProfileFormProps {
   onUpdateBenefitListing?: () => void;
 }
 
+const formatEnum = (val: string | null | undefined, mappings: Record<string, string> | undefined) => {
+  if (!val) return 'N/A';
+  const cleanVal = val.toUpperCase();
+  if (mappings) {
+    const found = mappings[cleanVal] || mappings[val];
+    if (found) return found;
+  }
+  return val.replace(/_/g, ' ');
+};
+
+const formatMultipleEnums = (val: string | null | undefined, mappings: Record<string, string> | undefined) => {
+  if (!val) return 'N/A';
+  return val.split(',').map(v => formatEnum(v.trim(), mappings)).join(', ');
+};
+
+const formatMediaCategory = (category: string | null | undefined, index: number, mediaCat: Record<string, string>) => {
+  if (!category) return mediaCat.IMAGE ? `${mediaCat.IMAGE} ${index + 1}` : `Image ${index + 1}`;
+  if (category.startsWith('GALLERY_')) {
+    const num = category.split('_')[1];
+    return `${mediaCat.GALLERY || 'Gallery'} ${num}`;
+  }
+  return mediaCat[category] || category.replace(/_/g, ' ');
+};
+
 export default function CompanyProfileForm({ initialData, onUpdate, onUpdateVendorListing, onUpdateBenefitListing }: CompanyProfileFormProps) {
   const { formData, listingsData, isLoadingListings, isSubmitting, canEditCompanyProfile, handleChange, handleSubmit } = useCompanyProfile(initialData, onUpdate);
   const { t } = useLanguage();
+  const enums = (t.portal.companyProfile as any).enums || {};
+  const mediaCat = (t.portal.companyProfile as any).mediaCategory || {};
   const { branches } = useVendors();
   const [isEditing, setIsEditing] = useState(false);
 
@@ -397,18 +423,14 @@ export default function CompanyProfileForm({ initialData, onUpdate, onUpdateVend
           <div className="bg-surface border border-border hover:border-brand/30 transition-colors rounded-xl p-5 shadow-sm">
             {listingsData?.benefitListing ? (
               <div className="space-y-5">
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pb-4 border-b border-border">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pb-4 border-b border-border">
                   <div className="space-y-1">
                     <p className="text-xs text-muted-foreground uppercase">{(t.portal.companyProfile as any).listingGoal || 'Listing Goal'}</p>
-                    <p className="text-sm text-main font-medium">{listingsData.benefitListing.listingGoal?.replace(/_/g, ' ') || 'N/A'}</p>
+                    <p className="text-sm text-main font-medium">{formatEnum(listingsData.benefitListing.listingGoal, enums.listingGoal)}</p>
                   </div>
                   <div className="space-y-1">
                     <p className="text-xs text-muted-foreground uppercase">{(t.portal.companyProfile as any).advertisingFor || 'Advertising For'}</p>
-                    <p className="text-sm text-main font-medium">{listingsData.benefitListing.advertisingFor?.replace(/_/g, ' ') || 'N/A'}</p>
-                  </div>
-                  <div className="space-y-1">
-                    <p className="text-xs text-muted-foreground uppercase">{(t.portal.companyProfile as any).preferredLang || 'Preferred Language'}</p>
-                    <p className="text-sm text-main font-medium">{listingsData.benefitListing.preferredLanguage === 'ar' ? 'العربية' : 'English'}</p>
+                    <p className="text-sm text-main font-medium">{formatEnum(listingsData.benefitListing.advertisingFor, enums.advertisingFor)}</p>
                   </div>
                 </div>
 
@@ -419,18 +441,10 @@ export default function CompanyProfileForm({ initialData, onUpdate, onUpdateVend
                         <div className="flex flex-col gap-2 pb-3 border-b border-border">
                           <div className="flex items-start justify-between gap-3">
                             <div>
-                              <p className="text-xs text-muted-foreground uppercase">{(t.portal.companyProfile as any).benefitName || 'Benefit Name'}</p>
-                              <h4 className="text-sm font-bold text-main mt-0.5">{offer.benefitName || 'N/A'}</h4>
+                               <p className="text-xs text-muted-foreground uppercase">{(t.portal.companyProfile as any).benefitName || 'Benefit Name'}</p>
+                               <h4 className="text-sm font-bold text-main mt-0.5">{offer.benefitName || 'N/A'}</h4>
                             </div>
-                            {offer.discountPercentage > 0 && (
-                              <div className="text-right">
-                                <p className="text-[10px] text-muted-foreground uppercase opacity-0 select-none">.</p>
-                                <span className="text-sm font-black text-brand bg-brand/10 px-3 py-1 rounded-lg whitespace-nowrap mt-0.5 block border border-brand/20">
-                                  {offer.discountPercentage}% OFF
-                                </span>
-                              </div>
-                            )}
-                          </div>
+                           </div>
                           {offer.benefitDescription && (
                             <div className="mt-1">
                               <p className="text-xs text-muted-foreground uppercase">{(t.portal.companyProfile as any).benefitDescription || 'Short Description'}</p>
@@ -439,7 +453,13 @@ export default function CompanyProfileForm({ initialData, onUpdate, onUpdateVend
                           )}
                         </div>
 
-                        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                        <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
+                          {offer.discountPercentage > 0 && (
+                            <div className="space-y-1">
+                              <p className="text-xs text-muted-foreground uppercase">{(t.portal.companyProfile as any).discountPercentage || 'Discount(%)'}</p>
+                              <p className="text-sm text-brand font-black">{offer.discountPercentage}% OFF</p>
+                            </div>
+                          )}
                           {offer.currency && (
                             <div className="space-y-1">
                               <p className="text-xs text-muted-foreground uppercase">{(t.portal.companyProfile as any).currency || 'Currency'}</p>
@@ -467,9 +487,9 @@ export default function CompanyProfileForm({ initialData, onUpdate, onUpdateVend
                         </div>
 
                         {offer.valueProposition && (
-                          <div className="space-y-1">
-                            <p className="text-xs text-muted-foreground uppercase">{(t.portal.companyProfile as any).valueProposition || 'Value Proposition'}</p>
-                            <p className="text-sm text-main font-medium">{offer.valueProposition.replace(/_/g, ' ')}</p>
+                          <div className="space-y-1 mt-4">
+                            <p className="text-[10px] text-muted-foreground uppercase">{(t.portal.companyProfile as any).valueProposition || 'Value Proposition'}</p>
+                            <p className="text-sm text-main font-medium">{formatEnum(offer.valueProposition, enums.valueProp)}</p>
                           </div>
                         )}
 
@@ -534,19 +554,18 @@ export default function CompanyProfileForm({ initialData, onUpdate, onUpdateVend
                             <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
                               <div className="space-y-1">
                                 <p className="text-[10px] text-muted-foreground uppercase">{(t.portal.companyProfile as any).geoTargeting || 'Geographic'}</p>
-                                <p className="text-sm text-main font-medium">{offer.targeting.geoTargetingType?.replace(/_/g, ' ') || 'N/A'}</p>
+                                <p className="text-sm text-main font-medium">{formatEnum(offer.targeting.geoTargetingType, enums.geo)}</p>
                               </div>
                               <div className="space-y-1">
                                 <p className="text-[10px] text-muted-foreground uppercase">{(t.portal.companyProfile as any).genderTargeting || 'Gender'}</p>
                                 <p className="text-sm text-main font-medium">
-                                  {offer.targeting.genderTargeting === 'ALL' ? 'Male & Female' : offer.targeting.genderTargeting || 'Male & Female'}
+                                  {formatEnum(offer.targeting.genderTargeting, enums.gender)}
                                 </p>
                               </div>
                               <div className="space-y-1">
                                 <p className="text-[10px] text-muted-foreground uppercase">{(t.portal.companyProfile as any).parentTargeting || 'Parent Status'}</p>
                                 <p className="text-sm text-main font-medium">
-                                  {offer.targeting.parentTargeting === 'ALL' ? 'Parents & Singles' : 
-                                   offer.targeting.parentTargeting === 'PARENTS' ? 'Only Parents' : 'Non-Parents'}
+                                  {formatEnum(offer.targeting.parentTargeting, enums.parent)}
                                 </p>
                               </div>
                             </div>
@@ -559,30 +578,30 @@ export default function CompanyProfileForm({ initialData, onUpdate, onUpdateVend
                             <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
                               <div className="space-y-1">
                                 <p className="text-[10px] text-muted-foreground uppercase">{(t.portal.companyProfile as any).claimMethod || 'Claim Method'}</p>
-                                <p className="text-sm text-main font-medium">{offer.claimSettings.claimMethod?.replace(/_/g, ' ') || 'N/A'}</p>
+                                <p className="text-sm text-main font-medium">{formatEnum(offer.claimSettings.claimMethod, enums.claimMethod)}</p>
                               </div>
                               {offer.claimSettings.discountCodeType && (
                                 <div className="space-y-1">
                                   <p className="text-[10px] text-muted-foreground uppercase">{(t.portal.companyProfile as any).codeType || 'Code Type'}</p>
-                                  <p className="text-sm text-main font-medium">{offer.claimSettings.discountCodeType?.replace(/_/g, ' ')}</p>
+                                  <p className="text-sm text-main font-medium">{formatEnum(offer.claimSettings.discountCodeType, enums.discountCodeType)}</p>
                                 </div>
                               )}
                               {offer.claimSettings.paymentCollection && (
                                 <div className="space-y-1">
                                   <p className="text-[10px] text-muted-foreground uppercase">{(t.portal.companyProfile as any).payment || 'Payment'}</p>
-                                  <p className="text-sm text-main font-medium">{offer.claimSettings.paymentCollection?.replace(/_/g, ' ')}</p>
+                                  <p className="text-sm text-main font-medium">{formatEnum(offer.claimSettings.paymentCollection, enums.payment)}</p>
                                 </div>
                               )}
                               {offer.claimSettings.purchaseMethod && (
                                 <div className="space-y-1">
                                   <p className="text-[10px] text-muted-foreground uppercase">{(t.portal.companyProfile as any).purchaseMethod || 'Purchase Method'}</p>
-                                  <p className="text-sm text-main font-medium">{offer.claimSettings.purchaseMethod?.replace(/,/g, ', ')}</p>
+                                  <p className="text-sm text-main font-medium">{formatMultipleEnums(offer.claimSettings.purchaseMethod, enums.purchaseMethod)}</p>
                                 </div>
                               )}
                               {offer.claimSettings.receiveMethod && (
                                 <div className="space-y-1">
                                   <p className="text-[10px] text-muted-foreground uppercase">{(t.portal.companyProfile as any).receiveMethod || 'Receive Method'}</p>
-                                  <p className="text-sm text-main font-medium">{offer.claimSettings.receiveMethod?.replace(/,/g, ', ')}</p>
+                                  <p className="text-sm text-main font-medium">{formatMultipleEnums(offer.claimSettings.receiveMethod, enums.receiveMethod)}</p>
                                 </div>
                               )}
                               {offer.claimSettings.claimButtonText && (
@@ -617,8 +636,8 @@ export default function CompanyProfileForm({ initialData, onUpdate, onUpdateVend
                                       </div>
                                     )}
                                   </a>
-                                  <span className="text-[10px] text-muted-foreground uppercase max-w-[5rem] text-center truncate" title={asset.mediaCategory?.replace(/_/g, ' ')}>
-                                    {asset.mediaCategory?.replace(/_/g, ' ')}
+                                  <span className="text-[10px] text-muted-foreground uppercase max-w-[5rem] text-center truncate" title={formatMediaCategory(asset.mediaCategory, asset.id, mediaCat)}>
+                                    {formatMediaCategory(asset.mediaCategory, asset.id, mediaCat)}
                                   </span>
                                 </div>
                               ))}
