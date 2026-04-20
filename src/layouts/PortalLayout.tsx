@@ -17,18 +17,20 @@ export default function PortalLayout() {
   }
 
   return (
-    <div dir={direction} className="min-h-screen flex flex-col bg-surface-hover">
+    <div dir={direction} className="min-h-screen bg-white flex flex-col">
       <Header />
       
-      <div className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 py-8 flex gap-8">
+      <div className="flex-1 flex max-w-7xl w-full mx-auto sm:px-6">
         <Sidebar />
         
-        <main className="flex-1 min-w-0 flex flex-col">
-          <div className="flex-1">
-            <Outlet />
-          </div>
+        <div className="flex-1 min-w-0 flex flex-col">
+          <main className="flex-1">
+            <div className="px-4 sm:px-6 lg:px-8 py-8 w-full max-w-7xl mx-auto">
+              <Outlet />
+            </div>
+          </main>
           <Footer />
-        </main>
+        </div>
       </div>
     </div>
   );

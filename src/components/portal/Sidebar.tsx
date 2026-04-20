@@ -10,43 +10,54 @@ export default function Sidebar() {
   const [showBranchModal, setShowBranchModal] = useState(false);
 
   return (
-    <aside className="w-64 flex-shrink-0 hidden md:block">
-      <div className="sticky top-24 me-8">
-        <WorkspaceSwitcher onAddBranch={() => setShowBranchModal(true)} />
+    <aside className="bg-white border-r border-gray-200 flex flex-col overflow-hidden transition-all duration-300 ease-in-out fixed md:sticky top-[64px] z-10 h-[calc(100vh-64px)] w-64 hidden md:flex">
+      <div className="flex-1 overflow-y-auto px-3 py-4 space-y-1">
+        <div className="mb-4">
+          <WorkspaceSwitcher onAddBranch={() => setShowBranchModal(true)} />
+        </div>
 
-        <nav className="space-y-2">
+        <nav className="space-y-1">
           <NavLink
             to="/portal"
             className={({ isActive }) =>
-              `flex items-center gap-3 px-4 py-3 rounded-xl transition-all font-semibold text-sm ${isActive ? 'bg-brand text-white shadow-md shadow-brand/20' : 'text-main hover:bg-surface-hover hover:text-brand'
+              `group w-full flex items-center gap-3 rounded-xl px-4 py-3 transition-all duration-300 ${
+                isActive
+                  ? 'bg-brand text-white shadow-lg shadow-brand/25'
+                  : 'text-gray-500 hover:bg-gray-50 hover:text-gray-700'
               }`
             }
             end
           >
             <Home className="w-5 h-5" />
-            <span>{t.portal.sidebar.home}</span>
+            <span className="text-sm font-semibold truncate">{t.portal.sidebar.home}</span>
           </NavLink>
 
           <NavLink
             to="/portal/company-profile"
             className={({ isActive }) =>
-              `flex items-center gap-3 px-4 py-3 rounded-xl transition-all font-semibold text-sm ${isActive ? 'bg-brand text-white shadow-md shadow-brand/20' : 'text-main hover:bg-surface-hover hover:text-brand'
+              `group w-full flex items-center gap-3 rounded-xl px-4 py-3 transition-all duration-300 ${
+                isActive
+                  ? 'bg-brand text-white shadow-lg shadow-brand/25'
+                  : 'text-gray-500 hover:bg-gray-50 hover:text-gray-700'
               }`
             }
           >
             <Building className="w-5 h-5" />
-            <span>{t.portal.sidebar.companyProfile}</span>
+            <span className="text-sm font-semibold truncate">{t.portal.sidebar.companyProfile}</span>
           </NavLink>
 
           <NavLink
             to="/portal/admin"
             className={({ isActive }) =>
-              `flex items-center gap-3 px-4 py-3 rounded-xl transition-all font-semibold text-sm ${isActive ? 'bg-brand text-white shadow-md shadow-brand/20' : 'text-main hover:bg-surface-hover hover:text-brand'
+              `group w-full flex items-center gap-3 rounded-xl px-4 py-3 transition-all duration-300 ${
+                isActive
+                  ? 'bg-brand text-white shadow-lg shadow-brand/25'
+                  : 'text-gray-500 hover:bg-gray-50 hover:text-gray-700'
               }`
             }
           >
             <Users className="w-5 h-5" />
-            <span>{t.portal.sidebar.vendorAdmin}</span>
+            <span className="text-sm font-semibold truncate">{t.portal.sidebar.vendorAdmin}</span>
           </NavLink>
         </nav>
       </div>
