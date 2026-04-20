@@ -303,11 +303,24 @@ export default function CompanyProfileForm({ initialData, onUpdate, onUpdateVend
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div className="space-y-1">
                     <p className="text-xs text-muted-foreground uppercase flex items-center gap-1"><MapPin className="w-3 h-3" /> {t.backoffice.listing.hqAddress}</p>
-                    <p className="text-sm text-main font-medium">
+                    <div className="text-sm text-main font-medium">
                       {listingsData.vendorListing.hqAddressEntity ? (
-                        `${listingsData.vendorListing.hqAddressEntity.building || ''} ${listingsData.vendorListing.hqAddressEntity.street || ''}, ${listingsData.vendorListing.hqAddressEntity.city || ''}`
+                        <>
+                          <p>{listingsData.vendorListing.hqAddressEntity.building || ''} {listingsData.vendorListing.hqAddressEntity.street || ''}, {listingsData.vendorListing.hqAddressEntity.city || ''}</p>
+                          {listingsData.vendorListing.hqAddressEntity.postalCode && (
+                            <p className="text-muted"><span className="text-xs uppercase">Postal Code:</span> {listingsData.vendorListing.hqAddressEntity.postalCode}</p>
+                          )}
+                          {listingsData.vendorListing.hqAddressEntity.additionalNotes && (
+                            <p className="text-muted text-xs mt-1 italic">"{listingsData.vendorListing.hqAddressEntity.additionalNotes}"</p>
+                          )}
+                          {listingsData.vendorListing.hqAddressEntity.googleMapsUrl && (
+                            <a href={listingsData.vendorListing.hqAddressEntity.googleMapsUrl} target="_blank" rel="noreferrer" className="text-xs text-blue-600 hover:underline inline-flex items-center gap-1 mt-1">
+                              View on Google Maps
+                            </a>
+                          )}
+                        </>
                       ) : t.backoffice.listing.noAddress}
-                    </p>
+                    </div>
                   </div>
                   <div className="space-y-1">
                     <p className="text-xs text-muted-foreground uppercase flex items-center gap-1"><Globe className="w-3 h-3" /> {t.backoffice.listing.website}</p>
@@ -317,6 +330,15 @@ export default function CompanyProfileForm({ initialData, onUpdate, onUpdateVend
                       </a>
                     ) : (
                       <p className="text-sm text-muted">{formData.companyWebsite || t.backoffice.listing.noLinks}</p>
+                    )}
+                    
+                    {listingsData.vendorListing.companyProfile?.youtubeVideoUrl && (
+                      <div className="mt-2">
+                        <p className="text-xs text-muted-foreground uppercase flex items-center gap-1">YouTube</p>
+                        <a href={listingsData.vendorListing.companyProfile.youtubeVideoUrl} target="_blank" rel="noreferrer" className="text-sm text-red-600 font-medium truncate block hover:underline">
+                          Watch Video
+                        </a>
+                      </div>
                     )}
                   </div>
                 </div>

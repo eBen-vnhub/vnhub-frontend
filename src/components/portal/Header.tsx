@@ -28,7 +28,7 @@ export default function Header() {
   return (
     <>
       <header className="fixed top-0 left-0 right-0 z-50" dir={direction}>
-        <div className="absolute inset-0 bg-white/95 backdrop-blur-xl border-b border-border-subtle" />
+        <div className="absolute inset-0 bg-white/95 backdrop-blur-xl border-b border-gray-200" />
 
         <div className="relative px-4 sm:px-6">
           <div className="flex justify-between items-center h-16">
@@ -49,10 +49,10 @@ export default function Header() {
               <div className="relative" ref={menuRef}>
                 <button
                   onClick={() => setIsProfileMenuOpen(!isProfileMenuOpen)}
-                  className="flex items-center gap-2.5 px-2 py-1.5 sm:px-3 sm:py-2 rounded-xl hover:bg-surface-hover transition-all duration-300 group"
+                  className="flex items-center gap-2.5 px-3 py-2 rounded-xl hover:bg-gray-50 transition-all duration-300 group"
                 >
                   <div className="hidden md:block text-end">
-                    <p className="text-sm font-semibold text-main leading-tight">
+                    <p className="text-sm font-semibold text-gray-700 leading-tight">
                       {displayName}
                     </p>
                   </div>
@@ -61,17 +61,17 @@ export default function Header() {
                     <UserIcon className="w-4 h-4 text-white" />
                   </div>
 
-                  <ChevronDown className={`w-3.5 h-3.5 text-muted transition-transform duration-300 ${isProfileMenuOpen ? 'rotate-180' : ''}`} />
+                  <ChevronDown className={`w-3.5 h-3.5 text-gray-400 transition-transform duration-300 ${isProfileMenuOpen ? 'rotate-180' : ''}`} />
                 </button>
 
                 {isProfileMenuOpen && (
-                  <div className="absolute end-0 mt-2 w-72 animate-in fade-in zoom-in-95 duration-200">
-                    <div className="bg-surface rounded-2xl border border-border shadow-2xl overflow-hidden">
-                      <div className="px-5 py-4 bg-surface border-b border-border-subtle">
-                        <p className="text-sm font-bold text-main text-center">
+                  <div className="absolute end-0 mt-2 w-72 animate-slideDown">
+                    <div className="bg-white rounded-2xl border border-gray-200 shadow-2xl overflow-hidden">
+                      <div className="px-5 py-4 bg-white border-b border-gray-100">
+                        <p className="text-sm font-bold text-gray-900 text-center">
                           {displayName}
                         </p>
-                        <p className="text-xs text-muted mt-0.5 text-center">
+                        <p className="text-xs text-gray-500 mt-0.5 text-center">
                           {user?.email}
                         </p>
                       </div>
@@ -84,38 +84,38 @@ export default function Header() {
                         <Link
                           to="/portal/profile"
                           onClick={() => setIsProfileMenuOpen(false)}
-                          className="flex items-center gap-3 w-full px-3 py-2.5 text-sm font-semibold text-main hover:text-brand hover:bg-brand/5 rounded-xl transition-all duration-200 group"
+                          className="flex items-center gap-3 w-full px-3 py-2.5 text-sm text-gray-700 hover:text-brand hover:bg-brand/5 rounded-xl transition-all duration-200 group"
                         >
-                          <div className="w-8 h-8 flex items-center justify-center bg-surface-hover rounded-lg group-hover:bg-brand/10 transition-all flex-shrink-0">
+                          <div className="w-8 h-8 flex items-center justify-center bg-gray-100 rounded-lg group-hover:bg-brand/10 transition-all flex-shrink-0">
                             <UserIcon className="w-4 h-4" />
                           </div>
-                          <span>{t.portal.header.myProfile}</span>
+                          <span className="font-semibold">{t.portal.header.myProfile}</span>
                         </Link>
 
                         <Link
                           to="/portal/change-password"
                           onClick={() => setIsProfileMenuOpen(false)}
-                          className="flex items-center gap-3 w-full px-3 py-2.5 text-sm font-semibold text-main hover:text-brand hover:bg-brand/5 rounded-xl transition-all duration-200 group"
+                          className="flex items-center gap-3 w-full px-3 py-2.5 text-sm text-gray-700 hover:text-brand hover:bg-brand/5 rounded-xl transition-all duration-200 group"
                         >
-                          <div className="w-8 h-8 flex items-center justify-center bg-surface-hover rounded-lg group-hover:bg-brand/10 transition-all flex-shrink-0">
+                          <div className="w-8 h-8 flex items-center justify-center bg-gray-100 rounded-lg group-hover:bg-brand/10 transition-all flex-shrink-0">
                             <Lock className="w-4 h-4" />
                           </div>
-                          <span>{t.portal.header.changePassword}</span>
+                          <span className="font-semibold">{t.portal.header.changePassword}</span>
                         </Link>
 
-                        <div className="border-t border-border-subtle my-1" />
+                        <div className="border-t border-gray-100 my-1" />
 
                         <button
                           onClick={() => {
                             setIsProfileMenuOpen(false);
                             logout();
                           }}
-                          className="flex items-center gap-3 w-full px-3 py-2.5 text-sm font-semibold text-error hover:bg-error/5 rounded-xl transition-all duration-200 group"
+                          className="flex items-center gap-3 w-full px-3 py-2.5 text-sm text-red-600 hover:text-red-700 hover:bg-red-50 rounded-xl transition-all duration-200 group"
                         >
-                          <div className="w-8 h-8 flex items-center justify-center bg-surface-hover rounded-lg group-hover:bg-error/10 transition-all flex-shrink-0">
+                          <div className="w-8 h-8 flex items-center justify-center bg-gray-100 rounded-lg group-hover:bg-red-100 transition-all flex-shrink-0">
                             <LogOut className="w-4 h-4" />
                           </div>
-                          <span>{t.portal.header.signOut}</span>
+                          <span className="font-semibold">{t.portal.header.signOut}</span>
                         </button>
                       </div>
                     </div>
