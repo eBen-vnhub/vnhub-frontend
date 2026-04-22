@@ -5,12 +5,15 @@ import vendorsService from '../../../services/vendors';
 import BenefitListingModal from '../../../components/portal/BenefitListingModal';
 import BenefitCard from '../components/benefits/BenefitCard';
 import EmptyBenefits from '../components/benefits/EmptyBenefits';
+import BenefitDetailsDrawer from '../components/benefits/BenefitDetailsDrawer';
 
 export default function MyBenefitsPage() {
   const { t } = useLanguage();
   const [benefits, setBenefits] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [selectedBenefit, setSelectedBenefit] = useState<any>(null);
   const [editingBenefitId, setEditingBenefitId] = useState<number | null>(null);
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const fetchBenefits = useCallback(async () => {
@@ -33,7 +36,14 @@ export default function MyBenefitsPage() {
     fetchBenefits();
   }, [fetchBenefits]);
 
+  const handleBenefitClick = (benefit: any) => {
+    setSelectedBenefit(benefit);
+    setIsDrawerOpen(true);
+  };
+
   const handleEdit = (benefitId: number) => {
+    setIsDrawerOpen(false);
+    setSelectedBenefit(null);
     setEditingBenefitId(benefitId);
     setIsModalOpen(true);
   };
@@ -73,10 +83,17 @@ export default function MyBenefitsPage() {
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {benefits.map((benefit: any) => (
-            <BenefitCard key={benefit.id} benefit={benefit} onEdit={handleEdit} />
+            <BenefitCard key={benefit.id} benefit={benefit} onClick={handleBenefitClick} />
           ))}
         </div>
       )}
+
+      <BenefitDetailsDrawer
+        benefit={selectedBenefit}
+        isOpen={isDrawerOpen}
+        onClose={() => setIsDrawerOpen(false)}
+        onEdit={handleEdit}
+      />
 
       {isModalOpen && (
         <BenefitListingModal

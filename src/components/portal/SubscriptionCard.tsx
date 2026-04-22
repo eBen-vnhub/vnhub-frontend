@@ -81,7 +81,7 @@ export default function SubscriptionCard({ subscription, companyName, onEdit, on
               className="bg-portal-accent text-white hover:bg-portal-accent/90 text-sm flex items-center gap-2 py-2"
             >
               <CheckCircle2 className="w-4 h-4" />
-              Add Benefit
+              {(t.portal as any).subscriptionCard?.addBenefit || 'Add Benefit'}
               <span className="text-xs bg-white/20 px-1.5 rounded ml-1">
                 {subscription.maxBenefits - subscription.benefitsSubmitted} left
               </span>
