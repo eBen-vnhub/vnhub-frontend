@@ -135,6 +135,15 @@ export const en = {
       later: "Do it later",
       close: "Close Window",
     },
+    myBenefits: {
+      title: "My Benefits",
+      subtitle: "Manage all your active and pending benefits across your subscriptions.",
+      noBenefitsTitle: "No Benefits Found",
+      noBenefitsDesc: "You haven't added any benefits yet. Go to your Subscriptions page to add a new benefit to an active plan.",
+      unnamedBenefit: "Unnamed Benefit",
+      noDescription: "No description provided.",
+      editBenefit: "Edit Benefit",
+    },
     companyProfile: {
       title: "Company Profile",
       subtitle: "Manage your company information.",

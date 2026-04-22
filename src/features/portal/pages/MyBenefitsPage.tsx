@@ -1,8 +1,10 @@
 import { useEffect, useState, useCallback } from 'react';
-import { Gift, Edit3, Loader2 } from 'lucide-react';
+import { Gift, Loader2 } from 'lucide-react';
 import { useLanguage } from '../../../i18n/LanguageContext';
 import vendorsService from '../../../services/vendors';
 import BenefitListingModal from '../../../components/portal/BenefitListingModal';
+import BenefitCard from '../components/benefits/BenefitCard';
+import EmptyBenefits from '../components/benefits/EmptyBenefits';
 
 export default function MyBenefitsPage() {
   const { t } = useLanguage();
@@ -59,60 +61,19 @@ export default function MyBenefitsPage() {
       <div className="mb-8">
         <h1 className="text-2xl sm:text-3xl font-bold text-main mb-2 flex items-center gap-3">
           <Gift className="w-8 h-8 text-brand" />
-          My Benefits
+          {(t.portal as any).myBenefits?.title || 'My Benefits'}
         </h1>
-        <p className="text-muted">Manage all your active and pending benefits across your subscriptions.</p>
+        <p className="text-muted">
+          {(t.portal as any).myBenefits?.subtitle || 'Manage all your active and pending benefits across your subscriptions.'}
+        </p>
       </div>
 
       {benefits.length === 0 ? (
-        <div className="bg-surface border border-border rounded-2xl p-12 text-center flex flex-col items-center">
-          <div className="w-16 h-16 bg-brand/10 text-brand rounded-full flex items-center justify-center mb-4">
-            <Gift className="w-8 h-8" />
-          </div>
-          <h3 className="text-xl font-bold text-main mb-2">No Benefits Found</h3>
-          <p className="text-muted max-w-md">
-            You haven't added any benefits yet. Go to your Subscriptions page to add a new benefit to an active plan.
-          </p>
-        </div>
+        <EmptyBenefits />
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {benefits.map((benefit: any) => (
-            <div key={benefit.id} className="bg-surface border border-border rounded-2xl p-6 flex flex-col hover:shadow-md transition-shadow">
-              <div className="flex justify-between items-start mb-4">
-                <div className="w-12 h-12 rounded-lg bg-gray-100 flex items-center justify-center overflow-hidden border border-gray-200">
-                  {benefit.mediaAssets?.find((m: any) => m.mediaCategory === 'LOGO') ? (
-                    <img 
-                      src={benefit.mediaAssets.find((m: any) => m.mediaCategory === 'LOGO').fileUrl} 
-                      alt="Logo" 
-                      className="w-full h-full object-cover"
-                    />
-                  ) : (
-                    <Gift className="w-6 h-6 text-gray-400" />
-                  )}
-                </div>
-                <span className="text-xs font-semibold px-2 py-1 bg-brand/10 text-brand rounded-full">
-                  {benefit.claimSettings?.claimMethod || 'Benefit'}
-                </span>
-              </div>
-              
-              <h3 className="text-lg font-bold text-main mb-1 line-clamp-1">
-                {benefit.benefitName || 'Unnamed Benefit'}
-              </h3>
-              
-              <p className="text-sm text-muted mb-4 line-clamp-2 flex-grow">
-                {benefit.benefitDescription || benefit.detailedContent || 'No description provided.'}
-              </p>
-              
-              <div className="border-t border-border pt-4 mt-auto">
-                <button
-                  onClick={() => handleEdit(benefit.id)}
-                  className="w-full flex items-center justify-center gap-2 py-2 px-4 rounded-xl font-semibold text-sm bg-surface-hover text-main hover:bg-gray-100 transition-colors"
-                >
-                  <Edit3 className="w-4 h-4" />
-                  Edit Benefit
-                </button>
-              </div>
-            </div>
+            <BenefitCard key={benefit.id} benefit={benefit} onEdit={handleEdit} />
           ))}
         </div>
       )}
