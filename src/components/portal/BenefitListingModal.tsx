@@ -8,9 +8,10 @@ interface BenefitListingModalProps {
   isOpen: boolean;
   onClose: () => void;
   onSuccess?: () => void;
+  benefitId?: number;
 }
 
-export default function BenefitListingModal({ isOpen, onClose, onSuccess }: BenefitListingModalProps) {
+export default function BenefitListingModal({ isOpen, onClose, onSuccess, benefitId }: BenefitListingModalProps) {
   const { t } = useLanguage();
   const { vendor } = useVendors();
 
@@ -21,6 +22,7 @@ export default function BenefitListingModal({ isOpen, onClose, onSuccess }: Bene
 
   const { iframeRef, isLoading, handleIframeLoad } = useBenefitListingSync({
     onSuccess: handleSuccess,
+    benefitId,
   });
 
   const formUrl = import.meta.env.VITE_BENEFIT_LISTING_URL;
