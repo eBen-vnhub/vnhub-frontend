@@ -61,6 +61,8 @@ export interface Subscription {
   nextStep: string;
   locations: string[];
   createdAt: string;
+  maxBenefits: number;
+  benefitsSubmitted: number;
 }
 
 export interface Vendor {

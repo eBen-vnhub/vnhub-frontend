@@ -72,11 +72,12 @@ export default function SubscriptionsPage() {
     setModal({ type: 'next-action', stepType: 'VENDOR_LISTING' });
   };
 
-  const completeStepLocally = async (stepType: string) => {
+  const completeStepLocally = async (stepType: string, markAsComplete = false) => {
     const targetSub = subscriptions.find(s => s.nextStep === stepType && s.status !== 'CANCELLED');
     if (targetSub) {
       try {
-        const response = await vendorsService.completeSubscriptionStep(targetSub.id, stepType);
+        const payload = markAsComplete ? { stepType, markAsComplete: true } : { stepType };
+        const response = await vendorsService.completeSubscriptionStep(targetSub.id, payload);
         updateSubscriptionInContext(response.subscription);
       } catch (err) {
         console.error('Failed to complete step', err);
@@ -98,11 +99,14 @@ export default function SubscriptionsPage() {
     toast.success((t.portal as any).pendingActions?.benefitSuccess || 'Benefit listing submitted successfully!');
   };
 
-  const handlePendingAction = (actionType: string) => {
+  const handlePendingAction = async (actionType: string) => {
     if (actionType === 'VENDOR_LISTING') {
       setModal({ type: 'vendor-listing' });
     } else if (actionType === 'BENEFIT_LISTING') {
       setModal({ type: 'benefit-listing' });
+    } else if (actionType === 'MARK_COMPLETE') {
+      await completeStepLocally('BENEFIT_LISTING', true);
+      toast.success('Setup completed successfully!');
     }
   };
 
