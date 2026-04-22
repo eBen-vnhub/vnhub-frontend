@@ -12,7 +12,7 @@ interface BenefitListingModalProps {
 }
 
 export default function BenefitListingModal({ isOpen, onClose, onSuccess, benefitId }: BenefitListingModalProps) {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const { vendor } = useVendors();
 
   const handleSuccess = () => {
@@ -56,7 +56,7 @@ export default function BenefitListingModal({ isOpen, onClose, onSuccess, benefi
 
         <iframe
           ref={iframeRef}
-          src={`${formUrl}?embed=true&skipPersonal=true${vendor ? `&vnhubVendorId=${vendor.id}` : ''}`}
+          src={`${formUrl}?embed=true&skipPersonal=true&lang=${language}${vendor ? `&vnhubVendorId=${vendor.id}` : ''}`}
           className="w-full flex-1 border-none bg-transparent relative z-0"
           onLoad={handleIframeLoad}
           title="Benefit Listing Form"
