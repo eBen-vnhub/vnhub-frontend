@@ -4,43 +4,59 @@ import { useLanguage } from '../../i18n/LanguageContext';
 import type { Subscription } from '../../types';
 
 interface PendingAction {
-  type: 'VENDOR_LISTING' | 'BENEFIT_LISTING';
+  type: 'VENDOR_LISTING' | 'BENEFIT_LISTING' | 'MARK_COMPLETE';
   label: string;
   description: string;
+  benefitsSubmitted?: number;
+  maxBenefits?: number;
+  subscriptionId?: number;
 }
 
 interface PendingActionsSectionProps {
   subscriptions: Subscription[];
-  onAction: (actionType: string) => void;
+  onAction: (actionType: string, subscriptionId?: number) => void;
 }
 
 function usePendingActions(subscriptions: Subscription[]): PendingAction[] {
   const { t } = useLanguage();
 
-  const hasVendorListingPending = subscriptions.some(
+  const vendorPendingSub = subscriptions.find(
     (s) => s.nextStep === 'VENDOR_LISTING' && s.status !== 'CANCELLED'
   );
 
-  const hasBenefitListingPending = subscriptions.some(
+  const benefitPendingSub = subscriptions.find(
     (s) => s.nextStep === 'BENEFIT_LISTING' && s.status !== 'CANCELLED'
   );
 
   const actions: PendingAction[] = [];
 
-  if (hasVendorListingPending) {
+  if (vendorPendingSub) {
     actions.push({
       type: 'VENDOR_LISTING',
       label: (t.portal as any).pendingActions?.vendorListing || 'Complete Vendor Listing',
       description: (t.portal as any).pendingActions?.vendorListingDesc || 'Provide your company details to activate your workspace.',
+      subscriptionId: vendorPendingSub.id
     });
   }
 
-  if (hasBenefitListingPending) {
+  if (benefitPendingSub) {
+    const submitted = benefitPendingSub.benefitsSubmitted || 0;
+    const max = benefitPendingSub.maxBenefits || 1;
     actions.push({
       type: 'BENEFIT_LISTING',
-      label: (t.portal as any).pendingActions?.benefitListing || 'Complete Benefit Listing',
+      label: `Benefits (${submitted}/${max}) — Add Benefit`,
       description: (t.portal as any).pendingActions?.benefitListingDesc || 'Set up your offers and discounts for the benefits center.',
+      subscriptionId: benefitPendingSub.id
     });
+
+    if (submitted > 0 && submitted < max) {
+      actions.push({
+        type: 'MARK_COMPLETE',
+        label: 'Finish Setup Early',
+        description: 'You have remaining benefits, but you can finish your setup now and add more later.',
+        subscriptionId: benefitPendingSub.id
+      });
+    }
   }
 
   return actions;
@@ -84,11 +100,11 @@ export default function PendingActionsSection({ subscriptions, onAction }: Pendi
               </div>
             </div>
             <Button
-              onClick={() => onAction(action.type)}
-              className="bg-portal-accent text-white hover:bg-portal-accent/90 whitespace-nowrap flex items-center gap-2"
+              onClick={() => onAction(action.type, action.subscriptionId)}
+              className={`${action.type === 'MARK_COMPLETE' ? 'bg-surface-hover text-main hover:bg-surface-hover/80 border border-border' : 'bg-portal-accent text-white hover:bg-portal-accent/90'} whitespace-nowrap flex items-center gap-2`}
             >
-              {(t.portal as any).pendingActions?.startButton || 'Start'}
-              <ArrowRight className="w-4 h-4" />
+              {action.type === 'MARK_COMPLETE' ? 'Complete Setup' : ((t.portal as any).pendingActions?.startButton || 'Start')}
+              {action.type !== 'MARK_COMPLETE' && <ArrowRight className="w-4 h-4" />}
             </Button>
           </div>
         ))}

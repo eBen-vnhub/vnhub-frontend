@@ -2,6 +2,7 @@ import { useEffect, useRef, useState, useCallback } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { useVendors } from '../contexts/VendorsContext';
 import { useLanguage } from '../i18n/LanguageContext';
+import vendorsService from '../services/vendors';
 
 interface UseBenefitListingSyncProps {
   onSuccess: () => void;
@@ -16,24 +17,57 @@ export function useBenefitListingSync({ onSuccess }: UseBenefitListingSyncProps)
   const iframeReadyRef = useRef(false);
   const dataSentRef = useRef(false);
 
-  const sendSyncData = useCallback(() => {
+  const sendSyncData = useCallback(async () => {
     if (!iframeRef.current?.contentWindow || !vendor || !user || !iframeReadyRef.current) return;
     if (dataSentRef.current) return;
 
     dataSentRef.current = true;
+    
+    let prefillData = null;
+    try {
+      const data = await vendorsService.getListingsData();
+      if (data.benefitListing?.benefitOffers?.length > 0) {
+        const offers = data.benefitListing.benefitOffers;
+        const lastBenefit = offers[offers.length - 1];
+        
+        prefillData = {
+          hqAddress: data.benefitListing.companyAddress,
+          advertisingFor: data.benefitListing.advertisingFor,
+          listingGoal: data.benefitListing.listingGoal,
+          socialMedia: data.benefitListing.socialMedia,
+          targeting: lastBenefit.targeting,
+          brandDescription: lastBenefit.brandIntro,
+          brandDifferentiator: lastBenefit.brandDifferentiator,
+          claimMethod: lastBenefit.claimSettings?.claimMethod,
+          purchaseMethods: lastBenefit.claimSettings?.purchaseMethods,
+          receiveMethods: lastBenefit.claimSettings?.receiveMethods,
+          paymentCollection: lastBenefit.claimSettings?.paymentCollection,
+          discountCodeType: lastBenefit.claimSettings?.discountCodeType,
+          singleDiscountCode: lastBenefit.claimSettings?.singleDiscountCode,
+          emailType: lastBenefit.claimSettings?.emailType,
+          claimingInstructions: lastBenefit.claimSettings?.claimingInstructions,
+          additionalNotes: lastBenefit.claimSettings?.additionalNotes,
+        };
+      }
+    } catch (e) {
+      console.error('Failed to fetch prefill data', e);
+    }
 
-    iframeRef.current.contentWindow.postMessage({
-      type: 'SYNC_BENEFIT_DATA',
-      vnhubVendorId: vendor.id,
-      personal: {
-        firstName: user.firstName || '',
-        lastName: user.lastName || '',
-        email: user.email || '',
-        companyName: vendor.companyName || '',
-        phoneNumber: user.mobileNumber || '',
-      },
-      language,
-    }, '*');
+    if (iframeRef.current?.contentWindow) {
+      iframeRef.current.contentWindow.postMessage({
+        type: 'SYNC_BENEFIT_DATA',
+        vnhubVendorId: vendor.id,
+        personal: {
+          firstName: user.firstName || '',
+          lastName: user.lastName || '',
+          email: user.email || '',
+          companyName: vendor.companyName || '',
+          phoneNumber: user.mobileNumber || '',
+        },
+        language,
+        prefillData,
+      }, '*');
+    }
   }, [vendor, user, language]);
 
   useEffect(() => {

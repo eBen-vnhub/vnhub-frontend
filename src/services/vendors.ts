@@ -61,10 +61,10 @@ const vendorsService = {
       body: JSON.stringify({ workspace_id: workspaceId }),
     }),
 
-  completeSubscriptionStep: (subscriptionId: number, stepType: string) =>
+  completeSubscriptionStep: (subscriptionId: number, payload: any) =>
     request<ApiSuccessResponse & { subscription: Subscription }>(`/vendors/subscriptions/${subscriptionId}/complete-step/`, {
       method: 'POST',
-      body: JSON.stringify({ stepType }),
+      body: JSON.stringify(typeof payload === 'string' ? { stepType: payload } : payload),
     }),
 };
 
