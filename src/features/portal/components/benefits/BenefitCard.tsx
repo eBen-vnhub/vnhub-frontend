@@ -1,4 +1,4 @@
-import { Gift } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import { useLanguage } from '../../../../i18n/LanguageContext';
 
 interface BenefitCardProps {
@@ -8,41 +8,63 @@ interface BenefitCardProps {
 
 export default function BenefitCard({ benefit, onClick }: BenefitCardProps) {
   const { t } = useLanguage();
+  const enums = (t.portal.companyProfile as any).enums || {};
+
+  const formatEnum = (val: string | null | undefined, mappings: Record<string, string> | undefined) => {
+    if (!val) return '';
+    const cleanVal = val.toUpperCase();
+    if (mappings) {
+      const found = mappings[cleanVal] || mappings[val];
+      if (found) return found;
+    }
+    return val.replace(/_/g, ' ');
+  };
+
+  const logoUrl = benefit.mediaAssets?.find((m: any) => m.mediaCategory === 'LOGO')?.fileUrl;
 
   return (
     <div 
-      className="bg-surface border border-border rounded-2xl p-6 flex flex-col hover:shadow-lg hover:border-brand/30 transition-all cursor-pointer group"
+      className="bg-surface border border-border rounded-2xl flex flex-col hover:shadow-lg hover:-translate-y-1 hover:border-brand/30 transition-all duration-300 cursor-pointer group overflow-hidden"
       onClick={() => onClick(benefit)}
     >
-      <div className="flex justify-between items-start mb-4">
-        <div className="w-12 h-12 rounded-lg bg-gray-100 flex items-center justify-center overflow-hidden border border-gray-200">
-          {benefit.mediaAssets?.find((m: any) => m.mediaCategory === 'LOGO') ? (
-            <img 
-              src={benefit.mediaAssets.find((m: any) => m.mediaCategory === 'LOGO').fileUrl} 
-              alt="Logo" 
-              className="w-full h-full object-cover"
-            />
-          ) : (
-            <Gift className="w-6 h-6 text-gray-400" />
+      <div className="h-2 bg-gradient-to-r from-brand to-brand/60" />
+      
+      <div className="p-6 flex flex-col flex-grow">
+        <div className="flex justify-between items-start mb-4 gap-3">
+          <h3 className="text-xl font-extrabold text-main line-clamp-2 group-hover:text-brand transition-colors">
+            {benefit.benefitName || (t.portal as any).myBenefits?.unnamedBenefit || 'Unnamed Benefit'}
+          </h3>
+          {logoUrl && (
+            <img src={logoUrl} alt="Logo" className="w-10 h-10 rounded-full border border-border object-cover shadow-sm shrink-0" />
           )}
         </div>
-        <span className="text-xs font-semibold px-2 py-1 bg-brand/10 text-brand rounded-full">
-          {benefit.claimSettings?.claimMethod || 'Benefit'}
-        </span>
-      </div>
-      
-      <h3 className="text-lg font-bold text-main mb-1 line-clamp-1">
-        {benefit.benefitName || (t.portal as any).myBenefits?.unnamedBenefit || 'Unnamed Benefit'}
-      </h3>
-      
-      <p className="text-sm text-muted mb-4 line-clamp-2 flex-grow">
-        {benefit.benefitDescription || benefit.detailedContent || (t.portal as any).myBenefits?.noDescription || 'No description provided.'}
-      </p>
-      
-      <div className="border-t border-border pt-4 mt-auto">
-        <p className="w-full text-center text-xs font-semibold text-brand opacity-0 group-hover:opacity-100 transition-opacity">
-          Click to view details
+
+        <div className="flex flex-wrap items-center gap-2 mb-4 text-[11px] font-semibold text-muted-foreground">
+          {benefit.discountPercentage > 0 && (
+            <span className="flex items-center gap-1 text-green-700 bg-green-500/10 px-2 py-0.5 rounded-full">
+              💰 {benefit.discountPercentage}% OFF
+            </span>
+          )}
+          {benefit.claimSettings?.claimMethod && (
+            <span className="flex items-center gap-1 bg-surface-hover px-2 py-0.5 rounded-full">
+              🏷️ {formatEnum(benefit.claimSettings.claimMethod, enums.claimMethod)}
+            </span>
+          )}
+          {benefit.targeting?.geoTargetingType && (
+            <span className="flex items-center gap-1 bg-surface-hover px-2 py-0.5 rounded-full max-w-[120px] truncate">
+              📍 {formatEnum(benefit.targeting.geoTargetingType, enums.geo)}
+            </span>
+          )}
+        </div>
+        
+        <p className="text-sm text-muted line-clamp-2 flex-grow mb-6 leading-relaxed">
+          {benefit.benefitDescription || benefit.detailedContent || (t.portal as any).myBenefits?.noDescription || 'No description provided.'}
         </p>
+        
+        <div className="flex items-center text-xs font-bold text-brand mt-auto pt-4 border-t border-border opacity-70 group-hover:opacity-100 transition-opacity">
+          {(t.portal as any).myBenefits?.clickViewDetails || 'View details'}
+          <ArrowRight className="w-4 h-4 ml-1.5 transform group-hover:translate-x-1 transition-transform" />
+        </div>
       </div>
     </div>
   );

@@ -1,4 +1,4 @@
-import { X, Edit3, MapPin, Users, Tag, CheckCircle2, Image as ImageIcon } from 'lucide-react';
+import { X, Edit3, MapPin, Users, Tag, CheckCircle2, Image as ImageIcon, Briefcase, CreditCard } from 'lucide-react';
 import { useLanguage } from '../../../../i18n/LanguageContext';
 import Button from '../../../../components/ui/Button';
 
@@ -14,10 +14,12 @@ export default function BenefitDetailsDrawer({ benefit, isOpen, onClose, onEdit 
 
   if (!isOpen || !benefit) return null;
 
-  const enums = (t.portal.companyProfile as any).enums || {};
+  const labels = (t.portal as any).myBenefits || {};
+  const profileLabels = t.portal.companyProfile as any;
+  const enums = profileLabels.enums || {};
 
   const formatEnum = (val: string | null | undefined, mappings: Record<string, string> | undefined) => {
-    if (!val) return 'N/A';
+    if (!val) return '';
     const cleanVal = val.toUpperCase();
     if (mappings) {
       const found = mappings[cleanVal] || mappings[val];
@@ -28,218 +30,193 @@ export default function BenefitDetailsDrawer({ benefit, isOpen, onClose, onEdit 
 
   const getLogo = () => benefit.mediaAssets?.find((m: any) => m.mediaCategory === 'LOGO')?.fileUrl;
 
+  const DetailRow = ({ icon: Icon, label, value }: { icon: any; label: string; value: any }) => {
+    if (!value) return null;
+    return (
+      <div className="flex items-start gap-4">
+        <div className="mt-0.5 bg-surface-hover p-2 rounded-lg text-brand">
+          <Icon className="w-5 h-5" />
+        </div>
+        <div>
+          <p className="text-xs text-muted-foreground uppercase tracking-wider font-semibold mb-1">{label}</p>
+          <p className="text-sm font-medium text-main">{value}</p>
+        </div>
+      </div>
+    );
+  };
+
+  const hasPricing = benefit.currency || benefit.originalPrice != null || benefit.discountedPrice != null || benefit.productUnits;
+
   return (
     <>
-      <div 
-        className="fixed inset-0 z-[100] bg-black/30 backdrop-blur-sm animate-in fade-in duration-300"
+      <div
+        className="fixed inset-0 z-[100] bg-black/40 backdrop-blur-sm transition-opacity duration-300"
         onClick={onClose}
       />
-      <div className="fixed inset-y-0 right-0 z-[110] w-full max-w-2xl bg-surface shadow-2xl overflow-y-auto animate-in slide-in-from-right duration-500 border-l border-border">
-        <div className="sticky top-0 z-10 bg-surface/80 backdrop-blur-md border-b border-border px-6 py-4 flex items-center justify-between">
-          <h2 className="text-xl font-bold text-main flex items-center gap-2">
-            <Tag className="w-5 h-5 text-brand" />
-            {(t.portal as any).myBenefits?.benefitDetails || 'Benefit Details'}
-          </h2>
-          <button
-            onClick={onClose}
-            className="p-2 text-muted hover:text-main hover:bg-surface-hover rounded-full transition-colors"
-          >
-            <X className="w-5 h-5" />
-          </button>
-        </div>
+      <div className="fixed inset-0 z-[110] flex items-center justify-center p-6 sm:p-10 pointer-events-none">
+        <div className="bg-surface rounded-3xl shadow-2xl border border-border w-full max-w-2xl max-h-[90vh] flex flex-col overflow-hidden pointer-events-auto">
 
-        <div className="p-6 sm:p-8 space-y-8">
-          <div className="flex flex-col sm:flex-row gap-6 items-start">
-            <div className="w-24 h-24 shrink-0 rounded-2xl bg-surface-hover border border-border flex items-center justify-center overflow-hidden shadow-sm">
-              {getLogo() ? (
-                <img src={getLogo()} alt="Logo" className="w-full h-full object-cover" />
-              ) : (
-                <Tag className="w-10 h-10 text-muted-foreground/50" />
-              )}
+          <div className="relative h-28 bg-gradient-to-r from-brand/10 via-brand/5 to-surface-hover shrink-0">
+            <button
+              onClick={onClose}
+              className="absolute top-4 right-4 z-10 p-2 text-main bg-surface/50 hover:bg-surface backdrop-blur-md rounded-full shadow-sm transition-all"
+            >
+              <X className="w-5 h-5" />
+            </button>
+            <div className="absolute -bottom-10 left-8">
+              <div className="w-20 h-20 rounded-2xl bg-surface border-4 border-surface flex items-center justify-center overflow-hidden shadow-md">
+                {getLogo() ? (
+                  <img src={getLogo()} alt="Logo" className="w-full h-full object-cover" />
+                ) : (
+                  <Tag className="w-8 h-8 text-brand/50" />
+                )}
+              </div>
             </div>
-            <div className="flex-1">
-              <div className="flex items-center gap-3 mb-2">
-                <span className="text-[10px] font-bold uppercase tracking-wide px-2.5 py-1 bg-brand/10 text-brand rounded-full">
-                  {formatEnum(benefit.claimSettings?.claimMethod, enums.claimMethod)}
-                </span>
+          </div>
+
+          <div className="flex-1 overflow-y-auto px-8 pt-14 pb-8 space-y-10">
+
+            <div>
+              <h1 className="text-2xl font-black text-main mb-4 leading-tight">
+                {benefit.benefitName || labels.unnamedBenefit || 'Unnamed Benefit'}
+              </h1>
+              <div className="flex flex-wrap gap-2">
                 {benefit.discountPercentage > 0 && (
-                  <span className="text-[10px] font-bold uppercase tracking-wide px-2.5 py-1 bg-green-500/10 text-green-700 rounded-full flex items-center gap-1">
-                    <CheckCircle2 className="w-3 h-3" />
+                  <span className="px-3 py-1 bg-green-500/10 text-green-700 text-xs font-bold uppercase tracking-wider rounded-full flex items-center gap-1.5">
+                    <CheckCircle2 className="w-3.5 h-3.5" />
                     {benefit.discountPercentage}% OFF
                   </span>
                 )}
-              </div>
-              <h1 className="text-2xl font-black text-main mb-2">
-                {benefit.benefitName || 'Unnamed Benefit'}
-              </h1>
-              <p className="text-sm text-muted leading-relaxed">
-                {benefit.benefitDescription || benefit.detailedContent || 'No description provided.'}
-              </p>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-            <div className="bg-surface-hover/30 rounded-xl p-4 border border-border">
-              <p className="text-xs text-muted-foreground uppercase mb-1">Currency</p>
-              <p className="text-lg font-bold text-main">{benefit.currency || 'N/A'}</p>
-            </div>
-            <div className="bg-surface-hover/30 rounded-xl p-4 border border-border">
-              <p className="text-xs text-muted-foreground uppercase mb-1">Original Price</p>
-              <p className="text-lg font-bold text-main">{benefit.originalPrice ?? 'N/A'}</p>
-            </div>
-            <div className="bg-surface-hover/30 rounded-xl p-4 border border-border">
-              <p className="text-xs text-muted-foreground uppercase mb-1">Discount Price</p>
-              <p className="text-lg font-bold text-brand">{benefit.discountedPrice ?? 'N/A'}</p>
-            </div>
-            <div className="bg-surface-hover/30 rounded-xl p-4 border border-border">
-              <p className="text-xs text-muted-foreground uppercase mb-1">Product Units</p>
-              <p className="text-lg font-bold text-main">{benefit.productUnits || 'N/A'}</p>
-            </div>
-          </div>
-
-          <div className="space-y-6">
-            <h3 className="text-sm font-bold text-main uppercase tracking-wide border-b border-border pb-2">
-              Marketing & Content
-            </h3>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {benefit.brandIntro && (
-                <div>
-                  <p className="text-xs text-muted-foreground uppercase mb-1">Brand Introduction</p>
-                  <p className="text-sm text-main">{benefit.brandIntro}</p>
-                </div>
-              )}
-              {benefit.brandDifferentiator && (
-                <div>
-                  <p className="text-xs text-muted-foreground uppercase mb-1">Brand Differentiator</p>
-                  <p className="text-sm text-main">{benefit.brandDifferentiator}</p>
-                </div>
-              )}
-              {benefit.featuresContent && (
-                <div>
-                  <p className="text-xs text-muted-foreground uppercase mb-1">Features</p>
-                  <p className="text-sm text-main">{benefit.featuresContent}</p>
-                </div>
-              )}
-              {benefit.limitationsContent && (
-                <div>
-                  <p className="text-xs text-muted-foreground uppercase mb-1">Limitations</p>
-                  <p className="text-sm text-main">{benefit.limitationsContent}</p>
-                </div>
-              )}
-              {benefit.hasFreeGift && benefit.freeGiftDescription && (
-                <div className="col-span-full">
-                  <p className="text-xs text-muted-foreground uppercase mb-1">Free Gift</p>
-                  <p className="text-sm text-main">{benefit.freeGiftDescription}</p>
-                </div>
-              )}
-            </div>
-          </div>
-
-          {benefit.targeting && (
-            <div className="space-y-6">
-              <h3 className="text-sm font-bold text-main uppercase tracking-wide border-b border-border pb-2 flex items-center gap-2">
-                <Users className="w-4 h-4 text-brand" /> Targeting
-              </h3>
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                <div className="flex items-start gap-3 bg-surface-hover/30 p-4 rounded-xl border border-border">
-                  <MapPin className="w-5 h-5 text-muted-foreground shrink-0" />
-                  <div>
-                    <p className="text-[10px] text-muted-foreground uppercase mb-0.5">Geographic</p>
-                    <p className="text-sm font-semibold text-main">{formatEnum(benefit.targeting.geoTargetingType, enums.geo)}</p>
-                  </div>
-                </div>
-                <div className="flex items-start gap-3 bg-surface-hover/30 p-4 rounded-xl border border-border">
-                  <Users className="w-5 h-5 text-muted-foreground shrink-0" />
-                  <div>
-                    <p className="text-[10px] text-muted-foreground uppercase mb-0.5">Gender</p>
-                    <p className="text-sm font-semibold text-main">{formatEnum(benefit.targeting.genderTargeting, enums.gender)}</p>
-                  </div>
-                </div>
-                <div className="flex items-start gap-3 bg-surface-hover/30 p-4 rounded-xl border border-border">
-                  <Users className="w-5 h-5 text-muted-foreground shrink-0" />
-                  <div>
-                    <p className="text-[10px] text-muted-foreground uppercase mb-0.5">Parent Status</p>
-                    <p className="text-sm font-semibold text-main">{formatEnum(benefit.targeting.parentTargeting, enums.parent)}</p>
-                  </div>
-                </div>
+                {benefit.claimSettings?.claimMethod && (
+                  <span className="px-3 py-1 bg-surface-hover text-main text-xs font-bold uppercase tracking-wider rounded-full">
+                    {formatEnum(benefit.claimSettings.claimMethod, enums.claimMethod)}
+                  </span>
+                )}
               </div>
             </div>
-          )}
 
-          {benefit.claimSettings && (
-            <div className="space-y-6">
-              <h3 className="text-sm font-bold text-main uppercase tracking-wide border-b border-border pb-2 flex items-center gap-2">
-                <CheckCircle2 className="w-4 h-4 text-brand" /> Claim Settings
-              </h3>
-              <div className="grid grid-cols-2 sm:grid-cols-3 gap-6">
-                <div>
-                  <p className="text-xs text-muted-foreground uppercase mb-1">Method</p>
-                  <p className="text-sm font-medium text-main">{formatEnum(benefit.claimSettings.claimMethod, enums.claimMethod)}</p>
-                </div>
-                {benefit.claimSettings.discountCodeType && (
+            {(benefit.benefitDescription || benefit.detailedContent) && (
+              <div className="prose prose-sm max-w-none text-muted leading-relaxed">
+                <p>{benefit.benefitDescription || benefit.detailedContent}</p>
+              </div>
+            )}
+
+            {hasPricing && (
+              <div className="flex flex-wrap items-center gap-x-12 gap-y-6 py-6 border-y border-border">
+                {benefit.originalPrice != null && (
                   <div>
-                    <p className="text-xs text-muted-foreground uppercase mb-1">Code Type</p>
-                    <p className="text-sm font-medium text-main">{formatEnum(benefit.claimSettings.discountCodeType, enums.discountCodeType)}</p>
+                    <p className="text-[10px] text-muted-foreground uppercase font-bold tracking-widest mb-1">{profileLabels.originalPrice || 'Original Price'}</p>
+                    <p className="text-xl font-medium text-muted line-through">{benefit.originalPrice} {benefit.currency}</p>
                   </div>
                 )}
-                {benefit.claimSettings.paymentCollection && (
+                {benefit.discountedPrice != null && (
                   <div>
-                    <p className="text-xs text-muted-foreground uppercase mb-1">Payment</p>
-                    <p className="text-sm font-medium text-main">{formatEnum(benefit.claimSettings.paymentCollection, enums.payment)}</p>
+                    <p className="text-[10px] text-muted-foreground uppercase font-bold tracking-widest mb-1">{profileLabels.discountedPrice || 'Discount Price'}</p>
+                    <p className="text-2xl font-black text-brand">{benefit.discountedPrice} {benefit.currency}</p>
+                  </div>
+                )}
+                {!benefit.originalPrice && !benefit.discountedPrice && benefit.currency && (
+                  <div>
+                    <p className="text-[10px] text-muted-foreground uppercase font-bold tracking-widest mb-1">{profileLabels.currency || 'Currency'}</p>
+                    <p className="text-xl font-bold text-main">{benefit.currency}</p>
+                  </div>
+                )}
+                {benefit.productUnits && (
+                  <div>
+                    <p className="text-[10px] text-muted-foreground uppercase font-bold tracking-widest mb-1">{profileLabels.productUnits || 'Product Unit'}</p>
+                    <p className="text-xl font-medium text-main capitalize">{benefit.productUnits.toLowerCase()}</p>
                   </div>
                 )}
               </div>
-              {benefit.claimSettings.claimTermsUrl && (
-                <div className="mt-4 p-4 bg-brand/5 border border-brand/10 rounded-xl">
-                  <p className="text-sm text-main font-medium mb-1">Terms & Conditions</p>
-                  <a href={benefit.claimSettings.claimTermsUrl} target="_blank" rel="noreferrer" className="text-xs text-brand hover:underline">
-                    View full terms document →
-                  </a>
+            )}
+
+            {(benefit.brandIntro || benefit.featuresContent || benefit.limitationsContent || benefit.freeGiftDescription) && (
+              <div>
+                <h3 className="text-sm font-bold text-main uppercase tracking-widest mb-6 border-b border-border pb-3">
+                  {labels.drawerOfferDetails || 'Offer Details'}
+                </h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                  <DetailRow icon={Briefcase} label={profileLabels.brandIntro || 'Brand Intro'} value={benefit.brandIntro} />
+                  <DetailRow icon={CheckCircle2} label={profileLabels.features || 'Features'} value={benefit.featuresContent} />
+                  <DetailRow icon={X} label={profileLabels.limitations || 'Limitations'} value={benefit.limitationsContent} />
+                  <DetailRow icon={Tag} label={profileLabels.freeGift || 'Free Gift'} value={benefit.freeGiftDescription} />
+                </div>
+              </div>
+            )}
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+              {benefit.targeting && (
+                <div>
+                  <h3 className="text-sm font-bold text-main uppercase tracking-widest mb-6 border-b border-border pb-3">
+                    {profileLabels.targeting || 'Targeting'}
+                  </h3>
+                  <div className="space-y-6">
+                    <DetailRow icon={MapPin} label={profileLabels.geoTargeting || 'Geographic'} value={formatEnum(benefit.targeting.geoTargetingType, enums.geo)} />
+                    <DetailRow icon={Users} label={profileLabels.genderTargeting || 'Gender'} value={formatEnum(benefit.targeting.genderTargeting, enums.gender)} />
+                    <DetailRow icon={Users} label={profileLabels.parentTargeting || 'Parent Status'} value={formatEnum(benefit.targeting.parentTargeting, enums.parent)} />
+                  </div>
                 </div>
               )}
-            </div>
-          )}
 
-          {benefit.mediaAssets && benefit.mediaAssets.length > 0 && (
-            <div className="space-y-6">
-              <h3 className="text-sm font-bold text-main uppercase tracking-wide border-b border-border pb-2 flex items-center gap-2">
-                <ImageIcon className="w-4 h-4 text-brand" /> Media Assets
-              </h3>
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-                {benefit.mediaAssets.map((asset: any) => (
-                  <a key={asset.id} href={asset.fileUrl} target="_blank" rel="noreferrer" className="group relative aspect-square rounded-xl overflow-hidden border border-border bg-surface-hover">
-                    {asset.mediaType === 'IMAGE' ? (
-                      <img src={asset.fileUrl} alt={asset.mediaCategory} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
-                    ) : (
-                      <div className="w-full h-full flex flex-col items-center justify-center p-2 text-center text-muted-foreground">
-                        <ImageIcon className="w-8 h-8 mb-2 opacity-50" />
-                        <span className="text-[10px] font-bold uppercase">{asset.mediaType}</span>
+              {benefit.claimSettings && (
+                <div>
+                  <h3 className="text-sm font-bold text-main uppercase tracking-widest mb-6 border-b border-border pb-3">
+                    {labels.drawerClaimPayment || 'Claim & Payment'}
+                  </h3>
+                  <div className="space-y-6">
+                    {benefit.claimSettings.discountCodeType && (
+                      <DetailRow icon={Tag} label={profileLabels.codeType || 'Code Type'} value={formatEnum(benefit.claimSettings.discountCodeType, enums.discountCodeType)} />
+                    )}
+                    {benefit.claimSettings.paymentCollection && (
+                      <DetailRow icon={CreditCard} label={profileLabels.payment || 'Payment'} value={formatEnum(benefit.claimSettings.paymentCollection, enums.payment)} />
+                    )}
+                    {benefit.claimSettings.claimTermsUrl && (
+                      <div className="mt-4">
+                        <a href={benefit.claimSettings.claimTermsUrl} target="_blank" rel="noreferrer" className="text-sm text-brand font-semibold hover:underline">
+                          {profileLabels.viewTerms || 'View Terms & Conditions'} →
+                        </a>
                       </div>
                     )}
-                    <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 to-transparent p-3 pt-8">
-                      <p className="text-[10px] font-bold text-white uppercase truncate">
-                        {asset.mediaCategory.replace(/_/g, ' ')}
-                      </p>
-                    </div>
-                  </a>
-                ))}
-              </div>
+                  </div>
+                </div>
+              )}
             </div>
-          )}
-        </div>
 
-        <div className="sticky bottom-0 z-10 bg-surface/80 backdrop-blur-md border-t border-border p-4 sm:px-8 flex justify-end">
-          <Button 
-            onClick={() => {
-              onClose();
-              onEdit(benefit.id);
-            }} 
-            className="rounded-full shadow-lg"
-          >
-            <Edit3 className="w-4 h-4 mr-2" />
-            {(t.portal as any).myBenefits?.editBenefit || 'Edit Benefit'}
-          </Button>
+            {benefit.mediaAssets && benefit.mediaAssets.filter((m: any) => m.mediaCategory !== 'LOGO').length > 0 && (
+              <div>
+                <h3 className="text-sm font-bold text-main uppercase tracking-widest mb-6 border-b border-border pb-3">
+                  {labels.drawerMedia || 'Media & Gallery'}
+                </h3>
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+                  {benefit.mediaAssets.filter((m: any) => m.mediaCategory !== 'LOGO').map((asset: any) => (
+                    <a key={asset.id} href={asset.fileUrl} target="_blank" rel="noreferrer" className="group relative aspect-video sm:aspect-square rounded-xl overflow-hidden bg-surface-hover border border-border">
+                      {asset.mediaType === 'IMAGE' ? (
+                        <img src={asset.fileUrl} alt={asset.mediaCategory} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                      ) : (
+                        <div className="w-full h-full flex flex-col items-center justify-center p-4 text-muted-foreground">
+                          <ImageIcon className="w-8 h-8 mb-2 opacity-30 group-hover:scale-110 transition-transform duration-300" />
+                          <span className="text-[10px] font-bold uppercase">{asset.mediaType}</span>
+                        </div>
+                      )}
+                    </a>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+
+          <div className="shrink-0 bg-surface/80 backdrop-blur-xl border-t border-border p-6 flex justify-end shadow-[0_-10px_40px_-15px_rgba(0,0,0,0.1)]">
+            <Button
+              onClick={() => {
+                onClose();
+                onEdit(benefit.id);
+              }}
+              className="rounded-full shadow-lg px-8 py-2.5 font-bold tracking-wide"
+            >
+              <Edit3 className="w-4 h-4 mr-2" />
+              {labels.editBenefit || 'Edit Benefit'}
+            </Button>
+          </div>
         </div>
       </div>
     </>
