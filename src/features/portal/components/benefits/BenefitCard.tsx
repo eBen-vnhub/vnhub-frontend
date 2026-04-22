@@ -8,17 +8,7 @@ interface BenefitCardProps {
 
 export default function BenefitCard({ benefit, onClick }: BenefitCardProps) {
   const { t } = useLanguage();
-  const enums = (t.portal.companyProfile as any).enums || {};
 
-  const formatEnum = (val: string | null | undefined, mappings: Record<string, string> | undefined) => {
-    if (!val) return '';
-    const cleanVal = val.toUpperCase();
-    if (mappings) {
-      const found = mappings[cleanVal] || mappings[val];
-      if (found) return found;
-    }
-    return val.replace(/_/g, ' ');
-  };
 
   const logoUrl = benefit.mediaAssets?.find((m: any) => m.mediaCategory === 'LOGO')?.fileUrl;
 
@@ -45,16 +35,6 @@ export default function BenefitCard({ benefit, onClick }: BenefitCardProps) {
               💰 {benefit.discountPercentage}% OFF
             </span>
           )}
-          {benefit.claimSettings?.claimMethod && (
-            <span className="flex items-center gap-1 bg-surface-hover px-2 py-0.5 rounded-full">
-              🏷️ {formatEnum(benefit.claimSettings.claimMethod, enums.claimMethod)}
-            </span>
-          )}
-          {benefit.targeting?.geoTargetingType && (
-            <span className="flex items-center gap-1 bg-surface-hover px-2 py-0.5 rounded-full max-w-[120px] truncate">
-              📍 {formatEnum(benefit.targeting.geoTargetingType, enums.geo)}
-            </span>
-          )}
         </div>
         
         <p className="text-sm text-muted line-clamp-2 flex-grow mb-6 leading-relaxed">
@@ -63,7 +43,7 @@ export default function BenefitCard({ benefit, onClick }: BenefitCardProps) {
         
         <div className="flex items-center text-xs font-bold text-brand mt-auto pt-4 border-t border-border opacity-70 group-hover:opacity-100 transition-opacity">
           {(t.portal as any).myBenefits?.clickViewDetails || 'View details'}
-          <ArrowRight className="w-4 h-4 ml-1.5 transform group-hover:translate-x-1 transition-transform" />
+          <ArrowRight className="w-4 h-4 ml-1.5 rtl:ml-0 rtl:mr-1.5 transform rtl:rotate-180 group-hover:translate-x-1 rtl:group-hover:-translate-x-1 transition-transform" />
         </div>
       </div>
     </div>

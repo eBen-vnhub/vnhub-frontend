@@ -279,6 +279,18 @@ export const ar = {
           ELSEWHERE_DISCOUNT: "خصم متوفر في أماكن أخرى",
           EXCLUSIVE_FREE_TRIAL: "تجربة مجانية حصرية",
           FREE_TRIAL_AVAILABLE_ELSEWHERE: "تجربة مجانية تتوفر في أماكن أخرى"
+        },
+        currency: {
+          AED: "درهم إماراتي",
+          SAR: "ريال سعودي",
+          EGP: "جنيه مصري",
+          USD: "دولار أمريكي"
+        },
+        productUnits: {
+          BOUQUET: "باقة",
+          ITEM: "قطعة",
+          SERVICE: "خدمة",
+          SUBSCRIPTION: "اشتراك"
         }
       }
     },

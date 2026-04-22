@@ -279,6 +279,18 @@ export const en = {
           ELSEWHERE_DISCOUNT: "Elsewhere Discount",
           EXCLUSIVE_FREE_TRIAL: "Exclusive Free Trial",
           FREE_TRIAL_AVAILABLE_ELSEWHERE: "Free Trial Available Elsewhere"
+        },
+        currency: {
+          AED: "AED",
+          SAR: "SAR",
+          EGP: "EGP",
+          USD: "USD"
+        },
+        productUnits: {
+          BOUQUET: "Bouquet",
+          ITEM: "Item",
+          SERVICE: "Service",
+          SUBSCRIPTION: "Subscription"
         }
       }
     },
