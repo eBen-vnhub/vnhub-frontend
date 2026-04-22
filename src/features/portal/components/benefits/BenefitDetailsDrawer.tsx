@@ -28,6 +28,11 @@ export default function BenefitDetailsDrawer({ benefit, isOpen, onClose, onEdit 
     return val.replace(/_/g, ' ');
   };
 
+  const formatMultipleEnums = (val: string | null | undefined, mappings: Record<string, string> | undefined) => {
+    if (!val) return '';
+    return val.split(',').map(v => formatEnum(v.trim(), mappings)).join(', ');
+  };
+
   const getLogo = () => benefit.mediaAssets?.find((m: any) => m.mediaCategory === 'LOGO')?.fileUrl;
 
   const DetailRow = ({ icon: Icon, label, value }: { icon: any; label: string; value: any }) => {
@@ -87,11 +92,6 @@ export default function BenefitDetailsDrawer({ benefit, isOpen, onClose, onEdit 
                     {benefit.discountPercentage}% OFF
                   </span>
                 )}
-                {benefit.claimSettings?.claimMethod && (
-                  <span className="px-3 py-1 bg-surface-hover text-main text-xs font-bold uppercase tracking-wider rounded-full">
-                    {formatEnum(benefit.claimSettings.claimMethod, enums.claimMethod)}
-                  </span>
-                )}
               </div>
             </div>
 
@@ -106,40 +106,55 @@ export default function BenefitDetailsDrawer({ benefit, isOpen, onClose, onEdit 
                 {benefit.originalPrice != null && (
                   <div>
                     <p className="text-[10px] text-muted-foreground uppercase font-bold tracking-widest mb-1">{profileLabels.originalPrice || 'Original Price'}</p>
-                    <p className="text-xl font-medium text-muted line-through">{benefit.originalPrice} {benefit.currency}</p>
+                    <p className="text-xl font-medium text-muted line-through">{benefit.originalPrice} {formatEnum(benefit.currency, enums.currency)}</p>
                   </div>
                 )}
                 {benefit.discountedPrice != null && (
                   <div>
                     <p className="text-[10px] text-muted-foreground uppercase font-bold tracking-widest mb-1">{profileLabels.discountedPrice || 'Discount Price'}</p>
-                    <p className="text-2xl font-black text-brand">{benefit.discountedPrice} {benefit.currency}</p>
+                    <p className="text-2xl font-black text-brand">{benefit.discountedPrice} {formatEnum(benefit.currency, enums.currency)}</p>
                   </div>
                 )}
                 {!benefit.originalPrice && !benefit.discountedPrice && benefit.currency && (
                   <div>
                     <p className="text-[10px] text-muted-foreground uppercase font-bold tracking-widest mb-1">{profileLabels.currency || 'Currency'}</p>
-                    <p className="text-xl font-bold text-main">{benefit.currency}</p>
+                    <p className="text-xl font-bold text-main">{formatEnum(benefit.currency, enums.currency)}</p>
                   </div>
                 )}
                 {benefit.productUnits && (
                   <div>
                     <p className="text-[10px] text-muted-foreground uppercase font-bold tracking-widest mb-1">{profileLabels.productUnits || 'Product Unit'}</p>
-                    <p className="text-xl font-medium text-main capitalize">{benefit.productUnits.toLowerCase()}</p>
+                    <p className="text-xl font-medium text-main capitalize">{formatEnum(benefit.productUnits, enums.productUnits)}</p>
                   </div>
                 )}
               </div>
             )}
 
-            {(benefit.brandIntro || benefit.featuresContent || benefit.limitationsContent || benefit.freeGiftDescription) && (
+            {(benefit.valueProposition || benefit.brandIntro || benefit.brandDifferentiator || benefit.featuresContent || benefit.limitationsContent || benefit.freeGiftDescription || benefit.referenceUrl) && (
               <div>
                 <h3 className="text-sm font-bold text-main uppercase tracking-widest mb-6 border-b border-border pb-3">
                   {labels.drawerOfferDetails || 'Offer Details'}
                 </h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                  <DetailRow icon={Tag} label={profileLabels.valueProposition || 'Value Proposition'} value={formatEnum(benefit.valueProposition, enums.valueProp)} />
                   <DetailRow icon={Briefcase} label={profileLabels.brandIntro || 'Brand Intro'} value={benefit.brandIntro} />
+                  <DetailRow icon={Briefcase} label={profileLabels.brandDifferentiator || 'Brand Differentiator'} value={benefit.brandDifferentiator} />
                   <DetailRow icon={CheckCircle2} label={profileLabels.features || 'Features'} value={benefit.featuresContent} />
                   <DetailRow icon={X} label={profileLabels.limitations || 'Limitations'} value={benefit.limitationsContent} />
                   <DetailRow icon={Tag} label={profileLabels.freeGift || 'Free Gift'} value={benefit.freeGiftDescription} />
+                  {benefit.referenceUrl && (
+                    <div className="flex items-start gap-4">
+                      <div className="mt-0.5 bg-surface-hover p-2 rounded-lg text-brand">
+                        <Tag className="w-5 h-5" />
+                      </div>
+                      <div>
+                        <p className="text-xs text-muted-foreground uppercase tracking-wider font-semibold mb-1">{profileLabels.referenceUrl || 'Reference URL'}</p>
+                        <a href={benefit.referenceUrl} target="_blank" rel="noreferrer" className="text-sm font-semibold text-brand hover:underline block break-all">
+                          {benefit.referenceUrl}
+                        </a>
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
             )}
@@ -164,11 +179,23 @@ export default function BenefitDetailsDrawer({ benefit, isOpen, onClose, onEdit 
                     {labels.drawerClaimPayment || 'Claim & Payment'}
                   </h3>
                   <div className="space-y-6">
+                    {benefit.claimSettings.claimMethod && (
+                      <DetailRow icon={Tag} label={profileLabels.claimMethod || 'Claim Method'} value={formatEnum(benefit.claimSettings.claimMethod, enums.claimMethod)} />
+                    )}
                     {benefit.claimSettings.discountCodeType && (
                       <DetailRow icon={Tag} label={profileLabels.codeType || 'Code Type'} value={formatEnum(benefit.claimSettings.discountCodeType, enums.discountCodeType)} />
                     )}
                     {benefit.claimSettings.paymentCollection && (
                       <DetailRow icon={CreditCard} label={profileLabels.payment || 'Payment'} value={formatEnum(benefit.claimSettings.paymentCollection, enums.payment)} />
+                    )}
+                    {benefit.claimSettings.purchaseMethod && (
+                      <DetailRow icon={CreditCard} label={profileLabels.purchaseMethod || 'Purchase Method'} value={formatMultipleEnums(benefit.claimSettings.purchaseMethod, enums.purchaseMethod)} />
+                    )}
+                    {benefit.claimSettings.receiveMethod && (
+                      <DetailRow icon={MapPin} label={profileLabels.receiveMethod || 'Receive Method'} value={formatMultipleEnums(benefit.claimSettings.receiveMethod, enums.receiveMethod)} />
+                    )}
+                    {benefit.claimSettings.claimButtonText && (
+                      <DetailRow icon={Tag} label={profileLabels.claimButton || 'CTA Button'} value={benefit.claimSettings.claimButtonText} />
                     )}
                     {benefit.claimSettings.claimTermsUrl && (
                       <div className="mt-4">
