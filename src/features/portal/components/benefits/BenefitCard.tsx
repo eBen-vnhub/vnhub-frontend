@@ -32,7 +32,7 @@ export default function BenefitCard({ benefit, onClick }: BenefitCardProps) {
         <div className="flex flex-wrap items-center gap-2 mb-4 text-[11px] font-semibold text-muted-foreground">
           {benefit.discountPercentage > 0 && (
             <span className="flex items-center gap-1 text-green-700 bg-green-500/10 px-2 py-0.5 rounded-full">
-              💰 {benefit.discountPercentage}% OFF
+              💰 {benefit.discountPercentage}% {((t.portal.companyProfile as any).off) || 'OFF'}
             </span>
           )}
         </div>

@@ -290,9 +290,21 @@ export const ar = {
           BOUQUET: "باقة",
           ITEM: "قطعة",
           SERVICE: "خدمة",
-          SUBSCRIPTION: "اشتراك"
+          SUBSCRIPTION: "اشتراك",
+          BOOKING: "حجز"
+        },
+        ctaButtons: {
+          "BOOK": "احجز",
+          "BUY": "شراء",
+          "CLAIM": "احصل على العرض",
+          "GET OFFER": "احصل على العرض",
+          "REGISTER": "سجل الآن",
+          "SUBSCRIBE": "اشترك الآن",
+          "CONTACT": "تواصل معنا",
+          "VISIT": "زيارة"
         }
-      }
+      },
+      off: "خصم"
     },
     vendorAdmin: {
       title: "إدارة الفريق",

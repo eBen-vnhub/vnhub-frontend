@@ -89,7 +89,7 @@ export default function BenefitDetailsDrawer({ benefit, isOpen, onClose, onEdit 
                 {benefit.discountPercentage > 0 && (
                   <span className="px-3 py-1 bg-green-500/10 text-green-700 text-xs font-bold uppercase tracking-wider rounded-full flex items-center gap-1.5">
                     <CheckCircle2 className="w-3.5 h-3.5" />
-                    {benefit.discountPercentage}% OFF
+                    {benefit.discountPercentage}% {((t.portal.companyProfile as any).off) || 'OFF'}
                   </span>
                 )}
               </div>
@@ -195,7 +195,7 @@ export default function BenefitDetailsDrawer({ benefit, isOpen, onClose, onEdit 
                       <DetailRow icon={MapPin} label={profileLabels.receiveMethod || 'Receive Method'} value={formatMultipleEnums(benefit.claimSettings.receiveMethod, enums.receiveMethod)} />
                     )}
                     {benefit.claimSettings.claimButtonText && (
-                      <DetailRow icon={Tag} label={profileLabels.claimButton || 'CTA Button'} value={benefit.claimSettings.claimButtonText} />
+                      <DetailRow icon={Tag} label={profileLabels.claimButton || 'CTA Button'} value={formatEnum(benefit.claimSettings.claimButtonText, enums.ctaButtons)} />
                     )}
                     {benefit.claimSettings.claimTermsUrl && (
                       <div className="mt-4">

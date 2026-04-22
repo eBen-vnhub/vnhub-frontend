@@ -290,9 +290,21 @@ export const en = {
           BOUQUET: "Bouquet",
           ITEM: "Item",
           SERVICE: "Service",
-          SUBSCRIPTION: "Subscription"
+          SUBSCRIPTION: "Subscription",
+          BOOKING: "Booking"
+        },
+        ctaButtons: {
+          "BOOK": "Book",
+          "BUY": "Buy",
+          "CLAIM": "Claim",
+          "GET OFFER": "Get Offer",
+          "REGISTER": "Register",
+          "SUBSCRIBE": "Subscribe",
+          "CONTACT": "Contact Us",
+          "VISIT": "Visit"
         }
-      }
+      },
+      off: "OFF"
     },
     vendorAdmin: {
       title: "Vendor Administration",
