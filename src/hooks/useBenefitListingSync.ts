@@ -6,9 +6,10 @@ import vendorsService from '../services/vendors';
 
 interface UseBenefitListingSyncProps {
   onSuccess: () => void;
+  benefitId?: number;
 }
 
-export function useBenefitListingSync({ onSuccess }: UseBenefitListingSyncProps) {
+export function useBenefitListingSync({ onSuccess, benefitId }: UseBenefitListingSyncProps) {
   const { user } = useAuth();
   const { vendor } = useVendors();
   const { language } = useLanguage();
@@ -57,6 +58,7 @@ export function useBenefitListingSync({ onSuccess }: UseBenefitListingSyncProps)
       iframeRef.current.contentWindow.postMessage({
         type: 'SYNC_BENEFIT_DATA',
         vnhubVendorId: vendor.id,
+        benefitId: benefitId,
         personal: {
           firstName: user.firstName || '',
           lastName: user.lastName || '',
@@ -68,7 +70,7 @@ export function useBenefitListingSync({ onSuccess }: UseBenefitListingSyncProps)
         prefillData,
       }, '*');
     }
-  }, [vendor, user, language]);
+  }, [vendor, user, language, benefitId]);
 
   useEffect(() => {
     if (iframeRef.current?.contentWindow) {

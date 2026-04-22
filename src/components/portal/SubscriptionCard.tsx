@@ -9,6 +9,7 @@ interface SubscriptionCardProps {
   companyName: string;
   onEdit: (subscription: Subscription) => void;
   onCancel: (subscriptionId: number) => void;
+  onAddBenefit: (subscriptionId: number) => void;
   isCancelling: boolean;
 }
 
@@ -18,7 +19,7 @@ const STATUS_CONFIG: Record<string, { icon: typeof CheckCircle2; className: stri
   cancelled: { icon: XCircle, className: 'bg-error/10 text-error' },
 };
 
-export default function SubscriptionCard({ subscription, companyName, onEdit, onCancel, isCancelling }: SubscriptionCardProps) {
+export default function SubscriptionCard({ subscription, companyName, onEdit, onCancel, onAddBenefit, isCancelling }: SubscriptionCardProps) {
   const { t } = useLanguage();
   const [showCancelConfirm, setShowCancelConfirm] = useState(false);
   const statusKey = subscription.status?.toLowerCase() || 'pending';
@@ -73,6 +74,19 @@ export default function SubscriptionCard({ subscription, companyName, onEdit, on
             <Edit3 className="w-4 h-4" />
             {t.portal.subscriptionCard.edit}
           </Button>
+
+          {subscription.benefitsSubmitted !== undefined && subscription.maxBenefits !== undefined && subscription.benefitsSubmitted < subscription.maxBenefits && (
+            <Button
+              onClick={() => onAddBenefit(subscription.id)}
+              className="bg-portal-accent text-white hover:bg-portal-accent/90 text-sm flex items-center gap-2 py-2"
+            >
+              <CheckCircle2 className="w-4 h-4" />
+              Add Benefit
+              <span className="text-xs bg-white/20 px-1.5 rounded ml-1">
+                {subscription.maxBenefits - subscription.benefitsSubmitted} left
+              </span>
+            </Button>
+          )}
 
           {!showCancelConfirm ? (
             <button

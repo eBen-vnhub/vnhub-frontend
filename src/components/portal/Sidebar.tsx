@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Home, Building, Users } from 'lucide-react';
+import { Home, Building, Users, Gift } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
 import { useLanguage } from '../../i18n/LanguageContext';
 import WorkspaceSwitcher from './WorkspaceSwitcher';
@@ -44,6 +44,20 @@ export default function Sidebar() {
           >
             <Building className="w-5 h-5" />
             <span className="text-sm font-semibold truncate">{t.portal.sidebar.companyProfile}</span>
+          </NavLink>
+
+          <NavLink
+            to="/portal/benefits"
+            className={({ isActive }) =>
+              `group w-full flex items-center gap-3 rounded-xl px-4 py-3 transition-all duration-300 ${
+                isActive
+                  ? 'bg-brand text-white shadow-lg shadow-brand/25'
+                  : 'text-gray-500 hover:bg-gray-50 hover:text-gray-700'
+              }`
+            }
+          >
+            <Gift className="w-5 h-5" />
+            <span className="text-sm font-semibold truncate">My Benefits</span>
           </NavLink>
 
           <NavLink

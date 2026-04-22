@@ -72,15 +72,26 @@ export default function SubscriptionsPage() {
     setModal({ type: 'next-action', stepType: 'VENDOR_LISTING' });
   };
 
-  const completeStepLocally = async (stepType: string, markAsComplete = false) => {
-    const targetSub = subscriptions.find(s => s.nextStep === stepType && s.status !== 'CANCELLED');
+  const handleAddBenefit = (subscriptionId: number) => {
+    sessionStorage.setItem('activeSubscriptionId', String(subscriptionId));
+    setModal({ type: 'benefit-listing' });
+  };
+
+  const completeStepLocally = async (stepType: string) => {
+    const activeSubId = sessionStorage.getItem('activeSubscriptionId');
+    const targetSub = activeSubId
+      ? subscriptions.find(s => s.id === Number(activeSubId))
+      : subscriptions.find(s => s.nextStep === stepType && s.status !== 'CANCELLED');
+
     if (targetSub) {
       try {
-        const payload = markAsComplete ? { stepType, markAsComplete: true } : { stepType };
+        const payload = { stepType };
         const response = await vendorsService.completeSubscriptionStep(targetSub.id, payload);
         updateSubscriptionInContext(response.subscription);
       } catch (err) {
         console.error('Failed to complete step', err);
+      } finally {
+        sessionStorage.removeItem('activeSubscriptionId');
       }
     }
   };
@@ -104,9 +115,6 @@ export default function SubscriptionsPage() {
       setModal({ type: 'vendor-listing' });
     } else if (actionType === 'BENEFIT_LISTING') {
       setModal({ type: 'benefit-listing' });
-    } else if (actionType === 'MARK_COMPLETE') {
-      await completeStepLocally('BENEFIT_LISTING', true);
-      toast.success('Setup completed successfully!');
     }
   };
 
@@ -188,6 +196,7 @@ export default function SubscriptionsPage() {
                 companyName={vendor.companyName}
                 onEdit={handleEdit}
                 onCancel={handleCancel}
+                onAddBenefit={handleAddBenefit}
                 isCancelling={cancellingId === sub.id}
               />
             ))}

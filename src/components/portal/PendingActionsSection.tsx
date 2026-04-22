@@ -4,7 +4,7 @@ import { useLanguage } from '../../i18n/LanguageContext';
 import type { Subscription } from '../../types';
 
 interface PendingAction {
-  type: 'VENDOR_LISTING' | 'BENEFIT_LISTING' | 'MARK_COMPLETE';
+  type: 'VENDOR_LISTING' | 'BENEFIT_LISTING';
   label: string;
   description: string;
   benefitsSubmitted?: number;
@@ -48,15 +48,6 @@ function usePendingActions(subscriptions: Subscription[]): PendingAction[] {
       description: (t.portal as any).pendingActions?.benefitListingDesc || 'Set up your offers and discounts for the benefits center.',
       subscriptionId: benefitPendingSub.id
     });
-
-    if (submitted > 0 && submitted < max) {
-      actions.push({
-        type: 'MARK_COMPLETE',
-        label: 'Finish Setup Early',
-        description: 'You have remaining benefits, but you can finish your setup now and add more later.',
-        subscriptionId: benefitPendingSub.id
-      });
-    }
   }
 
   return actions;
@@ -101,10 +92,10 @@ export default function PendingActionsSection({ subscriptions, onAction }: Pendi
             </div>
             <Button
               onClick={() => onAction(action.type, action.subscriptionId)}
-              className={`${action.type === 'MARK_COMPLETE' ? 'bg-surface-hover text-main hover:bg-surface-hover/80 border border-border' : 'bg-portal-accent text-white hover:bg-portal-accent/90'} whitespace-nowrap flex items-center gap-2`}
+              className="bg-portal-accent text-white hover:bg-portal-accent/90 whitespace-nowrap flex items-center gap-2"
             >
-              {action.type === 'MARK_COMPLETE' ? 'Complete Setup' : ((t.portal as any).pendingActions?.startButton || 'Start')}
-              {action.type !== 'MARK_COMPLETE' && <ArrowRight className="w-4 h-4" />}
+              {(t.portal as any).pendingActions?.startButton || 'Start'}
+              <ArrowRight className="w-4 h-4" />
             </Button>
           </div>
         ))}
