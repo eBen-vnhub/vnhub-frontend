@@ -128,11 +128,11 @@ export const ar = {
       cancelFailed: "فشل إلغاء الاشتراك.",
     },
     nextActionModal: {
-      title: "الخطوة التالية: إضافة العروض",
+      title: "الخطوة التالية: تسجيل المنافع",
       comingSoon: "قريباً",
-      description: "لقد أكملت بنجاح بيانات شركتك! الخطوة المطلوبة التالية هي إعداد عروضك ومميزاتك.",
-      continue: "ابدأ في إضافة العروض",
-      later: "سأفعل ذلك لاحقاً",
+      description: "لقد أكملت تسجيل المورد بنجاح! الخطوة التالية المطلوبة هي إعداد ملف تعريف VN Benefits الخاص بك.",
+      continue: "ابدأ تسجيل المنافع",
+      later: "ذكرني لاحقاً",
       close: "إغلاق النافذة",
     },
     myBenefits: {
@@ -143,6 +143,10 @@ export const ar = {
       unnamedBenefit: "عرض غير مسمى",
       noDescription: "لا يوجد وصف.",
       editBenefit: "تعديل العرض",
+      clickViewDetails: "عرض التفاصيل",
+      drawerOfferDetails: "تفاصيل العرض",
+      drawerClaimPayment: "الاستلام والدفع",
+      drawerMedia: "الوسائط والمعرض",
     },
     companyProfile: {
       title: "ملف الشركة",

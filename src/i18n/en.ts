@@ -143,6 +143,10 @@ export const en = {
       unnamedBenefit: "Unnamed Benefit",
       noDescription: "No description provided.",
       editBenefit: "Edit Benefit",
+      clickViewDetails: "View details",
+      drawerOfferDetails: "Offer Details",
+      drawerClaimPayment: "Claim & Payment",
+      drawerMedia: "Media & Gallery",
     },
     companyProfile: {
       title: "Company Profile",
