@@ -57,7 +57,7 @@ export default function Sidebar() {
             }
           >
             <Gift className="w-5 h-5" />
-            <span className="text-sm font-semibold truncate">My Benefits</span>
+            <span className="text-sm font-semibold truncate">{(t.portal as any).myBenefits?.title || 'My Benefits'}</span>
           </NavLink>
 
           <NavLink
