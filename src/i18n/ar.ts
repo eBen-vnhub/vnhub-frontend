@@ -83,6 +83,7 @@ export const ar = {
     sidebar: {
       home: "الرئيسية",
       companyProfile: "ملف الشركة",
+      vendorListing: "إدراج المورد",
       vendorAdmin: "لوحة إدارة الفريق",
     },
     workspace: {

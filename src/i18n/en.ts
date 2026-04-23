@@ -83,6 +83,7 @@ export const en = {
     sidebar: {
       home: "Home",
       companyProfile: "Company Profile",
+      vendorListing: "Vendor Listing",
       vendorAdmin: "Vendor Administration Panel",
     },
     workspace: {
