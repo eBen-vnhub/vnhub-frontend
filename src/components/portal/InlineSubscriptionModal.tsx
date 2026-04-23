@@ -80,8 +80,8 @@ export default function InlineSubscriptionModal({ isOpen, onClose, onSuccess, ne
   if (!isOpen) return null;
 
   const iframeSrc = newBranch
-    ? `${formUrl}?embed=true&newBranch=true&skipPersonal=true`
-    : `${formUrl}?embed=true&skipPersonal=true`;
+    ? `${formUrl}?embed=true&newBranch=true&skipPersonal=true&lang=${language}`
+    : `${formUrl}?embed=true&skipPersonal=true&lang=${language}`;
 
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6 md:p-12">

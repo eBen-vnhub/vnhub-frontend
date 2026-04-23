@@ -183,6 +183,10 @@ export const ar = {
       limitations: "القيود",
       freeGift: "هدية مجانية",
       referenceUrl: "رابط مرجعي",
+      detailedProvide: "تفاصيل ما نقدمه",
+      openCode: "كود الخصم المعروض",
+      claimProcess: "خطوات الاستلام",
+      additionalInfo: "معلومات إضافية",
       targeting: "الاستهداف",
       geoTargeting: "الجغرافي",
       genderTargeting: "الجنس",
@@ -284,7 +288,8 @@ export const ar = {
           AED: "درهم إماراتي",
           SAR: "ريال سعودي",
           EGP: "جنيه مصري",
-          USD: "دولار أمريكي"
+          USD: "دولار أمريكي",
+          BHD: "دينار بحريني"
         },
         productUnits: {
           BOUQUET: "باقة",
