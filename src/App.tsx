@@ -10,6 +10,7 @@ import PortalLayout from './layouts/PortalLayout';
 import SubscriptionsPage from './features/portal/pages/SubscriptionsPage';
 import CompanyProfilePage from './features/portal/pages/CompanyProfilePage';
 import VendorAdminPage from './features/portal/pages/VendorAdminPage';
+import VendorListingPage from './features/portal/pages/VendorListingPage';
 import ChangePasswordPage from './features/auth/pages/ChangePasswordPage';
 import UserProfilePage from './features/portal/pages/UserProfilePage';
 import MyBenefitsPage from './features/portal/pages/MyBenefitsPage';
@@ -43,6 +44,7 @@ export default function App() {
         }>
           <Route index element={<SubscriptionsPage />} />
           <Route path="company-profile" element={<CompanyProfilePage />} />
+          <Route path="vendor-listing" element={<VendorListingPage />} />
           <Route path="admin" element={<VendorAdminPage />} />
           <Route path="benefits" element={<MyBenefitsPage />} />
           <Route path="profile" element={<UserProfilePage />} />

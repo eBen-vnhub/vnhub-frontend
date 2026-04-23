@@ -1,4 +1,4 @@
-import { AlertTriangle, ArrowRight, CheckCircle } from 'lucide-react';
+import { ArrowRight, LayoutList } from 'lucide-react';
 import Button from '../../components/ui/Button';
 import { useLanguage } from '../../i18n/LanguageContext';
 import type { Subscription } from '../../types';
@@ -7,8 +7,6 @@ interface PendingAction {
   type: 'VENDOR_LISTING' | 'BENEFIT_LISTING';
   label: string;
   description: string;
-  benefitsSubmitted?: number;
-  maxBenefits?: number;
   subscriptionId?: number;
 }
 
@@ -34,7 +32,7 @@ function usePendingActions(subscriptions: Subscription[]): PendingAction[] {
     actions.push({
       type: 'VENDOR_LISTING',
       label: (t.portal as any).pendingActions?.vendorListing || 'Complete Vendor Listing',
-      description: (t.portal as any).pendingActions?.vendorListingDesc || 'Provide your company details to activate your workspace.',
+      description: (t.portal as any).pendingActions?.vendorListingDesc || 'Provide your brand details to activate your storefront.',
       subscriptionId: vendorPendingSub.id
     });
   }
@@ -60,42 +58,42 @@ export default function PendingActionsSection({ subscriptions, onAction }: Pendi
   if (actions.length === 0) return null;
 
   return (
-    <section className="bg-amber-500/5 border border-amber-500/20 rounded-3xl p-6 animate-in fade-in slide-in-from-top-2 duration-500">
-      <div className="flex items-center gap-3 mb-4">
-        <div className="w-10 h-10 bg-amber-500/10 rounded-full flex items-center justify-center flex-shrink-0">
-          <AlertTriangle className="w-5 h-5 text-amber-500" />
+    <section className="bg-surface border border-border rounded-3xl p-6 sm:p-8 shadow-sm animate-in fade-in slide-in-from-top-2 duration-500">
+      <div className="flex items-start sm:items-center gap-4 mb-6">
+        <div className="w-12 h-12 bg-brand/10 rounded-2xl flex items-center justify-center flex-shrink-0">
+          <LayoutList className="w-6 h-6 text-brand" />
         </div>
         <div>
-          <h3 className="text-xl font-bold text-portal-accent relative z-10">
-            {(t.portal as any).pendingActions?.title || 'Action Required'}
+          <h3 className="text-xl font-bold text-main">
+            {(t.portal as any).pendingActions?.setupTitle || 'Account Setup'}
           </h3>
-          <p className="text-sm text-portal-accent/80 font-medium relative z-10">
-            {(t.portal as any).pendingActions?.subtitle || 'Please complete the following steps to activate your workspace:'}
+          <p className="text-sm text-muted mt-1">
+            {(t.portal as any).pendingActions?.setupSubtitle || 'Complete these steps to fully activate your workspace and start receiving benefits.'}
           </p>
         </div>
       </div>
 
-      <div className="space-y-3">
-        {actions.map((action) => (
+      <div className="grid gap-4">
+        {actions.map((action, index) => (
           <div
             key={action.type}
-            className="bg-surface rounded-2xl p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4 border border-border"
+            className="group bg-surface hover:bg-surface-hover transition-colors rounded-2xl p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-5 border border-border hover:border-brand/30"
           >
-            <div className="flex items-start gap-3">
-              <div className="w-8 h-8 bg-amber-500/10 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5">
-                <CheckCircle className="w-4 h-4 text-amber-500" />
+            <div className="flex items-start gap-4">
+              <div className="w-8 h-8 bg-surface-hover group-hover:bg-brand/10 rounded-full flex items-center justify-center flex-shrink-0 transition-colors">
+                <span className="text-sm font-bold text-muted-foreground group-hover:text-brand">{index + 1}</span>
               </div>
               <div>
-                <p className="font-semibold text-main">{action.label}</p>
-                <p className="text-sm text-muted mt-0.5">{action.description}</p>
+                <p className="font-bold text-main text-base">{action.label}</p>
+                <p className="text-sm text-muted mt-1 leading-relaxed">{action.description}</p>
               </div>
             </div>
             <Button
               onClick={() => onAction(action.type, action.subscriptionId)}
-              className="bg-portal-accent text-white hover:bg-portal-accent/90 whitespace-nowrap flex items-center gap-2"
+              className="sm:w-auto w-full flex items-center justify-center gap-2"
             >
-              {(t.portal as any).pendingActions?.startButton || 'Start'}
-              <ArrowRight className="w-4 h-4" />
+              {(t.portal as any).pendingActions?.startButton || 'Start Setup'}
+              <ArrowRight className="w-4 h-4 rtl:rotate-180" />
             </Button>
           </div>
         ))}
