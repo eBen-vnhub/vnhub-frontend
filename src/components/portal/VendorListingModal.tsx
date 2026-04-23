@@ -10,7 +10,7 @@ interface VendorListingModalProps {
 }
 
 export default function VendorListingModal({ isOpen, onClose, onSuccess }: VendorListingModalProps) {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const { vendor } = useVendors();
 
   const handleSuccess = () => {
@@ -25,7 +25,7 @@ export default function VendorListingModal({ isOpen, onClose, onSuccess }: Vendo
   const rawFormUrl = import.meta.env.VITE_VENDOR_LISTING_URL || '';
   const formUrl = rawFormUrl.endsWith('/') ? rawFormUrl : `${rawFormUrl}/`;
   const vendorId = vendor?.id;
-  const iframeSrc = formUrl ? `${formUrl}?embed=true${vendorId ? `&vnhubVendorId=${vendorId}` : ''}` : '';
+  const iframeSrc = formUrl ? `${formUrl}?embed=true&lang=${language}${vendorId ? `&vnhubVendorId=${vendorId}` : ''}` : '';
 
   if (!isOpen) return null;
 

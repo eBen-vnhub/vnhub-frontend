@@ -10,7 +10,7 @@ export default function BenefitCard({ benefit, onClick }: BenefitCardProps) {
   const { t } = useLanguage();
 
 
-  const logoUrl = benefit.mediaAssets?.find((m: any) => m.mediaCategory === 'LOGO')?.fileUrl;
+
 
   return (
     <div 
@@ -24,9 +24,6 @@ export default function BenefitCard({ benefit, onClick }: BenefitCardProps) {
           <h3 className="text-xl font-extrabold text-main line-clamp-2 group-hover:text-brand transition-colors">
             {benefit.benefitName || (t.portal as any).myBenefits?.unnamedBenefit || 'Unnamed Benefit'}
           </h3>
-          {logoUrl && (
-            <img src={logoUrl} alt="Logo" className="w-10 h-10 rounded-full border border-border object-cover shadow-sm shrink-0" />
-          )}
         </div>
 
         <div className="flex flex-wrap items-center gap-2 mb-4 text-[11px] font-semibold text-muted-foreground">

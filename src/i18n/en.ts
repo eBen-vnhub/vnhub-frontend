@@ -183,6 +183,10 @@ export const en = {
       limitations: "Limitations",
       freeGift: "Free Gift",
       referenceUrl: "Reference URL",
+      detailedProvide: "What We Provide",
+      openCode: "Open Discount Code",
+      claimProcess: "Claim Process",
+      additionalInfo: "Additional Information",
       targeting: "Targeting",
       geoTargeting: "Geographic",
       genderTargeting: "Gender",
@@ -284,7 +288,8 @@ export const en = {
           AED: "AED",
           SAR: "SAR",
           EGP: "EGP",
-          USD: "USD"
+          USD: "USD",
+          BHD: "BHD"
         },
         productUnits: {
           BOUQUET: "Bouquet",

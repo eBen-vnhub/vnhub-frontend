@@ -33,7 +33,7 @@ export default function BenefitDetailsDrawer({ benefit, isOpen, onClose, onEdit 
     return val.split(',').map(v => formatEnum(v.trim(), mappings)).join(', ');
   };
 
-  const getLogo = () => benefit.mediaAssets?.find((m: any) => m.mediaCategory === 'LOGO')?.fileUrl;
+
 
   const DetailRow = ({ icon: Icon, label, value }: { icon: any; label: string; value: any }) => {
     if (!value) return null;
@@ -61,25 +61,16 @@ export default function BenefitDetailsDrawer({ benefit, isOpen, onClose, onEdit 
       <div className="fixed inset-0 z-[110] flex items-center justify-center p-6 sm:p-10 pointer-events-none">
         <div className="bg-surface rounded-3xl shadow-2xl border border-border w-full max-w-2xl max-h-[90vh] flex flex-col overflow-hidden pointer-events-auto">
 
-          <div className="relative h-28 bg-gradient-to-r from-brand/10 via-brand/5 to-surface-hover shrink-0">
+          <div className="relative h-20 bg-gradient-to-r from-brand/10 via-brand/5 to-surface-hover shrink-0">
             <button
               onClick={onClose}
               className="absolute top-4 right-4 z-10 p-2 text-main bg-surface/50 hover:bg-surface backdrop-blur-md rounded-full shadow-sm transition-all"
             >
               <X className="w-5 h-5" />
             </button>
-            <div className="absolute -bottom-10 left-8">
-              <div className="w-20 h-20 rounded-2xl bg-surface border-4 border-surface flex items-center justify-center overflow-hidden shadow-md">
-                {getLogo() ? (
-                  <img src={getLogo()} alt="Logo" className="w-full h-full object-cover" />
-                ) : (
-                  <Tag className="w-8 h-8 text-brand/50" />
-                )}
-              </div>
-            </div>
           </div>
 
-          <div className="flex-1 overflow-y-auto px-8 pt-14 pb-8 space-y-10">
+          <div className="flex-1 overflow-y-auto px-8 pt-8 pb-8 space-y-10">
 
             <div>
               <h1 className="text-2xl font-black text-main mb-4 leading-tight">
@@ -130,7 +121,7 @@ export default function BenefitDetailsDrawer({ benefit, isOpen, onClose, onEdit 
               </div>
             )}
 
-            {(benefit.valueProposition || benefit.brandIntro || benefit.brandDifferentiator || benefit.featuresContent || benefit.limitationsContent || benefit.freeGiftDescription || benefit.referenceUrl) && (
+            {(benefit.valueProposition || benefit.brandIntro || benefit.brandDifferentiator || benefit.featuresContent || benefit.limitationsContent || benefit.freeGiftDescription || benefit.referenceUrl || benefit.detailedProvideContent) && (
               <div>
                 <h3 className="text-sm font-bold text-main uppercase tracking-widest mb-6 border-b border-border pb-3">
                   {labels.drawerOfferDetails || 'Offer Details'}
@@ -139,6 +130,7 @@ export default function BenefitDetailsDrawer({ benefit, isOpen, onClose, onEdit 
                   <DetailRow icon={Tag} label={profileLabels.valueProposition || 'Value Proposition'} value={formatEnum(benefit.valueProposition, enums.valueProp)} />
                   <DetailRow icon={Briefcase} label={profileLabels.brandIntro || 'Brand Intro'} value={benefit.brandIntro} />
                   <DetailRow icon={Briefcase} label={profileLabels.brandDifferentiator || 'Brand Differentiator'} value={benefit.brandDifferentiator} />
+                  <DetailRow icon={CheckCircle2} label={profileLabels.detailedProvide || 'What We Provide'} value={benefit.detailedProvideContent} />
                   <DetailRow icon={CheckCircle2} label={profileLabels.features || 'Features'} value={benefit.featuresContent} />
                   <DetailRow icon={X} label={profileLabels.limitations || 'Limitations'} value={benefit.limitationsContent} />
                   <DetailRow icon={Tag} label={profileLabels.freeGift || 'Free Gift'} value={benefit.freeGiftDescription} />
@@ -182,8 +174,14 @@ export default function BenefitDetailsDrawer({ benefit, isOpen, onClose, onEdit 
                     {benefit.claimSettings.claimMethod && (
                       <DetailRow icon={Tag} label={profileLabels.claimMethod || 'Claim Method'} value={formatEnum(benefit.claimSettings.claimMethod, enums.claimMethod)} />
                     )}
+                    {benefit.claimSettings.claimingInstructions && (
+                      <DetailRow icon={Tag} label={profileLabels.claimProcess || 'Claim Process'} value={benefit.claimSettings.claimingInstructions} />
+                    )}
                     {benefit.claimSettings.discountCodeType && (
                       <DetailRow icon={Tag} label={profileLabels.codeType || 'Code Type'} value={formatEnum(benefit.claimSettings.discountCodeType, enums.discountCodeType)} />
+                    )}
+                    {benefit.claimSettings.singleDiscountCode && (
+                      <DetailRow icon={Tag} label={profileLabels.openCode || 'Discount Code'} value={benefit.claimSettings.singleDiscountCode} />
                     )}
                     {benefit.claimSettings.paymentCollection && (
                       <DetailRow icon={CreditCard} label={profileLabels.payment || 'Payment'} value={formatEnum(benefit.claimSettings.paymentCollection, enums.payment)} />
@@ -196,6 +194,9 @@ export default function BenefitDetailsDrawer({ benefit, isOpen, onClose, onEdit 
                     )}
                     {benefit.claimSettings.claimButtonText && (
                       <DetailRow icon={Tag} label={profileLabels.claimButton || 'CTA Button'} value={formatEnum(benefit.claimSettings.claimButtonText, enums.ctaButtons)} />
+                    )}
+                    {benefit.claimSettings.additionalNotes && (
+                      <DetailRow icon={Tag} label={profileLabels.additionalInfo || 'Additional Information'} value={benefit.claimSettings.additionalNotes} />
                     )}
                     {benefit.claimSettings.claimTermsUrl && (
                       <div className="mt-4">
