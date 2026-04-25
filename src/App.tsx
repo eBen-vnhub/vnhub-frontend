@@ -20,6 +20,7 @@ import BackofficeLayout from './layouts/BackofficeLayout';
 import VendorsListPage from './features/backoffice/pages/VendorsListPage';
 import VendorDetailPage from './features/backoffice/pages/VendorDetailPage';
 import OnboardingPage from './features/backoffice/pages/OnboardingPage';
+import VendorOnboardingPage from './features/portal/pages/VendorOnboardingPage';
 
 export default function App() {
   return (
@@ -51,6 +52,7 @@ export default function App() {
           <Route path="benefits" element={<MyBenefitsPage />} />
           <Route path="profile" element={<UserProfilePage />} />
           <Route path="change-password" element={<ChangePasswordPage />} />
+          <Route path="onboarding" element={<VendorOnboardingPage />} />
         </Route>
 
         <Route path="/backoffice" element={
