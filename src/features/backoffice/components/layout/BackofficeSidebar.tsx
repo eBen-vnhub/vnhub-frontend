@@ -23,7 +23,6 @@ export default function BackofficeSidebar() {
               {t.backoffice.sidebar.adminSection}
             </h2>
             <nav className="space-y-1">
-              <SidebarLink to="/backoffice" end icon={<Home />} label={t.backoffice.sidebar.dashboard} />
               <SidebarLink to="/backoffice/vendors" icon={<Users />} label={t.backoffice.sidebar.vendorsDirectory} />
               <SidebarLink to="/backoffice/onboarding" icon={<ClipboardList />} label={t.onboarding.pageTitle} />
               {isSuperAdmin && (
@@ -39,7 +38,6 @@ export default function BackofficeSidebar() {
               {t.backoffice.sidebar.vsmSection}
             </h2>
             <nav className="space-y-1">
-              <SidebarLink to="/backoffice" end icon={<Home />} label={t.backoffice.sidebar.dashboard} />
               <SidebarLink to="/backoffice/vendors" icon={<Users />} label={t.backoffice.sidebar.vendorsDirectory} />
               <SidebarLink to="/backoffice/onboarding" icon={<Briefcase />} label={t.backoffice.sidebar.myTasks} />
               <SidebarLink to="/backoffice/operations-tracker" icon={<Activity />} label={t.backoffice.sidebar.tracker} />

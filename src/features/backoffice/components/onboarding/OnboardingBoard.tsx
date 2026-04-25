@@ -5,13 +5,13 @@ import { useOnboardingTickets } from '../../hooks/useOnboardingTickets';
 import { KANBAN_COLUMNS } from '../../../../types/onboarding';
 import type { OnboardingTicket } from '../../../../types/onboarding';
 import KanbanColumn from './KanbanColumn';
-import TicketDetailDrawer from './TicketDetailDrawer';
+import TicketDetailModal from './TicketDetailModal';
 import { useNotifications } from '../../../../hooks/useNotifications';
 
 interface OnboardingBoardProps {
   title: string;
   subtitle: string;
-  columns: string[];
+  columns: (keyof typeof KANBAN_COLUMNS)[];
 }
 
 export default function OnboardingBoard({ title, subtitle, columns }: OnboardingBoardProps) {
@@ -70,7 +70,7 @@ export default function OnboardingBoard({ title, subtitle, columns }: Onboarding
         })}
       </div>
 
-      <TicketDetailDrawer
+      <TicketDetailModal
         ticket={selectedTicket}
         onClose={() => setSelectedTicket(null)}
         onUpdate={handleTicketUpdate}

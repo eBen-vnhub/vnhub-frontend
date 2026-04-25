@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { X, ExternalLink, User, Send, CheckCircle, XCircle, Upload, Rocket } from 'lucide-react';
+import { X, ExternalLink, User, CheckCircle, XCircle, Upload, Rocket } from 'lucide-react';
 import toast from 'react-hot-toast';
 import type { OnboardingTicket } from '../../../../types/onboarding';
 import { useLanguage } from '../../../../i18n/LanguageContext';
@@ -9,13 +9,13 @@ import StatusBadge from './StatusBadge';
 import ActionButton from './ActionButton';
 import AssignVSMForm from './AssignVSMForm';
 
-interface TicketDetailDrawerProps {
+interface TicketDetailModalProps {
   ticket: OnboardingTicket | null;
   onClose: () => void;
   onUpdate: (ticket: OnboardingTicket) => void;
 }
 
-export default function TicketDetailDrawer({ ticket, onClose, onUpdate }: TicketDetailDrawerProps) {
+export default function TicketDetailModal({ ticket, onClose, onUpdate }: TicketDetailModalProps) {
   const { t } = useLanguage();
   const { user } = useAuth();
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -48,13 +48,6 @@ export default function TicketDetailDrawer({ ticket, onClose, onUpdate }: Ticket
       () => onboardingService.assignTicket(ticket.id),
       t.onboarding.toast.assignSuccess,
       t.onboarding.toast.assignError,
-    );
-
-  const handleSendForms = () =>
-    handleAction(
-      () => onboardingService.sendForms(ticket.id),
-      t.onboarding.toast.sendFormsSuccess,
-      t.onboarding.toast.sendFormsError,
     );
 
   const handleReview = (approved: boolean) =>
@@ -113,11 +106,6 @@ export default function TicketDetailDrawer({ ticket, onClose, onUpdate }: Ticket
         }
         return userRole === 'VSM' ? (
           <ActionButton icon={<User className="w-4 h-4" />} label={t.onboarding.actions.assignToMe} onClick={handleAssign} disabled={isSubmitting} />
-        ) : null;
-
-      case 'ASSIGNED_TO_VSM':
-        return isVsm ? (
-          <ActionButton icon={<Send className="w-4 h-4" />} label={t.onboarding.actions.sendForms} onClick={handleSendForms} disabled={isSubmitting} />
         ) : null;
 
       case 'VSM_REVIEW':
@@ -201,45 +189,49 @@ export default function TicketDetailDrawer({ ticket, onClose, onUpdate }: Ticket
 
   return (
     <>
-      <div className="fixed inset-0 bg-black/30 backdrop-blur-sm z-40 transition-opacity" onClick={onClose} />
-      <div className="fixed inset-y-0 end-0 w-full max-w-md bg-white shadow-2xl z-50 flex flex-col animate-slideIn">
-        <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100">
-          <h2 className="text-lg font-bold text-main">{t.onboarding.labels.ticketDetails}</h2>
-          <button onClick={onClose} className="p-2 hover:bg-gray-100 rounded-xl transition-colors">
-            <X className="w-5 h-5 text-muted" />
-          </button>
-        </div>
-
-        <div className="flex-1 overflow-y-auto px-6 py-5 space-y-5">
-          <div className="flex items-center justify-between">
-            <h3 className="text-base font-bold text-main">{ticket.vendor_name}</h3>
-            <StatusBadge status={ticket.status} label={t.onboarding.status[ticket.status]} />
+      <div className="fixed inset-0 bg-black/40 backdrop-blur-sm z-40 transition-opacity flex items-center justify-center p-4" onClick={onClose}>
+        <div 
+          className="bg-white rounded-2xl shadow-2xl w-full max-w-lg overflow-hidden animate-slideUp flex flex-col"
+          onClick={e => e.stopPropagation()}
+        >
+          <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100 bg-gray-50/50">
+            <h2 className="text-lg font-bold text-main">{t.onboarding.labels.ticketDetails}</h2>
+            <button onClick={onClose} className="p-2 hover:bg-gray-200 rounded-full transition-colors">
+              <X className="w-5 h-5 text-muted" />
+            </button>
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
-            <DetailField label={t.onboarding.labels.plan} value={ticket.subscription_plan} />
-            <DetailField label={t.onboarding.labels.assignedVsm} value={ticket.assigned_vsm_name} />
-            <DetailField label={t.onboarding.labels.assignedOps} value={ticket.assigned_ops_name} />
-            <DetailField label={t.onboarding.labels.createdAt} value={new Date(ticket.created_at).toLocaleDateString()} />
-          </div>
-
-          {ticket.test_link && (
-            <LinkField label={t.onboarding.labels.testLink} url={ticket.test_link} />
-          )}
-
-          {ticket.live_link && (
-            <LinkField label={t.onboarding.labels.liveLink} url={ticket.live_link} />
-          )}
-
-          {ticket.internal_notes && (
-            <div>
-              <p className="text-xs font-semibold text-hint mb-1">{t.onboarding.labels.notes}</p>
-              <p className="text-sm text-muted bg-gray-50 rounded-xl p-3 whitespace-pre-wrap">{ticket.internal_notes}</p>
+          <div className="p-6 space-y-6 max-h-[80vh] overflow-y-auto">
+            <div className="flex items-center justify-between">
+              <h3 className="text-xl font-bold text-main">{ticket.vendor_name}</h3>
+              <StatusBadge status={ticket.status} label={t.onboarding.status[ticket.status]} />
             </div>
-          )}
 
-          <div className="pt-2 border-t border-gray-100">
-            {renderActions()}
+            <div className="grid grid-cols-2 gap-y-6 gap-x-4 bg-gray-50/50 p-4 rounded-xl border border-gray-100">
+              <DetailField label={t.onboarding.labels.plan} value={ticket.subscription_plan} />
+              <DetailField label={t.onboarding.labels.createdAt} value={new Date(ticket.created_at).toLocaleDateString()} />
+              <DetailField label={t.onboarding.labels.assignedVsm} value={ticket.assigned_vsm_name} />
+              <DetailField label={t.onboarding.labels.assignedOps} value={ticket.assigned_ops_name} />
+            </div>
+
+            {ticket.test_link && (
+              <LinkField label={t.onboarding.labels.testLink} url={ticket.test_link} />
+            )}
+
+            {ticket.live_link && (
+              <LinkField label={t.onboarding.labels.liveLink} url={ticket.live_link} />
+            )}
+
+            {ticket.internal_notes && (
+              <div className="bg-amber-50/50 p-4 rounded-xl border border-amber-100">
+                <p className="text-xs font-bold text-amber-800 mb-2 uppercase tracking-wide">{t.onboarding.labels.notes}</p>
+                <p className="text-sm text-amber-900 whitespace-pre-wrap">{ticket.internal_notes}</p>
+              </div>
+            )}
+
+            <div className="pt-4 border-t border-gray-100">
+              {renderActions()}
+            </div>
           </div>
         </div>
       </div>
@@ -250,8 +242,8 @@ export default function TicketDetailDrawer({ ticket, onClose, onUpdate }: Ticket
 function DetailField({ label, value }: { label: string; value: string | null | undefined }) {
   return (
     <div>
-      <p className="text-xs font-semibold text-hint mb-0.5">{label}</p>
-      <p className="text-sm font-medium text-main">{value || '—'}</p>
+      <p className="text-xs font-semibold text-muted mb-1">{label}</p>
+      <p className="text-sm font-bold text-main">{value || '—'}</p>
     </div>
   );
 }
@@ -259,14 +251,14 @@ function DetailField({ label, value }: { label: string; value: string | null | u
 function LinkField({ label, url }: { label: string; url: string }) {
   return (
     <div>
-      <p className="text-xs font-semibold text-hint mb-1">{label}</p>
+      <p className="text-xs font-semibold text-muted mb-1">{label}</p>
       <a
         href={url}
         target="_blank"
         rel="noopener noreferrer"
-        className="inline-flex items-center gap-1.5 text-sm font-medium text-brand hover:text-brand-hover transition-colors"
+        className="inline-flex items-center gap-1.5 text-sm font-bold text-brand hover:text-brand-hover transition-colors bg-brand/5 px-3 py-2 rounded-lg"
       >
-        <ExternalLink className="w-3.5 h-3.5" />
+        <ExternalLink className="w-4 h-4" />
         {url}
       </a>
     </div>
