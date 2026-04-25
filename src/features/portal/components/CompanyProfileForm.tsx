@@ -63,12 +63,12 @@ export default function CompanyProfileForm({ initialData, onUpdate }: CompanyPro
           ) : !isEditing ? (
             <Button type="button" variant="outline" onClick={() => setIsEditing(true)} className="flex items-center gap-2 rounded-full">
               <Edit2 className="w-4 h-4" />
-              Edit Profile
+              {t.portal.companyProfile.editProfile}
             </Button>
           ) : (
             <Button type="button" variant="outline" onClick={() => setIsEditing(false)} className="flex items-center gap-2 rounded-full text-muted-foreground hover:text-main">
               <X className="w-4 h-4" />
-              Cancel
+              {(t.portal.companyProfile as any).cancel || 'Cancel'}
             </Button>
           )}
         </div>
@@ -86,10 +86,10 @@ export default function CompanyProfileForm({ initialData, onUpdate }: CompanyPro
       <form onSubmit={handleFormSubmit} className="space-y-8">
         <section>
           <div className="flex items-center gap-2 mb-4">
-            <h3 className="text-sm font-bold text-main uppercase tracking-wide">Company Identity</h3>
+            <h3 className="text-sm font-bold text-main uppercase tracking-wide">{(t.portal.companyProfile as any).companyIdentity || 'Company Identity'}</h3>
             <span className="text-[10px] font-semibold text-muted bg-surface-hover px-2 py-0.5 rounded-full flex items-center gap-1">
               <MapPin className="w-3 h-3" />
-              This Workspace Only
+              {(t.portal.companyProfile as any).thisWorkspaceOnly || 'This Workspace Only'}
             </span>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -122,16 +122,16 @@ export default function CompanyProfileForm({ initialData, onUpdate }: CompanyPro
 
         <section>
           <div className="flex items-center gap-2 mb-1">
-            <h3 className="text-sm font-bold text-main uppercase tracking-wide">Global Company Data</h3>
+            <h3 className="text-sm font-bold text-main uppercase tracking-wide">{(t.portal.companyProfile as any).globalCompanyData || 'Global Company Data'}</h3>
             <span className="text-[10px] font-semibold text-amber-700 bg-amber-500/10 px-2 py-0.5 rounded-full flex items-center gap-1">
               <Info className="w-3 h-3" />
-              Shared Across All Branches
+              {(t.portal.companyProfile as any).sharedAcrossBranches || 'Shared Across All Branches'}
             </span>
           </div>
           {isEditing && (
             <p className="text-xs text-amber-700 mb-4 flex items-center gap-1">
               <Info className="w-3.5 h-3.5 shrink-0" />
-              Changes here will sync to all your workspaces globally.
+              {(t.portal.companyProfile as any).globalSyncWarning || 'Changes here will sync to all your workspaces globally.'}
             </p>
           )}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -159,7 +159,7 @@ export default function CompanyProfileForm({ initialData, onUpdate }: CompanyPro
 
             <div>
               <label className={`block text-sm font-medium mb-1.5 ${isViewOnly ? 'text-muted-foreground' : 'text-main'}`}>
-                Business Type
+                {(t.portal.companyProfile as any).businessType || 'Business Type'}
               </label>
               <div className="relative">
                 <div className="absolute inset-y-0 start-0 pl-3 md:ps-4 flex items-center pointer-events-none">
@@ -175,10 +175,10 @@ export default function CompanyProfileForm({ initialData, onUpdate }: CompanyPro
                     ${isViewOnly ? `${disabledFieldClass} cursor-not-allowed border-border/50` : 'bg-surface border-border text-main focus:border-brand focus:ring-1 focus:ring-brand hover:border-border-hover'}
                   `}
                 >
-                  <option value="" disabled>Select Business Type...</option>
-                  <option value="B2C">B2C (Business to Consumer)</option>
-                  <option value="B2B">B2B (Business to Business)</option>
-                  <option value="BOTH">Both (B2B & B2C)</option>
+                  <option value="" disabled>{(t.portal.companyProfile as any).selectBusinessType || 'Select Business Type...'}</option>
+                  <option value="B2C">{(t.portal.companyProfile as any).b2cFull || 'B2C (Business to Consumer)'}</option>
+                  <option value="B2B">{(t.portal.companyProfile as any).b2bFull || 'B2B (Business to Business)'}</option>
+                  <option value="BOTH">{(t.portal.companyProfile as any).bothFull || 'Both (B2B & B2C)'}</option>
                 </select>
               </div>
             </div>
