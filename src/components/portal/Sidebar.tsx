@@ -1,13 +1,16 @@
 import { useState } from 'react';
-import { Home, Building, Users, Gift, Store } from 'lucide-react';
+import { Home, Building, Users, Gift, Store, ClipboardList } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
 import { useLanguage } from '../../i18n/LanguageContext';
+import { useAuth } from '../../contexts/AuthContext';
 import WorkspaceSwitcher from './WorkspaceSwitcher';
 import InlineSubscriptionModal from './InlineSubscriptionModal';
 
 export default function Sidebar() {
   const { t } = useLanguage();
+  const { user } = useAuth();
   const [showBranchModal, setShowBranchModal] = useState(false);
+  const isPrimaryAdmin = user?.role === 'ADMIN' || user?.role === 'SUPER_ADMIN' || user?.role === 'STANDARD_USER';
 
   return (
     <aside className="bg-white border-r border-gray-200 flex flex-col overflow-hidden transition-all duration-300 ease-in-out fixed md:sticky top-[64px] z-10 h-[calc(100vh-64px)] w-64 hidden md:flex">
@@ -73,6 +76,22 @@ export default function Sidebar() {
             <Gift className="w-5 h-5" />
             <span className="text-sm font-semibold truncate">{(t.portal as any).myBenefits?.title || 'My Benefits'}</span>
           </NavLink>
+
+          {isPrimaryAdmin && (
+            <NavLink
+              to="/portal/onboarding"
+              className={({ isActive }) =>
+                `group w-full flex items-center gap-3 rounded-xl px-4 py-3 transition-all duration-300 ${
+                  isActive
+                    ? 'bg-brand text-white shadow-lg shadow-brand/25'
+                    : 'text-gray-500 hover:bg-gray-50 hover:text-gray-700'
+                }`
+              }
+            >
+              <ClipboardList className="w-5 h-5" />
+              <span className="text-sm font-semibold truncate">{t.vendorPortal.onboarding.sidebarTitle}</span>
+            </NavLink>
+          )}
 
           <NavLink
             to="/portal/admin"
