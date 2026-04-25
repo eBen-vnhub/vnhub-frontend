@@ -452,6 +452,11 @@ export const ar = {
       OTHER: "أخرى"
     }
   },
+  notifications: {
+    title: "الإشعارات",
+    markAllAsRead: "تحديد الكل كمقروء",
+    empty: "لا توجد إشعارات حتى الآن",
+  },
   onboarding: {
     pageTitle: "تسجيل الموردين",
     pageSubtitle: "تتبع وإدارة طلبات تسجيل الموردين خلال كل مرحلة.",
