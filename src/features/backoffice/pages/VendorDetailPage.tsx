@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
-import { ArrowLeft, Building2, MapPin, Globe, Loader2, ShieldCheck, Tag, Users, Shield, UserCheck, Edit2 } from 'lucide-react';
+import { ArrowLeft, Building2, MapPin, Globe, Loader2, Tag, Users, Shield, UserCheck, Edit2 } from 'lucide-react';
 import { useBackofficeVendors } from '../hooks/useBackofficeVendors';
 import { useLanguage } from '../../../i18n/LanguageContext';
 import { useAuth } from '../../../contexts/AuthContext';
