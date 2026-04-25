@@ -3,6 +3,7 @@ import { useParams, useNavigate, Link } from 'react-router-dom';
 import { ArrowLeft, Building2, MapPin, Globe, Loader2, ShieldCheck, Tag, Users, Shield, UserCheck, Edit2 } from 'lucide-react';
 import { useBackofficeVendors } from '../hooks/useBackofficeVendors';
 import { useLanguage } from '../../../i18n/LanguageContext';
+import { useAuth } from '../../../contexts/AuthContext';
 import ListingsAggregatedView from '../components/vendors/ListingsAggregatedView';
 import EditTeamMemberModal from '../components/vendors/EditTeamMemberModal';
 import type { BackofficeTeamMember } from '../../../services/backoffice';
@@ -23,6 +24,7 @@ export default function VendorDetailPage() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { t } = useLanguage();
+  const { user } = useAuth();
   const { vendorDetail, listingsData, isLoadingDetails, fetchVendorDetail, updateTeamMember } = useBackofficeVendors();
   const [editingMember, setEditingMember] = useState<BackofficeTeamMember | null>(null);
 
@@ -157,7 +159,7 @@ export default function VendorDetailPage() {
         </div>
       </div>
 
-      <ListingsAggregatedView data={listingsData} />
+      {user?.role !== 'ADMIN' && <ListingsAggregatedView data={listingsData} />}
 
       <EditTeamMemberModal
         isOpen={!!editingMember}
