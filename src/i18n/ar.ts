@@ -452,6 +452,11 @@ export const ar = {
       OTHER: "أخرى"
     }
   },
+  notifications: {
+    title: "الإشعارات",
+    markAllAsRead: "تحديد الكل كمقروء",
+    empty: "لا توجد إشعارات حتى الآن",
+  },
   onboarding: {
     pageTitle: "تسجيل الموردين",
     pageSubtitle: "تتبع وإدارة طلبات تسجيل الموردين خلال كل مرحلة.",
@@ -521,5 +526,32 @@ export const ar = {
       respondError: "فشل تقديم الرد",
     },
   },
+  vendorPortal: {
+    onboarding: {
+      sidebarTitle: "حالة التسجيل",
+      pageTitle: "حالة التسجيل",
+      pageSubtitle: "تتبع تقدم عملية تسجيل شركتك.",
+      progress: "التقدم",
+      viewTestLink: "عرض رابط الاختبار",
+      viewLiveLink: "عرض رابط التشغيل",
+      respondToTestLink: "مراجعة والرد على رابط الاختبار",
+      emptyTitle: "لا توجد طلبات تسجيل",
+      emptyDescription: "ليس لديك طلبات تسجيل نشطة حالياً.",
+      testLinkModal: {
+        title: "مراجعة رابط الاختبار",
+        subtitle: "يرجى مراجعة رابط الاختبار أدناه والموافقة عليه أو طلب تعديلات.",
+        linkLabel: "رابط الاختبار",
+        feedbackLabel: "الملاحظات (مطلوبة للتعديلات)",
+        feedbackPlaceholder: "صف ما يحتاج إلى تعديل...",
+        cancel: "إلغاء",
+        requestChanges: "طلب تعديلات",
+        approve: "الموافقة على رابط الاختبار",
+      },
+      toasts: {
+        approved: "تمت الموافقة على رابط الاختبار بنجاح!",
+        changesRequested: "تم طلب التعديلات، تم إبلاغ الفريق.",
+        error: "حدث خطأ ما. يرجى المحاولة مرة أخرى.",
+      },
+    },
+  },
 };
-

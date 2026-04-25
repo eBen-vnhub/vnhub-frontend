@@ -5,6 +5,7 @@ import { useLanguage } from '../../../../i18n/LanguageContext';
 import EbenLogo from '../../../../components/ui/EbenLogo';
 import LanguageSwitcher from '../../../../components/ui/LanguageSwitcher';
 import { LogOut, ChevronDown, User as UserIcon } from 'lucide-react';
+import NotificationBell from './NotificationBell';
 
 export default function BackofficeHeader() {
   const { user, displayName, logout } = useAuth();
@@ -46,6 +47,7 @@ export default function BackofficeHeader() {
             </div>
 
             <div className="flex items-center gap-3 ms-auto">
+              <NotificationBell />
               <LanguageSwitcher />
 
               <div className="relative" ref={menuRef}>
@@ -74,7 +76,7 @@ export default function BackofficeHeader() {
                           {displayName}
                         </p>
                         <p className="text-xs text-brand mt-0.5 text-center font-semibold">
-                          INTERNAL ADMIN
+                          {user?.role?.replace(/_/g, ' ') || 'INTERNAL ADMIN'}
                         </p>
                         <p className="text-xs text-gray-500 mt-1 text-center">
                           {user?.email}

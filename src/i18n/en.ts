@@ -452,6 +452,11 @@ export const en = {
       OTHER: "Other"
     }
   },
+  notifications: {
+    title: "Notifications",
+    markAllAsRead: "Mark all as read",
+    empty: "No notifications yet",
+  },
   onboarding: {
     pageTitle: "Vendor Onboarding",
     pageSubtitle: "Track and manage vendor onboarding tickets through each stage.",
@@ -519,6 +524,34 @@ export const en = {
       goLiveError: "Failed to go live",
       respondSuccess: "Response submitted",
       respondError: "Failed to submit response",
+    },
+  },
+  vendorPortal: {
+    onboarding: {
+      sidebarTitle: "Onboarding Status",
+      pageTitle: "Onboarding Status",
+      pageSubtitle: "Track the progress of your onboarding process.",
+      progress: "Progress",
+      viewTestLink: "View Test Link",
+      viewLiveLink: "View Live Link",
+      respondToTestLink: "Review & Respond to Test Link",
+      emptyTitle: "No Onboarding Tickets",
+      emptyDescription: "You don't have any active onboarding tickets at the moment.",
+      testLinkModal: {
+        title: "Review Test Link",
+        subtitle: "Please review the test link below and approve or request changes.",
+        linkLabel: "Test Link",
+        feedbackLabel: "Feedback (required for changes)",
+        feedbackPlaceholder: "Describe what needs to be changed...",
+        cancel: "Cancel",
+        requestChanges: "Request Changes",
+        approve: "Approve Test Link",
+      },
+      toasts: {
+        approved: "Test link approved successfully!",
+        changesRequested: "Changes requested, the team has been notified.",
+        error: "Something went wrong. Please try again.",
+      },
     },
   },
 };
