@@ -1,5 +1,5 @@
 import { NavLink } from 'react-router-dom';
-import { Home, Users, Settings, ClipboardList, Briefcase, Activity, ServerCog } from 'lucide-react';
+import { Users, Settings, ClipboardList, Briefcase, Activity, ServerCog } from 'lucide-react';
 import { useLanguage } from '../../../../i18n/LanguageContext';
 import { useAuth } from '../../../../contexts/AuthContext';
 
