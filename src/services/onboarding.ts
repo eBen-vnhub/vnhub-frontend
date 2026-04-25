@@ -5,9 +5,10 @@ const onboardingService = {
   getTickets: () =>
     request<OnboardingTicket[]>('/onboarding/tickets/'),
 
-  assignToMe: (ticketId: string) =>
+  assignTicket: (ticketId: string, vsmId?: number) =>
     request<OnboardingTicket>(`/onboarding/tickets/${ticketId}/assign/`, {
       method: 'POST',
+      body: vsmId ? JSON.stringify({ vsm_id: vsmId }) : undefined,
     }),
 
   sendForms: (ticketId: string) =>
