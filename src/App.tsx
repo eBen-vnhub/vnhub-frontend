@@ -63,8 +63,8 @@ export default function App() {
           </ProtectedRoute>
         }>
           <Route index element={
-            <RoleGuard allowedRoles={['SUPER_ADMIN', 'ADMIN', 'VSM']}>
-              <Navigate to="vendors" replace />
+            <RoleGuard allowedRoles={['SUPER_ADMIN', 'ADMIN', 'VSM', 'OPERATIONS']}>
+              <Navigate to="onboarding" replace />
             </RoleGuard>
           } />
 
@@ -73,7 +73,7 @@ export default function App() {
             <Route path="vendors/:id" element={<VendorDetailPage />} />
           </Route>
 
-          <Route element={<RoleGuard allowedRoles={['SUPER_ADMIN', 'ADMIN', 'VSM']} />}>
+          <Route element={<RoleGuard allowedRoles={['SUPER_ADMIN', 'ADMIN', 'VSM', 'OPERATIONS']} />}>
             <Route path="onboarding" element={<OnboardingPage />} />
           </Route>
 

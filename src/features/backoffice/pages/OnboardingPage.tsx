@@ -15,5 +15,9 @@ export default function OnboardingPage() {
     return <VsmTasksPage />;
   }
 
+  if (role === 'OPERATIONS') {
+    return <Navigate to="/backoffice/pipeline" replace />;
+  }
+
   return <Navigate to="/backoffice" replace />;
 }
