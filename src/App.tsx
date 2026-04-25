@@ -20,6 +20,8 @@ import BackofficeLayout from './layouts/BackofficeLayout';
 import VendorsListPage from './features/backoffice/pages/VendorsListPage';
 import VendorDetailPage from './features/backoffice/pages/VendorDetailPage';
 import OnboardingPage from './features/backoffice/pages/OnboardingPage';
+import VsmOperationsTrackerPage from './features/backoffice/pages/VsmOperationsTrackerPage';
+import OpsPipelinePage from './features/backoffice/pages/OpsPipelinePage';
 import VendorOnboardingPage from './features/portal/pages/VendorOnboardingPage';
 
 export default function App() {
@@ -71,8 +73,16 @@ export default function App() {
             <Route path="vendors/:id" element={<VendorDetailPage />} />
           </Route>
 
-          <Route element={<RoleGuard allowedRoles={['SUPER_ADMIN', 'ADMIN', 'VSM', 'OPERATIONS']} />}>
+          <Route element={<RoleGuard allowedRoles={['SUPER_ADMIN', 'ADMIN', 'VSM']} />}>
             <Route path="onboarding" element={<OnboardingPage />} />
+          </Route>
+
+          <Route element={<RoleGuard allowedRoles={['VSM']} />}>
+            <Route path="operations-tracker" element={<VsmOperationsTrackerPage />} />
+          </Route>
+
+          <Route element={<RoleGuard allowedRoles={['SUPER_ADMIN', 'OPERATIONS']} />}>
+            <Route path="pipeline" element={<OpsPipelinePage />} />
           </Route>
 
           <Route element={<RoleGuard allowedRoles={['SUPER_ADMIN']} />}>
