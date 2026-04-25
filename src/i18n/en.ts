@@ -381,9 +381,14 @@ export const en = {
   backoffice: {
     sidebar: {
       adminSection: "VNHub Administration",
+      vsmSection: "Vendor Success Management",
+      opsSection: "Technical Operations",
       dashboard: "Dashboard",
       vendorsDirectory: "Vendors Directory",
       systemSettings: "System Settings",
+      myTasks: "Onboarding Workspace",
+      tracker: "Operations Tracker",
+      pipeline: "Technical Pipeline",
     },
     vendors: {
       title: "Vendors Directory",
@@ -458,8 +463,14 @@ export const en = {
     empty: "No notifications yet",
   },
   onboarding: {
-    pageTitle: "Vendor Onboarding",
-    pageSubtitle: "Track and manage vendor onboarding tickets through each stage.",
+    pageTitle: "Global Onboarding Pipeline",
+    pageSubtitle: "Master overview of all active vendor onboarding stages and statuses.",
+    vsmTasksTitle: "My Onboarding Workspace",
+    vsmTasksSubtitle: "Manage and review assigned vendor onboarding workflows.",
+    trackerTitle: "Operations Tracker",
+    trackerSubtitle: "Monitor technical integration and testing progress of your vendors.",
+    opsPipelineTitle: "Technical Operations",
+    opsPipelineSubtitle: "Manage vendor system integrations and technical QA workflows.",
     columns: {
       INTAKE: "Intake",
       VENDOR_INPUT: "Vendor Input",
