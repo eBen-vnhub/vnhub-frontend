@@ -18,6 +18,7 @@ import ProtectedRoute from './components/guards/ProtectedRoute';
 import BackofficeLayout from './layouts/BackofficeLayout';
 import VendorsListPage from './features/backoffice/pages/VendorsListPage';
 import VendorDetailPage from './features/backoffice/pages/VendorDetailPage';
+import OnboardingPage from './features/backoffice/pages/OnboardingPage';
 
 export default function App() {
   return (
@@ -59,6 +60,7 @@ export default function App() {
           <Route index element={<Navigate to="vendors" replace />} />
           <Route path="vendors" element={<VendorsListPage />} />
           <Route path="vendors/:id" element={<VendorDetailPage />} />
+          <Route path="onboarding" element={<OnboardingPage />} />
           <Route path="settings" element={<div className="p-8 text-center text-muted mt-12 font-medium">System Settings Coming Soon in Phase 3</div>} />
         </Route>
 

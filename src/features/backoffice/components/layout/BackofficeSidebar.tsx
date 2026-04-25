@@ -1,5 +1,5 @@
 import { NavLink } from 'react-router-dom';
-import { Home, Users, Settings } from 'lucide-react';
+import { Home, Users, Settings, ClipboardList } from 'lucide-react';
 import { useLanguage } from '../../../../i18n/LanguageContext';
 
 export default function BackofficeSidebar() {
@@ -42,6 +42,20 @@ export default function BackofficeSidebar() {
           >
             <Users className="w-5 h-5" />
             <span className="text-sm font-semibold truncate">{t.backoffice.sidebar.vendorsDirectory}</span>
+          </NavLink>
+
+          <NavLink
+            to="/backoffice/onboarding"
+            className={({ isActive }) =>
+              `group w-full flex items-center gap-3 rounded-xl px-4 py-3 transition-all duration-300 ${
+                isActive
+                  ? 'bg-brand text-white shadow-lg shadow-brand/25'
+                  : 'text-gray-500 hover:bg-gray-50 hover:text-gray-700'
+              }`
+            }
+          >
+            <ClipboardList className="w-5 h-5" />
+            <span className="text-sm font-semibold truncate">{t.onboarding.pageTitle}</span>
           </NavLink>
 
           <NavLink
