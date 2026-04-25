@@ -384,7 +384,6 @@ export const ar = {
       vsmSection: "إدارة نجاح الموردين",
       opsSection: "العمليات التقنية",
       dashboard: "لوحة التحكم",
-      vendorsDirectory: "دليل الشركات والموردين",
       vendorsDirectory: "سجل الشركاء",
       systemSettings: "إعدادات النظام",
       myTasks: "مساحة عمل التسجيل",
