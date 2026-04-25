@@ -506,6 +506,7 @@ export const en = {
       notesPlaceholder: "Internal notes...",
       selectVsm: "Select VSM to Assign",
       selectVsmPlaceholder: "Select a VSM",
+      linkPlaceholder: "https://...",
       noTickets: "No tickets in this stage",
       unassigned: "Unassigned",
       ticketDetails: "Ticket Details",
