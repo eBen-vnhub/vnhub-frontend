@@ -6,6 +6,8 @@ import { useLanguage } from '../../../../i18n/LanguageContext';
 import { useAuth } from '../../../../contexts/AuthContext';
 import onboardingService from '../../../../services/onboarding';
 import StatusBadge from './StatusBadge';
+import ActionButton from './ActionButton';
+import AssignVSMForm from './AssignVSMForm';
 
 interface TicketDetailDrawerProps {
   ticket: OnboardingTicket | null;
@@ -94,10 +96,22 @@ export default function TicketDetailDrawer({ ticket, onClose, onUpdate }: Ticket
   const isOps = ['SUPER_ADMIN', 'OPERATIONS'].includes(userRole);
   const isVendor = userRole === 'VENDOR_PRIMARY_ADMIN' || userRole === 'VENDOR';
 
+  const handleAdminAssign = (vsmId: string) => {
+    if (!vsmId) return;
+    handleAction(
+      () => onboardingService.assignTicket(ticket.id, parseInt(vsmId)),
+      t.onboarding.toast.assignSuccess,
+      t.onboarding.toast.assignError,
+    );
+  };
+
   const renderActions = () => {
     switch (ticket.status) {
       case 'UNASSIGNED':
-        return isVsm ? (
+        if (['SUPER_ADMIN', 'ADMIN'].includes(userRole)) {
+          return <AssignVSMForm onAssign={handleAdminAssign} isSubmitting={isSubmitting} />;
+        }
+        return userRole === 'VSM' ? (
           <ActionButton icon={<User className="w-4 h-4" />} label={t.onboarding.actions.assignToMe} onClick={handleAssign} disabled={isSubmitting} />
         ) : null;
 
@@ -256,32 +270,5 @@ function LinkField({ label, url }: { label: string; url: string }) {
         {url}
       </a>
     </div>
-  );
-}
-
-interface ActionButtonProps {
-  icon: React.ReactNode;
-  label: string;
-  onClick: () => void;
-  disabled: boolean;
-  variant?: 'primary' | 'success' | 'danger';
-}
-
-function ActionButton({ icon, label, onClick, disabled, variant = 'primary' }: ActionButtonProps) {
-  const variants = {
-    primary: 'bg-brand hover:bg-brand-hover text-white shadow-lg shadow-brand/25',
-    success: 'bg-emerald-500 hover:bg-emerald-600 text-white shadow-lg shadow-emerald-500/25',
-    danger: 'bg-gray-100 hover:bg-red-50 text-gray-700 hover:text-red-600',
-  };
-
-  return (
-    <button
-      onClick={onClick}
-      disabled={disabled}
-      className={`flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed ${variants[variant]}`}
-    >
-      {icon}
-      {label}
-    </button>
   );
 }
