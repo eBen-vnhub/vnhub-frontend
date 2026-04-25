@@ -506,6 +506,7 @@ export const ar = {
       notesPlaceholder: "أضف ملاحظات داخلية...",
       selectVsm: "اختر مسؤول الموردين",
       selectVsmPlaceholder: "اختر مسؤول الموردين",
+      linkPlaceholder: "https://...",
       noTickets: "لا توجد طلبات في هذه المرحلة",
       unassigned: "غير مُعيّن",
       ticketDetails: "تفاصيل الطلب",

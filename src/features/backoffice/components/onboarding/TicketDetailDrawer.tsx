@@ -45,7 +45,7 @@ export default function TicketDetailDrawer({ ticket, onClose, onUpdate }: Ticket
 
   const handleAssign = () =>
     handleAction(
-      () => onboardingService.assignToMe(ticket.id),
+      () => onboardingService.assignTicket(ticket.id),
       t.onboarding.toast.assignSuccess,
       t.onboarding.toast.assignError,
     );
