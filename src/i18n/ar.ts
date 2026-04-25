@@ -585,4 +585,26 @@ export const ar = {
       },
     },
   },
+  benefitTracker: {
+    title: "متتبع العروض",
+    benefitLabel: "عرض",
+    status: {
+      PENDING: "قيد الانتظار",
+      VSM_REVIEW: "مراجعة VSM",
+      ASSIGNED_TO_OPS: "معيّن للعمليات",
+      BUILDING: "قيد البناء",
+      TESTING: "قيد الاختبار",
+      LIVE: "مباشر",
+    },
+    actions: {
+      requestListingUpdate: "طلب تحديث البيانات",
+      assignOps: "تعيين للعمليات",
+    },
+    toast: {
+      listingUpdateRequested: "تم إرسال طلب التحديث للمورد",
+      listingUpdateFailed: "فشل إرسال طلب التحديث",
+      assignOpsSuccess: "تم تعيين العرض للعمليات",
+      assignOpsFailed: "فشل تعيين العرض",
+    },
+  },
 };

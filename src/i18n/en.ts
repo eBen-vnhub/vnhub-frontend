@@ -585,4 +585,26 @@ export const en = {
       },
     },
   },
+  benefitTracker: {
+    title: "Benefit Tracker",
+    benefitLabel: "Benefit",
+    status: {
+      PENDING: "Pending",
+      VSM_REVIEW: "VSM Review",
+      ASSIGNED_TO_OPS: "Assigned to Ops",
+      BUILDING: "Building",
+      TESTING: "Testing",
+      LIVE: "Live",
+    },
+    actions: {
+      requestListingUpdate: "Request Listing Update",
+      assignOps: "Assign to Ops",
+    },
+    toast: {
+      listingUpdateRequested: "Update request sent to vendor",
+      listingUpdateFailed: "Failed to send update request",
+      assignOpsSuccess: "Benefit assigned to Ops",
+      assignOpsFailed: "Failed to assign benefit",
+    },
+  },
 };

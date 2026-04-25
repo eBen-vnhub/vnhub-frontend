@@ -1,12 +1,24 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
-import { ArrowLeft, Building2, MapPin, Globe, Loader2, Tag, Users, Shield, UserCheck, Edit2 } from 'lucide-react';
+import { ArrowLeft, Building2, MapPin, Globe, Loader2, Tag, Users, Shield, UserCheck, Edit2, Package, Send, ExternalLink } from 'lucide-react';
+import toast from 'react-hot-toast';
 import { useBackofficeVendors } from '../hooks/useBackofficeVendors';
 import { useLanguage } from '../../../i18n/LanguageContext';
 import { useAuth } from '../../../contexts/AuthContext';
 import ListingsAggregatedView from '../components/vendors/ListingsAggregatedView';
 import EditTeamMemberModal from '../components/vendors/EditTeamMemberModal';
+import onboardingService from '../../../services/onboarding';
 import type { BackofficeTeamMember } from '../../../services/backoffice';
+import type { BenefitTracker } from '../../../types/onboarding';
+
+const BENEFIT_STATUS_STYLES: Record<string, string> = {
+  PENDING: 'bg-gray-100 text-gray-700',
+  VSM_REVIEW: 'bg-amber-50 text-amber-700',
+  ASSIGNED_TO_OPS: 'bg-blue-50 text-blue-700',
+  BUILDING: 'bg-indigo-50 text-indigo-700',
+  TESTING: 'bg-purple-50 text-purple-700',
+  LIVE: 'bg-emerald-50 text-emerald-700',
+};
 
 function MemberRoleBadge({ role, t }: { role: string; t: any }) {
   const isPrimary = role === 'SUPER_ADMIN';
@@ -20,6 +32,16 @@ function MemberRoleBadge({ role, t }: { role: string; t: any }) {
   );
 }
 
+function BenefitStatusBadge({ status, t }: { status: string; t: any }) {
+  return (
+    <span className={`inline-flex items-center text-[10px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wider ${
+      BENEFIT_STATUS_STYLES[status] || 'bg-gray-100 text-gray-600'
+    }`}>
+      {t.benefitTracker.status[status] || status}
+    </span>
+  );
+}
+
 export default function VendorDetailPage() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
@@ -27,10 +49,36 @@ export default function VendorDetailPage() {
   const { user } = useAuth();
   const { vendorDetail, listingsData, isLoadingDetails, fetchVendorDetail, updateTeamMember } = useBackofficeVendors();
   const [editingMember, setEditingMember] = useState<BackofficeTeamMember | null>(null);
+  const [benefits, setBenefits] = useState<BenefitTracker[]>([]);
+  const [isRequestingUpdate, setIsRequestingUpdate] = useState(false);
+
+  const fetchBenefits = useCallback(async () => {
+    if (!id) return;
+    try {
+      const data = await onboardingService.getBenefitTrackers(Number(id));
+      setBenefits(data);
+    } catch { /* */ }
+  }, [id]);
 
   useEffect(() => {
-    if (id) fetchVendorDetail(id);
-  }, [id, fetchVendorDetail]);
+    if (id) {
+      fetchVendorDetail(id);
+      fetchBenefits();
+    }
+  }, [id, fetchVendorDetail, fetchBenefits]);
+
+  const handleRequestListingUpdate = async () => {
+    if (!id) return;
+    setIsRequestingUpdate(true);
+    try {
+      await onboardingService.requestVendorListingUpdate(Number(id));
+      toast.success(t.benefitTracker.toast.listingUpdateRequested);
+    } catch {
+      toast.error(t.benefitTracker.toast.listingUpdateFailed);
+    } finally {
+      setIsRequestingUpdate(false);
+    }
+  };
 
   if (isLoadingDetails) {
     return (
@@ -51,9 +99,11 @@ export default function VendorDetailPage() {
     );
   }
 
+  const canManage = user?.role === 'SUPER_ADMIN' || user?.role === 'ADMIN' || user?.role === 'VSM';
+
   return (
     <div className="animate-in fade-in slide-in-from-bottom-4 duration-700 space-y-6">
-      <div>
+      <div className="flex items-center justify-between">
         <Link
           to="/backoffice/vendors"
           className="inline-flex items-center gap-2 text-sm text-muted hover:text-brand font-medium transition-colors"
@@ -61,6 +111,17 @@ export default function VendorDetailPage() {
           <ArrowLeft className="w-4 h-4" />
           {t.backoffice.vendors.backToDirectory}
         </Link>
+
+        {canManage && (
+          <button
+            onClick={handleRequestListingUpdate}
+            disabled={isRequestingUpdate}
+            className="inline-flex items-center gap-2 px-4 py-2 bg-amber-50 text-amber-700 border border-amber-200 rounded-xl text-sm font-semibold hover:bg-amber-100 transition-colors disabled:opacity-50"
+          >
+            <Send className="w-4 h-4" />
+            {t.benefitTracker.actions.requestListingUpdate}
+          </button>
+        )}
       </div>
 
       <div className="bg-surface rounded-3xl p-6 sm:p-8 shadow-sm border border-border">
@@ -152,6 +213,47 @@ export default function VendorDetailPage() {
           </div>
         </div>
       </div>
+
+      {benefits.length > 0 && (
+        <div className="bg-surface border border-border rounded-3xl p-6">
+          <h3 className="text-lg font-bold text-main mb-4 flex items-center gap-2">
+            <Package className="text-brand w-5 h-5" />
+            {t.benefitTracker.title} ({benefits.length})
+          </h3>
+          <div className="space-y-3">
+            {benefits.map((benefit) => (
+              <div key={benefit.id} className="p-4 rounded-xl border border-border bg-surface-hover/30 flex items-center justify-between">
+                <div className="flex-1">
+                  <div className="flex items-center gap-3 mb-1">
+                    <span className="font-bold text-main">
+                      {t.benefitTracker.benefitLabel} #{benefit.benefit_number}
+                    </span>
+                    <BenefitStatusBadge status={benefit.status} t={t} />
+                  </div>
+                  <div className="text-xs text-muted">
+                    {benefit.subscription_plan} Plan • {new Date(benefit.created_at).toLocaleDateString()}
+                    {benefit.assigned_ops_name && (
+                      <span> • Ops: {benefit.assigned_ops_name}</span>
+                    )}
+                  </div>
+                </div>
+                <div className="flex items-center gap-2">
+                  {benefit.test_link && (
+                    <a href={benefit.test_link} target="_blank" rel="noopener noreferrer" className="p-2 rounded-lg bg-purple-50 text-purple-600 hover:bg-purple-100 transition-colors">
+                      <ExternalLink className="w-4 h-4" />
+                    </a>
+                  )}
+                  {benefit.live_link && (
+                    <a href={benefit.live_link} target="_blank" rel="noopener noreferrer" className="p-2 rounded-lg bg-emerald-50 text-emerald-600 hover:bg-emerald-100 transition-colors">
+                      <ExternalLink className="w-4 h-4" />
+                    </a>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
 
       {user?.role !== 'ADMIN' && <ListingsAggregatedView data={listingsData} />}
 
