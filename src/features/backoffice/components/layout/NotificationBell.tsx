@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { Bell } from 'lucide-react';
 import { useNotifications } from '../../../../hooks/useNotifications';
-import api from '../../../../services/api';
+import { request } from '../../../../services/api';
 import { useLanguage } from '../../../../i18n/LanguageContext';
 
 interface Notification {
@@ -21,8 +21,8 @@ export default function NotificationBell() {
 
   const fetchNotifications = async () => {
     try {
-      const response = await api.get('/api/v1/notifications/');
-      setNotifications(response.data);
+      const data = await request<Notification[]>('/notifications/');
+      setNotifications(data);
     } catch (err) {
       console.error('Failed to fetch notifications', err);
     }
@@ -50,7 +50,7 @@ export default function NotificationBell() {
 
   const handleMarkAsRead = async (id: number) => {
     try {
-      await api.post('/api/v1/notifications/mark-read/', { ids: [id] });
+      await request('/notifications/mark-read/', { method: 'POST', body: JSON.stringify({ ids: [id] }) });
       setNotifications(prev => prev.map(n => n.id === id ? { ...n, is_read: true } : n));
     } catch (err) {
       console.error('Failed to mark as read', err);
@@ -62,7 +62,7 @@ export default function NotificationBell() {
     if (unreadIds.length === 0) return;
 
     try {
-      await api.post('/api/v1/notifications/mark-read/', { ids: unreadIds });
+      await request('/notifications/mark-read/', { method: 'POST', body: JSON.stringify({ ids: unreadIds }) });
       setNotifications(prev => prev.map(n => ({ ...n, is_read: true })));
     } catch (err) {
       console.error('Failed to mark all as read', err);
