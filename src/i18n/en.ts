@@ -452,6 +452,11 @@ export const en = {
       OTHER: "Other"
     }
   },
+  notifications: {
+    title: "Notifications",
+    markAllAsRead: "Mark all as read",
+    empty: "No notifications yet",
+  },
   onboarding: {
     pageTitle: "Vendor Onboarding",
     pageSubtitle: "Track and manage vendor onboarding tickets through each stage.",
