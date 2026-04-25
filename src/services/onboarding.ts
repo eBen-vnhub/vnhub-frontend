@@ -1,5 +1,5 @@
 import { request } from './api';
-import type { OnboardingTicket, ReviewPayload, UploadLinkPayload } from '../types/onboarding';
+import type { OnboardingTicket, BenefitTracker, ReviewPayload, UploadLinkPayload } from '../types/onboarding';
 
 const onboardingService = {
   getTickets: () =>
@@ -42,6 +42,34 @@ const onboardingService = {
 
   goLive: (ticketId: string) =>
     request<OnboardingTicket>(`/onboarding/tickets/${ticketId}/go-live/`, {
+      method: 'POST',
+    }),
+
+  getBenefitTrackers: (vendorId?: number) =>
+    request<BenefitTracker[]>(
+      vendorId ? `/onboarding/benefits/?vendor_id=${vendorId}` : '/onboarding/benefits/'
+    ),
+
+  assignBenefitOps: (benefitId: string, opsUserId: string) =>
+    request<BenefitTracker>(`/onboarding/benefits/${benefitId}/assign-ops/`, {
+      method: 'POST',
+      body: JSON.stringify({ ops_user_id: opsUserId }),
+    }),
+
+  uploadBenefitTestLink: (benefitId: string, payload: UploadLinkPayload) =>
+    request<BenefitTracker>(`/onboarding/benefits/${benefitId}/upload-test-link/`, {
+      method: 'POST',
+      body: JSON.stringify(payload),
+    }),
+
+  uploadBenefitLiveLink: (benefitId: string, payload: UploadLinkPayload) =>
+    request<BenefitTracker>(`/onboarding/benefits/${benefitId}/upload-live-link/`, {
+      method: 'POST',
+      body: JSON.stringify(payload),
+    }),
+
+  requestVendorListingUpdate: (vendorId: number) =>
+    request<{ success: boolean }>(`/onboarding/vendors/${vendorId}/request-listing-update/`, {
       method: 'POST',
     }),
 };
