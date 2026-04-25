@@ -381,9 +381,14 @@ export const ar = {
   backoffice: {
     sidebar: {
       adminSection: "إدارة VNHub",
+      vsmSection: "إدارة نجاح الموردين",
+      opsSection: "العمليات التقنية",
       dashboard: "لوحة التحكم",
       vendorsDirectory: "دليل الشركات والموردين",
       systemSettings: "إعدادات النظام",
+      myTasks: "مساحة عمل التسجيل",
+      tracker: "متتبع العمليات التقنية",
+      pipeline: "مسار العمليات التقنية",
     },
     vendors: {
       title: "دليل الشركات والموردين",
@@ -458,8 +463,14 @@ export const ar = {
     empty: "لا توجد إشعارات حتى الآن",
   },
   onboarding: {
-    pageTitle: "تسجيل الموردين",
-    pageSubtitle: "تتبع وإدارة طلبات تسجيل الموردين خلال كل مرحلة.",
+    pageTitle: "لوحة المتابعة الشاملة لتسجيل الموردين",
+    pageSubtitle: "مراقبة وإدارة شاملة لجميع مراحل تسجيل الموردين النشطة.",
+    vsmTasksTitle: "مساحة عملي للتسجيل",
+    vsmTasksSubtitle: "إدارة ومراجعة مهام تسجيل الموردين المكلف بها.",
+    trackerTitle: "متتبع العمليات التقنية",
+    trackerSubtitle: "مراقبة تقدم التكامل التقني والاختبارات الخاصة بمورديك.",
+    opsPipelineTitle: "العمليات التقنية",
+    opsPipelineSubtitle: "إدارة سير عمل التكامل التقني واختبارات الجودة.",
     columns: {
       INTAKE: "الاستلام",
       VENDOR_INPUT: "بيانات المورد",

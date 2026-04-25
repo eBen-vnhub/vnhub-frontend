@@ -1,5 +1,5 @@
 import { NavLink } from 'react-router-dom';
-import { Home, Users, Settings, ClipboardList } from 'lucide-react';
+import { Home, Users, Settings, ClipboardList, Briefcase, Activity, ServerCog } from 'lucide-react';
 import { useLanguage } from '../../../../i18n/LanguageContext';
 import { useAuth } from '../../../../contexts/AuthContext';
 
@@ -7,87 +7,78 @@ export default function BackofficeSidebar() {
   const { t } = useLanguage();
   const { user } = useAuth();
   const role = user?.role || '';
+
   const isSuperAdmin = role === 'SUPER_ADMIN';
-  const isVsmOrAdmin = ['SUPER_ADMIN', 'ADMIN', 'VSM'].includes(role);
-  const isOps = ['SUPER_ADMIN', 'OPERATIONS'].includes(role);
+  const isAdmin = role === 'ADMIN' || isSuperAdmin;
+  const isVsm = role === 'VSM';
+  const isOps = role === 'OPERATIONS' || isSuperAdmin;
 
   return (
     <aside className="bg-white border-r border-gray-200 flex flex-col overflow-hidden transition-all duration-300 ease-in-out fixed md:sticky top-[64px] z-10 h-[calc(100vh-64px)] w-64 hidden md:flex">
-      <div className="flex-1 overflow-y-auto px-3 py-4 space-y-1">
-        <div className="mb-4 px-2">
-          <h2 className="text-xs font-bold text-gray-400 uppercase tracking-wider">
-            {t.backoffice.sidebar.adminSection}
-          </h2>
-        </div>
-        
-        <nav className="space-y-1">
-          {isVsmOrAdmin && (
-            <>
-              <NavLink
-                to="/backoffice"
-                end
-                className={({ isActive }) =>
-                  `group w-full flex items-center gap-3 rounded-xl px-4 py-3 transition-all duration-300 ${
-                    isActive
-                      ? 'bg-brand text-white shadow-lg shadow-brand/25'
-                      : 'text-gray-500 hover:bg-gray-50 hover:text-gray-700'
-                  }`
-                }
-              >
-                <Home className="w-5 h-5" />
-                <span className="text-sm font-semibold truncate">{t.backoffice.sidebar.dashboard}</span>
-              </NavLink>
+      <div className="flex-1 overflow-y-auto px-3 py-6 space-y-6">
 
-              <NavLink
-                to="/backoffice/vendors"
-                className={({ isActive }) =>
-                  `group w-full flex items-center gap-3 rounded-xl px-4 py-3 transition-all duration-300 ${
-                    isActive
-                      ? 'bg-brand text-white shadow-lg shadow-brand/25'
-                      : 'text-gray-500 hover:bg-gray-50 hover:text-gray-700'
-                  }`
-                }
-              >
-                <Users className="w-5 h-5" />
-                <span className="text-sm font-semibold truncate">{t.backoffice.sidebar.vendorsDirectory}</span>
-              </NavLink>
-            </>
-          )}
+        {isAdmin && (
+          <div className="space-y-1">
+            <h2 className="px-3 text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-2">
+              {t.backoffice.sidebar.adminSection}
+            </h2>
+            <nav className="space-y-1">
+              <SidebarLink to="/backoffice" end icon={<Home />} label={t.backoffice.sidebar.dashboard} />
+              <SidebarLink to="/backoffice/vendors" icon={<Users />} label={t.backoffice.sidebar.vendorsDirectory} />
+              <SidebarLink to="/backoffice/onboarding" icon={<ClipboardList />} label={t.onboarding.pageTitle} />
+              {isSuperAdmin && (
+                <SidebarLink to="/backoffice/settings" icon={<Settings />} label={t.backoffice.sidebar.systemSettings} />
+              )}
+            </nav>
+          </div>
+        )}
 
-          {(isVsmOrAdmin || isOps) && (
+        {isVsm && (
+          <div className="space-y-1">
+            <h2 className="px-3 text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-2">
+              {t.backoffice.sidebar.vsmSection}
+            </h2>
+            <nav className="space-y-1">
+              <SidebarLink to="/backoffice" end icon={<Home />} label={t.backoffice.sidebar.dashboard} />
+              <SidebarLink to="/backoffice/vendors" icon={<Users />} label={t.backoffice.sidebar.vendorsDirectory} />
+              <SidebarLink to="/backoffice/onboarding" icon={<Briefcase />} label={t.backoffice.sidebar.myTasks} />
+              <SidebarLink to="/backoffice/operations-tracker" icon={<Activity />} label={t.backoffice.sidebar.tracker} />
+            </nav>
+          </div>
+        )}
 
-          <NavLink
-            to="/backoffice/onboarding"
-            className={({ isActive }) =>
-              `group w-full flex items-center gap-3 rounded-xl px-4 py-3 transition-all duration-300 ${
-                isActive
-                  ? 'bg-brand text-white shadow-lg shadow-brand/25'
-                  : 'text-gray-500 hover:bg-gray-50 hover:text-gray-700'
-              }`
-            }
-          >
-            <ClipboardList className="w-5 h-5" />
-            <span className="text-sm font-semibold truncate">{t.onboarding.pageTitle}</span>
-            </NavLink>
-          )}
+        {isOps && !isAdmin && (
+          <div className="space-y-1">
+            <h2 className="px-3 text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-2">
+              {t.backoffice.sidebar.opsSection}
+            </h2>
+            <nav className="space-y-1">
+              <SidebarLink to="/backoffice/pipeline" icon={<ServerCog />} label={t.backoffice.sidebar.pipeline} />
+            </nav>
+          </div>
+        )}
 
-          {isSuperAdmin && (
-            <NavLink
-              to="/backoffice/settings"
-              className={({ isActive }) =>
-                `group w-full flex items-center gap-3 rounded-xl px-4 py-3 transition-all duration-300 ${
-                  isActive
-                    ? 'bg-brand text-white shadow-lg shadow-brand/25'
-                    : 'text-gray-500 hover:bg-gray-50 hover:text-gray-700'
-                }`
-              }
-            >
-              <Settings className="w-5 h-5" />
-              <span className="text-sm font-semibold truncate">{t.backoffice.sidebar.systemSettings}</span>
-            </NavLink>
-          )}
-        </nav>
       </div>
     </aside>
+  );
+}
+
+function SidebarLink({ to, icon, label, end = false }: { to: string; icon: React.ReactNode; label: string; end?: boolean }) {
+  return (
+    <NavLink
+      to={to}
+      end={end}
+      className={({ isActive }) =>
+        `group w-full flex items-center gap-3 rounded-xl px-3 py-2.5 transition-all duration-300 ${isActive
+          ? 'bg-brand/10 text-brand font-semibold'
+          : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900 font-medium'
+        }`
+      }
+    >
+      <div className="w-5 h-5 flex items-center justify-center">
+        {icon}
+      </div>
+      <span className="text-sm truncate">{label}</span>
+    </NavLink>
   );
 }
