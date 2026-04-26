@@ -34,7 +34,7 @@ export default function SubscriptionsPage() {
   const [isSaving, setIsSaving] = useState(false);
   const [cancellingId, setCancellingId] = useState<number | null>(null);
 
-  const { listingsData } = useCompanyProfile(vendor || ({} as any), () => {});
+  const { listingsData, isLoadingListings } = useCompanyProfile(vendor || ({} as any), () => {});
   const hasVendorListing = !!listingsData?.vendorListing;
 
   const closeModal = () => setModal({ type: 'none' });
@@ -129,7 +129,7 @@ export default function SubscriptionsPage() {
     handlePendingAction(stepType);
   };
 
-  if (isLoading) {
+  if (isLoading || isLoadingListings) {
     return (
       <div className="flex-1 flex items-center justify-center min-h-[400px]">
         <LoadingSpinner size="lg" className="text-brand" />
