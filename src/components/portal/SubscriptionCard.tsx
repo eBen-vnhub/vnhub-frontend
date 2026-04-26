@@ -2,7 +2,7 @@ import { useState } from 'react';
 import type { Subscription } from '../../types';
 import { useLanguage } from '../../i18n/LanguageContext';
 import Button from '../ui/Button';
-import { CheckCircle2, Clock, XCircle, MapPin, Calendar, Edit3, Trash2 } from 'lucide-react';
+import { CheckCircle2, MapPin, Calendar, Edit3, Trash2 } from 'lucide-react';
 
 interface SubscriptionCardProps {
   subscription: Subscription;
