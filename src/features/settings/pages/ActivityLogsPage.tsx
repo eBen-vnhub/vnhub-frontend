@@ -2,7 +2,7 @@ import { useState, useMemo, useEffect } from 'react';
 import { useLanguage } from '../../../i18n/LanguageContext';
 import SettingsTabs from '../components/SettingsTabs';
 import PageHeader from '../components/PageHeader';
-import ActivityLogsList from '../components/logs/ActivityLogsList';
+import ActivityLogsList from '../components/activity-logs/ActivityLogsList';
 import { ActivitySquare, Search } from 'lucide-react';
 import { settingsService } from '../../../services/settings';
 import type { ActivityLog } from '../../../services/settings';
