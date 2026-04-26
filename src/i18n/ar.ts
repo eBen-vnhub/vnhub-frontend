@@ -472,6 +472,7 @@ export const ar = {
     loading: "جاري التحميل...",
     error: "حدث خطأ ما",
     success: "تم بنجاح",
+    cancel: "إلغاء",
     documentTypes: {
       TRADE_LICENSE: "الرخصة التجارية",
       LOGO: "الشعار",

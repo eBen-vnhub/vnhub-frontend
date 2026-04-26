@@ -472,6 +472,7 @@ export const en = {
     loading: "Loading...",
     error: "Something went wrong",
     success: "Success",
+    cancel: "Cancel",
     documentTypes: {
       TRADE_LICENSE: "Trade License",
       LOGO: "Logo",
