@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { X, ExternalLink, CheckCircle, XCircle, Upload, UserCheck, Play } from 'lucide-react';
+import { X, ExternalLink, CheckCircle, XCircle, Upload, Play } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import type { BenefitTracker } from '../../../../types/onboarding';

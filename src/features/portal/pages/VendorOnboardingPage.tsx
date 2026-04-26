@@ -1,42 +1,12 @@
-import { useState } from 'react';
 import { useLanguage } from '../../../i18n/LanguageContext';
 import { useVendorOnboarding } from '../hooks/useVendorOnboarding';
 import OnboardingTicketCard from '../components/onboarding/OnboardingTicketCard';
-import TestLinkResponseModal from '../components/onboarding/TestLinkResponseModal';
-import vendorOnboardingService from '../services/vendorOnboarding';
 import LoadingSpinner from '../../../components/ui/LoadingSpinner';
-import type { OnboardingTicket } from '../../../types/onboarding';
-import toast from 'react-hot-toast';
 import { ClipboardList } from 'lucide-react';
 
 export default function VendorOnboardingPage() {
   const { t } = useLanguage();
-  const { tickets, isLoading, error, refetch } = useVendorOnboarding();
-  const [selectedTicket, setSelectedTicket] = useState<OnboardingTicket | null>(null);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-
-  const handleRespondTestLink = (ticket: OnboardingTicket) => {
-    setSelectedTicket(ticket);
-  };
-
-  const handleSubmitResponse = async (approved: boolean, feedback: string) => {
-    if (!selectedTicket) return;
-    setIsSubmitting(true);
-    try {
-      await vendorOnboardingService.respondToTestLink(selectedTicket.id, { approved, feedback });
-      toast.success(
-        approved
-          ? t.vendorPortal.onboarding.toasts.approved
-          : t.vendorPortal.onboarding.toasts.changesRequested
-      );
-      setSelectedTicket(null);
-      refetch();
-    } catch (err: any) {
-      toast.error(err?.response?.data?.error || t.vendorPortal.onboarding.toasts.error);
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
+  const { tickets, isLoading, error } = useVendorOnboarding();
 
   if (isLoading) {
     return (
@@ -74,20 +44,9 @@ export default function VendorOnboardingPage() {
             <OnboardingTicketCard
               key={ticket.id}
               ticket={ticket}
-              onRespondTestLink={handleRespondTestLink}
             />
           ))}
         </div>
-      )}
-
-      {selectedTicket && (
-        <TestLinkResponseModal
-          isOpen={!!selectedTicket}
-          testLink={selectedTicket.test_link || ''}
-          onClose={() => setSelectedTicket(null)}
-          onSubmit={handleSubmitResponse}
-          isSubmitting={isSubmitting}
-        />
       )}
     </div>
   );
