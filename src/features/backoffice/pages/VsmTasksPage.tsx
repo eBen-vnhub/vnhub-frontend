@@ -5,9 +5,9 @@ export default function VsmTasksPage() {
   const { t } = useLanguage();
   return (
     <OnboardingBoard
-      title={t.onboarding.vsmTasksTitle || 'My Onboarding Tasks'}
-      subtitle={t.onboarding.vsmTasksSubtitle || 'Manage your active vendor onboarding processes.'}
-      columns={['INTAKE', 'VENDOR_INPUT', 'FINAL']}
+      title={t.onboarding.vsmTasksTitle}
+      subtitle={t.onboarding.vsmTasksSubtitle}
+      columns={['INTAKE', 'VENDOR_INPUT', 'HANDOVER', 'SETUP', 'DONE']}
     />
   );
 }

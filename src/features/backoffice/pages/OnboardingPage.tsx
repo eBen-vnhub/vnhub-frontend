@@ -16,7 +16,7 @@ export default function OnboardingPage() {
   }
 
   if (role === 'OPERATIONS') {
-    return <Navigate to="/backoffice/pipeline" replace />;
+    return <Navigate to="/backoffice/vendor-setup" replace />;
   }
 
   return <Navigate to="/backoffice" replace />;

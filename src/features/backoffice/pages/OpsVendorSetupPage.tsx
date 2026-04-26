@@ -1,13 +1,13 @@
 import { useLanguage } from '../../../i18n/LanguageContext';
 import OnboardingBoard from '../components/onboarding/OnboardingBoard';
 
-export default function AdminOnboardingPage() {
+export default function OpsVendorSetupPage() {
   const { t } = useLanguage();
   return (
     <OnboardingBoard
-      title={t.onboarding.pageTitle}
-      subtitle={t.onboarding.pageSubtitle}
-      columns={['INTAKE', 'VENDOR_INPUT', 'HANDOVER', 'SETUP', 'DONE']}
+      title={t.onboarding.opsSetupTitle}
+      subtitle={t.onboarding.opsSetupSubtitle}
+      columns={['HANDOVER', 'SETUP', 'DONE']}
     />
   );
 }
