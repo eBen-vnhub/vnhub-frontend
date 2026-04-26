@@ -496,10 +496,10 @@ export const ar = {
     opsSetupTitle: "تجهيز الموردين",
     opsSetupSubtitle: "إنشاء المنظمة، الموقع، الحساب، وبيانات الدخول للمورد.",
     columns: {
-      INTAKE: "الاستلام",
-      VENDOR_INPUT: "بيانات المورد",
-      HANDOVER: "تسليم للعمليات",
-      SETUP: "تجهيز المورد",
+      QUEUE: "قائمة الانتظار",
+      DATA_COLLECTION: "جمع البيانات",
+      TECHNICAL_SETUP: "التجهيز التقني",
+      FINAL_REVIEW: "المراجعة النهائية",
       DONE: "مكتمل",
     },
     status: {
@@ -593,9 +593,10 @@ export const ar = {
     benefitLabel: "عرض",
     columns: {
       QUEUE: "قائمة الانتظار",
-      BUILDING: "قيد البناء",
-      REVIEW: "المراجعة والاختبار",
+      IN_PROGRESS: "قيد التنفيذ",
+      TEST_REVIEW: "مراجعة الاختبار",
       GO_LIVE: "الإطلاق",
+      DONE: "منشور (مباشر)",
     },
     status: {
       PENDING: "قيد الانتظار",

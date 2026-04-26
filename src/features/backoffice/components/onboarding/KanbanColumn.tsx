@@ -10,10 +10,10 @@ interface KanbanColumnProps {
 }
 
 const COLUMN_ACCENT: Record<string, string> = {
-  INTAKE: 'bg-gray-400',
-  VENDOR_INPUT: 'bg-amber-400',
-  HANDOVER: 'bg-indigo-400',
-  SETUP: 'bg-cyan-400',
+  QUEUE: 'bg-gray-400',
+  DATA_COLLECTION: 'bg-amber-400',
+  TECHNICAL_SETUP: 'bg-indigo-400',
+  FINAL_REVIEW: 'bg-cyan-400',
   DONE: 'bg-emerald-400',
 };
 

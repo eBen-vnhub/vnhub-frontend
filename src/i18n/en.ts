@@ -496,11 +496,11 @@ export const en = {
     opsSetupTitle: "Vendor Setup",
     opsSetupSubtitle: "Complete vendor technical setup: create org, location, account, and admin credentials.",
     columns: {
-      INTAKE: "Intake",
-      VENDOR_INPUT: "Vendor Listing",
-      HANDOVER: "Handover to Ops",
-      SETUP: "Vendor Setup",
-      DONE: "Completed",
+      QUEUE: "Queue",
+      DATA_COLLECTION: "Data Collection",
+      TECHNICAL_SETUP: "Technical Setup",
+      FINAL_REVIEW: "Final Review",
+      DONE: "Done",
     },
     status: {
       UNASSIGNED: "Unassigned",
@@ -593,9 +593,10 @@ export const en = {
     benefitLabel: "Benefit",
     columns: {
       QUEUE: "Queue",
-      BUILDING: "Building",
-      REVIEW: "Review & Testing",
+      IN_PROGRESS: "In Progress",
+      TEST_REVIEW: "Test Review",
       GO_LIVE: "Go Live",
+      DONE: "Published (Live)",
     },
     status: {
       PENDING: "Pending",
