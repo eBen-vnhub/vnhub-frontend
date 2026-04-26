@@ -71,6 +71,8 @@ export default function App() {
 
           <Route element={<RoleGuard allowedRoles={['SUPER_ADMIN', 'ADMIN', 'VSM']} />}>
             <Route path="vendors" element={<VendorsListPage />} />
+          </Route>
+          <Route element={<RoleGuard allowedRoles={['SUPER_ADMIN', 'ADMIN', 'VSM', 'OPERATIONS']} />}>
             <Route path="vendors/:id" element={<VendorDetailPage />} />
           </Route>
 

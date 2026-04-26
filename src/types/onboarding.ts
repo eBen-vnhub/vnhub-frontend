@@ -29,6 +29,10 @@ export interface OnboardingTicket {
   assigned_vsm_name: string | null;
   assigned_ops: string | null;
   assigned_ops_name: string | null;
+  setup_org: boolean;
+  setup_location: boolean;
+  setup_account: boolean;
+  setup_admin: boolean;
   internal_notes: string;
   created_at: string;
   updated_at: string;
@@ -65,16 +69,17 @@ export interface UploadLinkPayload {
 }
 
 export const ONBOARDING_COLUMNS: Record<string, TicketStatus[]> = {
-  INTAKE: ['UNASSIGNED', 'ASSIGNED_TO_VSM'],
-  VENDOR_INPUT: ['AWAITING_VENDOR_LISTING', 'VSM_REVIEW'],
-  HANDOVER: ['READY_FOR_OPS'],
-  SETUP: ['OPS_IN_PROGRESS', 'VSM_FINAL_REVIEW'],
+  QUEUE: ['UNASSIGNED', 'ASSIGNED_TO_VSM'],
+  DATA_COLLECTION: ['AWAITING_VENDOR_LISTING', 'VSM_REVIEW'],
+  TECHNICAL_SETUP: ['READY_FOR_OPS'],
+  FINAL_REVIEW: ['OPS_IN_PROGRESS', 'VSM_FINAL_REVIEW'],
   DONE: ['COMPLETED'],
 };
 
 export const BENEFIT_COLUMNS: Record<string, BenefitStatus[]> = {
   QUEUE: ['PENDING', 'ASSIGNED_TO_OPS'],
-  BUILDING: ['BUILDING'],
-  REVIEW: ['IN_TESTING', 'REVISION'],
-  GO_LIVE: ['PENDING_LIVE', 'LIVE'],
+  IN_PROGRESS: ['BUILDING'],
+  TEST_REVIEW: ['IN_TESTING', 'REVISION'],
+  GO_LIVE: ['PENDING_LIVE'],
+  DONE: ['LIVE'],
 };

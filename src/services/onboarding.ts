@@ -28,6 +28,12 @@ const onboardingService = {
       body: JSON.stringify(payload),
     }),
 
+  updateChecklist: (ticketId: string, payload: Partial<Pick<OnboardingTicket, 'setup_org' | 'setup_location' | 'setup_account' | 'setup_admin'>>) =>
+    request<OnboardingTicket>(`/onboarding/tickets/${ticketId}/checklist/`, {
+      method: 'PATCH',
+      body: JSON.stringify(payload),
+    }),
+
   opsCompleteSetup: (ticketId: string) =>
     request<OnboardingTicket>(`/onboarding/tickets/${ticketId}/ops-complete/`, {
       method: 'POST',
