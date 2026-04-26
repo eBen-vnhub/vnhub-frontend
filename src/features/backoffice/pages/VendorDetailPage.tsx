@@ -221,7 +221,7 @@ export default function VendorDetailPage() {
                   <MemberRoleBadge role={member.role} t={t} />
                   {canEditTeam && <Edit2 className="w-4 h-4 text-muted group-hover:text-brand transition-colors opacity-0 group-hover:opacity-100" />}
                 </div>
-              </div>>
+              </div>
             ))}
           </div>
         </div>
