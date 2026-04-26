@@ -51,6 +51,7 @@ export default function BackofficeSidebar() {
               {t.backoffice.sidebar.opsSection}
             </h2>
             <nav className="space-y-1">
+              <SidebarLink to="/backoffice/onboarding" icon={<Briefcase />} label={t.backoffice.sidebar.vendorSetupWorkspace} />
               <SidebarLink to="/backoffice/pipeline" icon={<ServerCog />} label={t.backoffice.sidebar.pipeline} />
             </nav>
           </div>
