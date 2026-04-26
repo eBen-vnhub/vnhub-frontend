@@ -94,7 +94,7 @@ export default function TicketDetailModal({ ticket, onClose, onUpdate }: TicketD
       t.onboarding.toast.confirmError,
     );
 
-  const isVsm = ['SUPER_ADMIN', 'ADMIN', 'VSM'].includes(userRole);
+  const isVsm = ['SUPER_ADMIN', 'VSM'].includes(userRole);
   const isOps = ['SUPER_ADMIN', 'OPERATIONS'].includes(userRole);
 
   const handleAdminAssign = (vsmId: string) => {
@@ -129,11 +129,11 @@ export default function TicketDetailModal({ ticket, onClose, onUpdate }: TicketD
         return isVsm ? (
           <div className="space-y-4">
             <p className="text-sm text-muted bg-gray-50 p-4 rounded-xl border border-gray-100">
-              If the vendor has completed their profile setup, you can manually start the review process.
+              {t.onboarding.labels.advanceToReviewDesc}
             </p>
             <ActionButton 
               icon={<CheckCircle className="w-4 h-4" />} 
-              label="Start VSM Review" 
+              label={t.onboarding.actions.advanceToReview} 
               onClick={handleStartReview} 
               disabled={isSubmitting} 
               variant="success" 
@@ -179,11 +179,11 @@ export default function TicketDetailModal({ ticket, onClose, onUpdate }: TicketD
         return isOps ? (
           <div className="space-y-4">
             <div className="bg-gray-50 border border-gray-200 rounded-xl p-4 space-y-3">
-              <h4 className="text-sm font-bold text-main mb-2">Technical Setup Checklist</h4>
-              <ChecklistItem label="Create Organization in ePN" checked={ticket.setup_org} onChange={(c) => handleChecklistChange('setup_org', c)} disabled={isSubmitting} />
-              <ChecklistItem label="Setup Location / Branch" checked={ticket.setup_location} onChange={(c) => handleChecklistChange('setup_location', c)} disabled={isSubmitting} />
-              <ChecklistItem label="Create Financial Account" checked={ticket.setup_account} onChange={(c) => handleChecklistChange('setup_account', c)} disabled={isSubmitting} />
-              <ChecklistItem label="Generate Admin Credentials" checked={ticket.setup_admin} onChange={(c) => handleChecklistChange('setup_admin', c)} disabled={isSubmitting} />
+              <h4 className="text-sm font-bold text-main mb-2">{t.onboarding.labels.techSetupChecklist}</h4>
+              <ChecklistItem label={t.onboarding.labels.createOrgEpn} checked={ticket.setup_org} onChange={(c) => handleChecklistChange('setup_org', c)} disabled={isSubmitting} />
+              <ChecklistItem label={t.onboarding.labels.setupLocation} checked={ticket.setup_location} onChange={(c) => handleChecklistChange('setup_location', c)} disabled={isSubmitting} />
+              <ChecklistItem label={t.onboarding.labels.createFinance} checked={ticket.setup_account} onChange={(c) => handleChecklistChange('setup_account', c)} disabled={isSubmitting} />
+              <ChecklistItem label={t.onboarding.labels.generateAdmin} checked={ticket.setup_admin} onChange={(c) => handleChecklistChange('setup_admin', c)} disabled={isSubmitting} />
             </div>
             <ActionButton 
               icon={<CheckCircle className="w-4 h-4" />} 
@@ -197,7 +197,16 @@ export default function TicketDetailModal({ ticket, onClose, onUpdate }: TicketD
 
       case 'VSM_FINAL_REVIEW':
         return isVsm ? (
-          <ActionButton icon={<UserCheck className="w-4 h-4" />} label={t.onboarding.actions.confirmCompletion} onClick={handleVSMConfirm} disabled={isSubmitting} variant="success" />
+          <div className="space-y-4">
+            <div className="bg-gray-50 border border-gray-200 rounded-xl p-4 space-y-3">
+              <h4 className="text-sm font-bold text-main mb-2">{t.onboarding.labels.techSetupChecklist}</h4>
+              <ChecklistItem label={t.onboarding.labels.createOrgEpn} checked={ticket.setup_org} onChange={() => {}} disabled={true} />
+              <ChecklistItem label={t.onboarding.labels.setupLocation} checked={ticket.setup_location} onChange={() => {}} disabled={true} />
+              <ChecklistItem label={t.onboarding.labels.createFinance} checked={ticket.setup_account} onChange={() => {}} disabled={true} />
+              <ChecklistItem label={t.onboarding.labels.generateAdmin} checked={ticket.setup_admin} onChange={() => {}} disabled={true} />
+            </div>
+            <ActionButton icon={<UserCheck className="w-4 h-4" />} label={t.onboarding.actions.confirmCompletion} onClick={handleVSMConfirm} disabled={isSubmitting} variant="success" />
+          </div>
         ) : null;
 
       default:

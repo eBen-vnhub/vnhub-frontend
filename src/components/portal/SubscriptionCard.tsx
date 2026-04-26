@@ -42,11 +42,6 @@ export default function SubscriptionCard({ subscription, companyName, onEdit, on
             <span className="text-sm text-muted">• {subscription.billingCycle}</span>
           </div>
         </div>
-
-        <div className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-semibold ${config.className}`}>
-          <StatusIcon className="w-4 h-4" />
-          <span>{subscription.status || t.portal.subscriptionCard.pending}</span>
-        </div>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4">

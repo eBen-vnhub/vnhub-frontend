@@ -23,10 +23,6 @@ function usePendingActions(subscriptions: Subscription[], hasVendorListing?: boo
     (s) => s.nextStep === 'VENDOR_LISTING' && s.status !== 'CANCELLED'
   );
 
-  const benefitPendingSub = subscriptions.find(
-    (s) => s.nextStep === 'BENEFIT_LISTING' && s.status !== 'CANCELLED'
-  );
-
   const actions: PendingAction[] = [];
 
   if (vendorPendingSub && !hasVendorListing) {
@@ -35,17 +31,6 @@ function usePendingActions(subscriptions: Subscription[], hasVendorListing?: boo
       label: (t.portal as any).pendingActions?.vendorListing || 'Complete Vendor Listing',
       description: (t.portal as any).pendingActions?.vendorListingDesc || 'Provide your brand details to activate your storefront.',
       subscriptionId: vendorPendingSub.id
-    });
-  }
-
-  if (benefitPendingSub) {
-    const submitted = benefitPendingSub.benefitsSubmitted || 0;
-    const max = benefitPendingSub.maxBenefits || 1;
-    actions.push({
-      type: 'BENEFIT_LISTING',
-      label: `Benefits (${submitted}/${max}) — Add Benefit`,
-      description: (t.portal as any).pendingActions?.benefitListingDesc || 'Set up your offers and discounts for the benefits center.',
-      subscriptionId: benefitPendingSub.id
     });
   }
 

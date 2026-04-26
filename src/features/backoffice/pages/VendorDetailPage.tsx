@@ -103,7 +103,8 @@ export default function VendorDetailPage() {
     );
   }
 
-  const canManage = user?.role === 'SUPER_ADMIN' || user?.role === 'ADMIN' || user?.role === 'VSM';
+  const canRequestUpdate = user?.role === 'SUPER_ADMIN' || user?.role === 'VSM';
+  const canEditTeam = user?.role === 'SUPER_ADMIN' || user?.role === 'VSM';
 
   return (
     <div className="animate-in fade-in slide-in-from-bottom-4 duration-700 space-y-6">
@@ -116,7 +117,7 @@ export default function VendorDetailPage() {
           {t.backoffice.vendors.backToDirectory}
         </Link>
 
-        {canManage && (
+        {canRequestUpdate && (
           <button
             onClick={() => setIsRequestModalOpen(true)}
             disabled={isRequestingUpdate}
@@ -194,7 +195,6 @@ export default function VendorDetailPage() {
                     <div className="font-bold text-main">{sub.plan} Plan</div>
                     <div className="text-xs text-muted mt-1">{sub.billingCycle} • {new Date(sub.createdAt).toLocaleDateString()}</div>
                   </div>
-                  <span className="px-3 py-1 bg-brand/10 text-brand text-xs font-bold rounded-full uppercase tracking-wider">{sub.status}</span>
                 </div>
               ))}
             </div>
@@ -208,20 +208,20 @@ export default function VendorDetailPage() {
           </h3>
           <div className="space-y-3">
             {vendorDetail.teamMembers.map((member) => (
-              <button 
+              <div 
                 key={member.id} 
-                className="w-full p-4 rounded-xl border border-border bg-surface-hover/30 hover:bg-surface-hover hover:border-brand/30 flex justify-between items-center transition-all cursor-pointer text-left group"
-                onClick={() => setEditingMember(member)}
+                className={`w-full p-4 rounded-xl border border-border bg-surface-hover/30 flex justify-between items-center transition-all ${canEditTeam ? 'hover:bg-surface-hover hover:border-brand/30 cursor-pointer group text-left' : ''}`}
+                onClick={() => canEditTeam && setEditingMember(member)}
               >
                 <div>
-                  <div className="font-bold text-main group-hover:text-brand transition-colors">{member.firstName} {member.lastName}</div>
+                  <div className={`font-bold text-main ${canEditTeam ? 'group-hover:text-brand transition-colors' : ''}`}>{member.firstName} {member.lastName}</div>
                   <div className="text-xs text-muted mt-1">{member.email}</div>
                 </div>
                 <div className="flex items-center gap-3">
                   <MemberRoleBadge role={member.role} t={t} />
-                  <Edit2 className="w-4 h-4 text-muted group-hover:text-brand transition-colors opacity-0 group-hover:opacity-100" />
+                  {canEditTeam && <Edit2 className="w-4 h-4 text-muted group-hover:text-brand transition-colors opacity-0 group-hover:opacity-100" />}
                 </div>
-              </button>
+              </div>>
             ))}
           </div>
         </div>
