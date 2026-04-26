@@ -1,13 +1,16 @@
 import { useLanguage } from '../../../i18n/LanguageContext';
-import OnboardingBoard from '../components/onboarding/OnboardingBoard';
+import BenefitBoard from '../components/benefits/BenefitBoard';
 
 export default function BenefitBuildsPage() {
   const { t } = useLanguage();
+
   return (
-    <OnboardingBoard
-      title={t.onboarding.opsPipelineTitle || 'Operations Pipeline'}
-      subtitle={t.onboarding.opsPipelineSubtitle || 'Manage technical integrations and testing workflows.'}
-      columns={['OPS_PIPELINE', 'TESTING']}
-    />
+    <div className="animate-in fade-in slide-in-from-bottom-4 duration-700">
+      <BenefitBoard
+        title={t.onboarding.opsPipelineTitle}
+        subtitle={t.onboarding.opsPipelineSubtitle}
+        columns={['QUEUE', 'BUILDING', 'REVIEW', 'GO_LIVE']}
+      />
+    </div>
   );
 }

@@ -39,8 +39,8 @@ export default function BackofficeSidebar() {
             </h2>
             <nav className="space-y-1">
               <SidebarLink to="/backoffice/vendors" icon={<Users />} label={t.backoffice.sidebar.vendorsDirectory} />
-              <SidebarLink to="/backoffice/onboarding" icon={<Briefcase />} label={t.backoffice.sidebar.myTasks} />
-              <SidebarLink to="/backoffice/operations-tracker" icon={<Activity />} label={t.backoffice.sidebar.tracker} />
+              <SidebarLink to="/backoffice/onboarding" icon={<Briefcase />} label={t.backoffice.sidebar.vendorOnboarding} />
+              <SidebarLink to="/backoffice/benefit-tracker" icon={<Activity />} label={t.backoffice.sidebar.benefitTracker} />
             </nav>
           </div>
         )}
@@ -51,8 +51,8 @@ export default function BackofficeSidebar() {
               {t.backoffice.sidebar.opsSection}
             </h2>
             <nav className="space-y-1">
-              <SidebarLink to="/backoffice/onboarding" icon={<Briefcase />} label={t.backoffice.sidebar.vendorSetupWorkspace} />
-              <SidebarLink to="/backoffice/pipeline" icon={<ServerCog />} label={t.backoffice.sidebar.pipeline} />
+              <SidebarLink to="/backoffice/vendor-setup" icon={<ServerCog />} label={t.backoffice.sidebar.vendorSetup} />
+              <SidebarLink to="/backoffice/benefit-builds" icon={<Activity />} label={t.backoffice.sidebar.benefitBuilds} />
             </nav>
           </div>
         )}

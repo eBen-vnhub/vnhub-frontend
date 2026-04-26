@@ -14,10 +14,11 @@ import type { BenefitTracker } from '../../../types/onboarding';
 
 const BENEFIT_STATUS_STYLES: Record<string, string> = {
   PENDING: 'bg-gray-100 text-gray-700',
-  VSM_REVIEW: 'bg-amber-50 text-amber-700',
   ASSIGNED_TO_OPS: 'bg-blue-50 text-blue-700',
   BUILDING: 'bg-indigo-50 text-indigo-700',
-  TESTING: 'bg-purple-50 text-purple-700',
+  IN_TESTING: 'bg-purple-50 text-purple-700',
+  REVISION: 'bg-red-50 text-red-700',
+  PENDING_LIVE: 'bg-amber-50 text-amber-700',
   LIVE: 'bg-emerald-50 text-emerald-700',
 };
 

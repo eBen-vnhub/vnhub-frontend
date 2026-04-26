@@ -1,31 +1,31 @@
 import { useState } from 'react';
 import { ClipboardList } from 'lucide-react';
 import { useLanguage } from '../../../../i18n/LanguageContext';
-import { useOnboardingTickets } from '../../hooks/useOnboardingTickets';
-import { ONBOARDING_COLUMNS } from '../../../../types/onboarding';
-import type { OnboardingTicket } from '../../../../types/onboarding';
-import KanbanColumn from './KanbanColumn';
-import TicketDetailModal from './TicketDetailModal';
+import { BENEFIT_COLUMNS } from '../../../../types/onboarding';
+import type { BenefitTracker } from '../../../../types/onboarding';
+import BenefitKanbanColumn from './BenefitKanbanColumn';
+import BenefitDetailModal from './BenefitDetailModal';
+import { useBenefitTrackers } from '../../hooks/useBenefitTrackers';
 import { useNotifications } from '../../../../hooks/useNotifications';
 
-interface OnboardingBoardProps {
+interface BenefitBoardProps {
   title: string;
   subtitle: string;
-  columns: (keyof typeof ONBOARDING_COLUMNS)[];
+  columns: (keyof typeof BENEFIT_COLUMNS)[];
 }
 
-export default function OnboardingBoard({ title, subtitle, columns }: OnboardingBoardProps) {
+export default function BenefitBoard({ title, subtitle, columns }: BenefitBoardProps) {
   const { t } = useLanguage();
-  const { tickets, isLoading, error, updateTicketLocally, refetch } = useOnboardingTickets();
-  const [selectedTicket, setSelectedTicket] = useState<OnboardingTicket | null>(null);
+  const { benefits, isLoading, error, updateLocally, refetch } = useBenefitTrackers();
+  const [selectedBenefit, setSelectedBenefit] = useState<BenefitTracker | null>(null);
 
   useNotifications(() => {
     refetch();
   });
 
-  const handleTicketUpdate = (updated: OnboardingTicket) => {
-    updateTicketLocally(updated);
-    setSelectedTicket(updated);
+  const handleBenefitUpdate = (updated: BenefitTracker) => {
+    updateLocally(updated);
+    setSelectedBenefit(updated);
   };
 
   if (isLoading) {
@@ -56,24 +56,24 @@ export default function OnboardingBoard({ title, subtitle, columns }: Onboarding
 
       <div className="flex gap-4 overflow-x-auto pb-4">
         {columns.map((key) => {
-          const statuses = ONBOARDING_COLUMNS[key];
+          const statuses = BENEFIT_COLUMNS[key];
           if (!statuses) return null;
           return (
-            <KanbanColumn
+            <BenefitKanbanColumn
               key={key}
               columnKey={key}
               statuses={statuses}
-              tickets={tickets}
-              onTicketClick={setSelectedTicket}
+              benefits={benefits}
+              onBenefitClick={setSelectedBenefit}
             />
           );
         })}
       </div>
 
-      <TicketDetailModal
-        ticket={selectedTicket}
-        onClose={() => setSelectedTicket(null)}
-        onUpdate={handleTicketUpdate}
+      <BenefitDetailModal
+        benefit={selectedBenefit}
+        onClose={() => setSelectedBenefit(null)}
+        onUpdate={handleBenefitUpdate}
       />
     </div>
   );
