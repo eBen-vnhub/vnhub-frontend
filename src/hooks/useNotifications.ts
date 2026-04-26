@@ -9,6 +9,8 @@ export function useNotifications(onNotificationReceived?: () => void) {
   const { isAuthenticated } = useAuth();
   const { direction } = useLanguage();
   const wsRef = useRef<WebSocket | null>(null);
+  const callbackRef = useRef(onNotificationReceived);
+  callbackRef.current = onNotificationReceived;
 
   useEffect(() => {
     if (!isAuthenticated) return;
@@ -27,8 +29,8 @@ export function useNotifications(onNotificationReceived?: () => void) {
             className: 'bg-white text-main font-semibold border border-gray-200'
           });
 
-          if (onNotificationReceived) {
-            onNotificationReceived();
+          if (callbackRef.current) {
+            callbackRef.current();
           }
         }
       } catch {
@@ -40,7 +42,7 @@ export function useNotifications(onNotificationReceived?: () => void) {
         wsRef.current.close();
       }
     };
-  }, [isAuthenticated, direction, onNotificationReceived]);
+  }, [isAuthenticated, direction]);
 
   return null;
 }
