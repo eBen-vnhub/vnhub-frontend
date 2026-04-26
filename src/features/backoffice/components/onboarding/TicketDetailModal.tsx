@@ -126,23 +126,18 @@ export default function TicketDetailModal({ ticket, onClose, onUpdate }: TicketD
         ) : null;
 
       case 'AWAITING_VENDOR_LISTING':
-        const isListingSubmitted = !!listingsData?.vendorListing;
         return isVsm ? (
           <div className="space-y-4">
             <p className="text-sm text-muted bg-gray-50 p-4 rounded-xl border border-gray-100">
-              {isListingSubmitted 
-                ? "Vendor has completed their profile setup. You can now start the review." 
-                : "Waiting for the vendor to complete their company profile."}
+              If the vendor has completed their profile setup, you can manually start the review process.
             </p>
-            {isListingSubmitted && (
-              <ActionButton 
-                icon={<CheckCircle className="w-4 h-4" />} 
-                label="Start VSM Review" 
-                onClick={handleStartReview} 
-                disabled={isSubmitting} 
-                variant="success" 
-              />
-            )}
+            <ActionButton 
+              icon={<CheckCircle className="w-4 h-4" />} 
+              label="Start VSM Review" 
+              onClick={handleStartReview} 
+              disabled={isSubmitting} 
+              variant="success" 
+            />
           </div>
         ) : null;
 
