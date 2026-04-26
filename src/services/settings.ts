@@ -1,4 +1,4 @@
-import api from './api';
+import { request } from './api';
 
 export interface ActivityLog {
   id: string | number;
@@ -13,7 +13,6 @@ export interface ActivityLog {
 export const settingsService = {
   getLogs: async (date?: string): Promise<ActivityLog[]> => {
     const url = date ? `/core/logs/?date=${date}` : '/core/logs/';
-    const response = await api.get(url);
-    return response.data;
+    return await request<ActivityLog[]>(url);
   },
 };
