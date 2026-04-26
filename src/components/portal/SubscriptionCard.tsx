@@ -13,12 +13,6 @@ interface SubscriptionCardProps {
   isCancelling: boolean;
 }
 
-const STATUS_CONFIG: Record<string, { icon: typeof CheckCircle2; className: string }> = {
-  active: { icon: CheckCircle2, className: 'bg-success/10 text-success' },
-  pending: { icon: Clock, className: 'bg-warning/10 text-warning' },
-  cancelled: { icon: XCircle, className: 'bg-error/10 text-error' },
-};
-
 export default function SubscriptionCard({ subscription, companyName, onEdit, onCancel, onAddBenefit, isCancelling }: SubscriptionCardProps) {
   const { t } = useLanguage();
   const [showCancelConfirm, setShowCancelConfirm] = useState(false);
