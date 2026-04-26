@@ -27,7 +27,7 @@ const PROGRESS_MAP: Record<TicketStatus, number> = {
 };
 
 function getVendorFacingStatus(status: TicketStatus, t: any) {
-  if (status === 'COMPLETED') return (t.vendorPortal as any).onboarding?.statuses?.completed || 'Live / Completed';
+  if (status === 'COMPLETED') return (t.vendorPortal as any).onboarding?.statuses?.completed || 'Completed';
   if (status === 'UNASSIGNED' || status === 'AWAITING_VENDOR_LISTING') return (t.vendorPortal as any).onboarding?.statuses?.actionRequired || 'Action Required';
   return (t.vendorPortal as any).onboarding?.statuses?.inSetup || 'In Setup & Review';
 }

@@ -24,6 +24,8 @@ import BenefitTrackerPage from './features/backoffice/pages/BenefitTrackerPage';
 import BenefitBuildsPage from './features/backoffice/pages/BenefitBuildsPage';
 import OpsVendorSetupPage from './features/backoffice/pages/OpsVendorSetupPage';
 import VendorOnboardingPage from './features/portal/pages/VendorOnboardingPage';
+import UserManagementPage from './features/settings/pages/UserManagementPage';
+import ActivityLogsPage from './features/settings/pages/ActivityLogsPage';
 
 export default function App() {
   return (
@@ -90,7 +92,9 @@ export default function App() {
           </Route>
 
           <Route element={<RoleGuard allowedRoles={['SUPER_ADMIN']} />}>
-            <Route path="settings" element={<div className="p-8 text-center text-muted mt-12 font-medium">System Settings Coming Soon in Phase 5</div>} />
+            <Route path="settings" element={<Navigate to="/backoffice/settings/users" replace />} />
+            <Route path="settings/users" element={<UserManagementPage />} />
+            <Route path="settings/logs" element={<ActivityLogsPage />} />
           </Route>
         </Route>
 
