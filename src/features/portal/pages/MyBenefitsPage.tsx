@@ -2,6 +2,7 @@ import { useEffect, useState, useCallback } from 'react';
 import { Gift, Loader2 } from 'lucide-react';
 import { useLanguage } from '../../../i18n/LanguageContext';
 import vendorsService from '../../../services/vendors';
+import onboardingService from '../../../services/onboarding';
 import BenefitListingModal from '../../../components/portal/BenefitListingModal';
 import BenefitCard from '../components/benefits/BenefitCard';
 import EmptyBenefits from '../components/benefits/EmptyBenefits';
@@ -19,9 +20,20 @@ export default function MyBenefitsPage() {
   const fetchBenefits = useCallback(async () => {
     setIsLoading(true);
     try {
-      const data = await vendorsService.getListingsData();
-      if (data.benefitListing?.benefitOffers) {
-        setBenefits(data.benefitListing.benefitOffers);
+      const [listingsData, trackersData] = await Promise.all([
+        vendorsService.getListingsData(),
+        onboardingService.getBenefitTrackers().catch(() => []) // Gracefully fail if no access
+      ]);
+
+      if (listingsData.benefitListing?.benefitOffers) {
+        const mappedBenefits = listingsData.benefitListing.benefitOffers.map((offer: any, index: number) => {
+          const tracker = trackersData.find(t => t.benefitNumber === index + 1);
+          return {
+            ...offer,
+            trackerStatus: tracker?.status || 'PENDING'
+          };
+        });
+        setBenefits(mappedBenefits);
       } else {
         setBenefits([]);
       }

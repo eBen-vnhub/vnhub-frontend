@@ -7,24 +7,30 @@ interface OnboardingTicketCardProps {
 }
 
 const STATUS_CONFIG: Record<TicketStatus, { icon: typeof Clock; color: string }> = {
-  UNASSIGNED: { icon: Clock, color: 'text-gray-400' },
-  AWAITING_VENDOR_LISTING: { icon: FileText, color: 'text-amber-500' },
-  VSM_REVIEW: { icon: FileText, color: 'text-indigo-500' },
-  READY_FOR_OPS: { icon: Settings, color: 'text-purple-500' },
-  OPS_IN_PROGRESS: { icon: Loader2, color: 'text-purple-500' },
-  VSM_FINAL_REVIEW: { icon: CheckCircle, color: 'text-teal-500' },
-  COMPLETED: { icon: CheckCircle, color: 'text-green-600' },
+  UNASSIGNED: { icon: Clock, color: 'text-amber-500' },
+  AWAITING_VENDOR_LISTING: { icon: Clock, color: 'text-amber-500' },
+  VSM_REVIEW: { icon: Loader2, color: 'text-brand' },
+  READY_FOR_OPS: { icon: Loader2, color: 'text-brand' },
+  OPS_IN_PROGRESS: { icon: Loader2, color: 'text-brand' },
+  VSM_FINAL_REVIEW: { icon: Loader2, color: 'text-brand' },
+  COMPLETED: { icon: CheckCircle, color: 'text-emerald-500' },
 };
 
 const PROGRESS_MAP: Record<TicketStatus, number> = {
-  UNASSIGNED: 5,
+  UNASSIGNED: 10,
   AWAITING_VENDOR_LISTING: 25,
-  VSM_REVIEW: 40,
-  READY_FOR_OPS: 55,
-  OPS_IN_PROGRESS: 70,
-  VSM_FINAL_REVIEW: 85,
+  VSM_REVIEW: 45,
+  READY_FOR_OPS: 60,
+  OPS_IN_PROGRESS: 75,
+  VSM_FINAL_REVIEW: 90,
   COMPLETED: 100,
 };
+
+function getVendorFacingStatus(status: TicketStatus, t: any) {
+  if (status === 'COMPLETED') return (t.vendorPortal as any).onboarding?.statuses?.completed || 'Live / Completed';
+  if (status === 'UNASSIGNED' || status === 'AWAITING_VENDOR_LISTING') return (t.vendorPortal as any).onboarding?.statuses?.actionRequired || 'Action Required';
+  return (t.vendorPortal as any).onboarding?.statuses?.inSetup || 'In Setup & Review';
+}
 
 export default function OnboardingTicketCard({ ticket }: OnboardingTicketCardProps) {
   const { t } = useLanguage();
@@ -50,9 +56,11 @@ export default function OnboardingTicketCard({ ticket }: OnboardingTicketCardPro
           <span className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold ${
             ticket.status === 'COMPLETED'
               ? 'bg-emerald-50 text-emerald-700'
-              : 'bg-gray-50 text-gray-600'
+              : ticket.status === 'UNASSIGNED' || ticket.status === 'AWAITING_VENDOR_LISTING'
+              ? 'bg-amber-50 text-amber-700'
+              : 'bg-brand/10 text-brand'
           }`}>
-            {t.onboarding.status[ticket.status] || ticket.status}
+            {getVendorFacingStatus(ticket.status, t)}
           </span>
         </div>
 
