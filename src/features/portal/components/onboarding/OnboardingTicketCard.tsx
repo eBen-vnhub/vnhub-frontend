@@ -1,6 +1,6 @@
 import { useLanguage } from '../../../../i18n/LanguageContext';
 import type { OnboardingTicket, TicketStatus } from '../../../../types/onboarding';
-import { CheckCircle, Clock, FileText, Loader2, Settings } from 'lucide-react';
+import { CheckCircle, Clock, Loader2 } from 'lucide-react';
 
 interface OnboardingTicketCardProps {
   ticket: OnboardingTicket;

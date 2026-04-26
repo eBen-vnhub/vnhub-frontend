@@ -27,7 +27,7 @@ export default function MyBenefitsPage() {
 
       if (listingsData.benefitListing?.benefitOffers) {
         const mappedBenefits = listingsData.benefitListing.benefitOffers.map((offer: any, index: number) => {
-          const tracker = trackersData.find(t => t.benefitNumber === index + 1);
+          const tracker = trackersData.find(t => (t as any).benefit_number === index + 1);
           return {
             ...offer,
             trackerStatus: tracker?.status || 'PENDING'
