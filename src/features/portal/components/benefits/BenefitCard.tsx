@@ -9,9 +9,21 @@ interface BenefitCardProps {
 export default function BenefitCard({ benefit, onClick }: BenefitCardProps) {
   const { t } = useLanguage();
 
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case 'LIVE': return 'bg-emerald-50 text-emerald-700 border-emerald-200';
+      case 'ACTION_REQUIRED': return 'bg-amber-50 text-amber-700 border-amber-200';
+      default: return 'bg-brand/10 text-brand border-brand/20';
+    }
+  };
 
-
-
+  const getStatusLabel = (status: string) => {
+    switch (status) {
+      case 'LIVE': return (t.vendorPortal as any).onboarding?.statuses?.completed || 'Live';
+      case 'ACTION_REQUIRED': return (t.vendorPortal as any).onboarding?.statuses?.actionRequired || 'Action Required';
+      default: return (t.vendorPortal as any).onboarding?.statuses?.inSetup || 'In Review';
+    }
+  };
   return (
     <div 
       className="bg-surface border border-border rounded-2xl flex flex-col hover:shadow-lg hover:-translate-y-1 hover:border-brand/30 transition-all duration-300 cursor-pointer group overflow-hidden"
@@ -21,9 +33,14 @@ export default function BenefitCard({ benefit, onClick }: BenefitCardProps) {
       
       <div className="p-6 flex flex-col flex-grow">
         <div className="flex justify-between items-start mb-4 gap-3">
-          <h3 className="text-xl font-extrabold text-main line-clamp-2 group-hover:text-brand transition-colors">
+          <h3 className="text-xl font-extrabold text-main line-clamp-2 group-hover:text-brand transition-colors flex-1">
             {benefit.benefitName || (t.portal as any).myBenefits?.unnamedBenefit || 'Unnamed Benefit'}
           </h3>
+          {benefit.trackerStatus && (
+            <span className={`px-2.5 py-1 text-[10px] font-bold rounded-full border whitespace-nowrap ${getStatusColor(benefit.trackerStatus)}`}>
+              {getStatusLabel(benefit.trackerStatus)}
+            </span>
+          )}
         </div>
 
         <div className="flex flex-wrap items-center gap-2 mb-4 text-[11px] font-semibold text-muted-foreground">

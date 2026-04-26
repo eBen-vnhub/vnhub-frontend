@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useAuth } from '../../../contexts/AuthContext';
 import { useVendors } from '../../../contexts/VendorsContext';
 import { useLanguage } from '../../../i18n/LanguageContext';
+import { useCompanyProfile } from '../hooks/useCompanyProfile';
 import SubscriptionCard from '../../../components/portal/SubscriptionCard';
 import InlineSubscriptionModal from '../../../components/portal/InlineSubscriptionModal';
 import VendorListingModal from '../../../components/portal/VendorListingModal';
@@ -32,6 +33,9 @@ export default function SubscriptionsPage() {
   const [modal, setModal] = useState<ModalState>({ type: 'none' });
   const [isSaving, setIsSaving] = useState(false);
   const [cancellingId, setCancellingId] = useState<number | null>(null);
+
+  const { listingsData } = useCompanyProfile(vendor || ({} as any), () => {});
+  const hasVendorListing = !!listingsData?.vendorListing;
 
   const closeModal = () => setModal({ type: 'none' });
 
@@ -152,6 +156,7 @@ export default function SubscriptionsPage() {
       <PendingActionsSection
         subscriptions={subscriptions}
         onAction={handlePendingAction}
+        hasVendorListing={hasVendorListing}
       />
 
       <section>
@@ -189,7 +194,7 @@ export default function SubscriptionsPage() {
           </div>
         ) : (
           <div className="grid grid-cols-1 gap-6">
-            {subscriptions.map((sub) => (
+            {subscriptions.filter(s => s.status !== 'CANCELLED').map((sub) => (
               <SubscriptionCard
                 key={sub.id}
                 subscription={sub}
