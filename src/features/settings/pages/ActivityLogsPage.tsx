@@ -3,8 +3,9 @@ import { useLanguage } from '../../../i18n/LanguageContext';
 import SettingsTabs from '../components/SettingsTabs';
 import PageHeader from '../components/PageHeader';
 import ActivityLogsList from '../components/logs/ActivityLogsList';
-import { ActivitySquare, Search, Filter } from 'lucide-react';
-import { settingsService, ActivityLog } from '../../../services/settings';
+import { ActivitySquare, Search } from 'lucide-react';
+import { settingsService } from '../../../services/settings';
+import type { ActivityLog } from '../../../services/settings';
 
 export default function ActivityLogsPage() {
   const { t } = useLanguage();
@@ -82,7 +83,7 @@ export default function ActivityLogsPage() {
                 onClick={() => setDateFilter('')}
                 className="text-xs text-brand font-bold hover:underline"
               >
-                {t.common?.clear || 'Clear'}
+                Clear
               </button>
             )}
           </div>
