@@ -379,6 +379,13 @@ export const en = {
     },
   },
   backoffice: {
+    requestUpdateModal: {
+      title: 'Request Listing Update',
+      warning: 'A notification will be sent to the vendor requesting an update, including the notes below.',
+      notesLabel: 'Notes for Vendor (Required)',
+      notesPlaceholder: 'e.g., Please upload a high-quality PNG logo...',
+      sendRequest: 'Send Request',
+    },
     sidebar: {
       adminSection: "VNHub Administration",
       vsmSection: "Vendor Success Management",
@@ -386,9 +393,10 @@ export const en = {
       dashboard: "Dashboard",
       vendorsDirectory: "Partner Registry",
       systemSettings: "System Settings",
-      myTasks: "Onboarding Workspace",
-      tracker: "Operations Tracker",
-      pipeline: "Technical Pipeline",
+      myTasks: "Vendor Onboarding Workspace",
+      vendorSetupWorkspace: "Vendor Setup Workspace",
+      tracker: "Benefit Tracker",
+      pipeline: "Benefit Builds Workspace",
     },
     directory: {
       title: 'Partner Registry',

@@ -7,6 +7,7 @@ import { useLanguage } from '../../../i18n/LanguageContext';
 import { useAuth } from '../../../contexts/AuthContext';
 import ListingsAggregatedView from '../components/vendors/ListingsAggregatedView';
 import EditTeamMemberModal from '../components/vendors/EditTeamMemberModal';
+import RequestListingUpdateModal from '../components/onboarding/RequestListingUpdateModal';
 import onboardingService from '../../../services/onboarding';
 import type { BackofficeTeamMember } from '../../../services/backoffice';
 import type { BenefitTracker } from '../../../types/onboarding';
@@ -51,6 +52,7 @@ export default function VendorDetailPage() {
   const [editingMember, setEditingMember] = useState<BackofficeTeamMember | null>(null);
   const [benefits, setBenefits] = useState<BenefitTracker[]>([]);
   const [isRequestingUpdate, setIsRequestingUpdate] = useState(false);
+  const [isRequestModalOpen, setIsRequestModalOpen] = useState(false);
 
   const fetchBenefits = useCallback(async () => {
     if (!id) return;
@@ -67,12 +69,13 @@ export default function VendorDetailPage() {
     }
   }, [id, fetchVendorDetail, fetchBenefits]);
 
-  const handleRequestListingUpdate = async () => {
+  const handleRequestListingUpdate = async (feedback: string) => {
     if (!id) return;
     setIsRequestingUpdate(true);
     try {
-      await onboardingService.requestVendorListingUpdate(Number(id));
+      await onboardingService.requestVendorListingUpdate(Number(id), feedback);
       toast.success(t.benefitTracker.toast.listingUpdateRequested);
+      setIsRequestModalOpen(false);
     } catch {
       toast.error(t.benefitTracker.toast.listingUpdateFailed);
     } finally {
@@ -114,7 +117,7 @@ export default function VendorDetailPage() {
 
         {canManage && (
           <button
-            onClick={handleRequestListingUpdate}
+            onClick={() => setIsRequestModalOpen(true)}
             disabled={isRequestingUpdate}
             className="inline-flex items-center gap-2 px-4 py-2 bg-amber-50 text-amber-700 border border-amber-200 rounded-xl text-sm font-semibold hover:bg-amber-100 transition-colors disabled:opacity-50"
           >
@@ -123,6 +126,13 @@ export default function VendorDetailPage() {
           </button>
         )}
       </div>
+
+      <RequestListingUpdateModal
+        isOpen={isRequestModalOpen}
+        onClose={() => setIsRequestModalOpen(false)}
+        onSubmit={handleRequestListingUpdate}
+        companyName={vendorDetail?.companyName || ''}
+      />
 
       <div className="bg-surface rounded-3xl p-6 sm:p-8 shadow-sm border border-border">
         <div className="flex flex-col sm:flex-row items-center gap-6">

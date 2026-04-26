@@ -379,6 +379,13 @@ export const ar = {
     },
   },
   backoffice: {
+    requestUpdateModal: {
+      title: 'طلب تحديث البيانات',
+      warning: 'سيتم إرسال إشعار للمورد يطلب منه تحديث بياناته مع إرفاق الملاحظات التالية.',
+      notesLabel: 'ملاحظات للمورد (إجباري)',
+      notesPlaceholder: 'مثال: يرجى رفع اللوجو بصيغة PNG وبجودة عالية...',
+      sendRequest: 'إرسال الطلب',
+    },
     sidebar: {
       adminSection: "إدارة VNHub",
       vsmSection: "إدارة نجاح الموردين",
@@ -386,9 +393,10 @@ export const ar = {
       dashboard: "لوحة التحكم",
       vendorsDirectory: "سجل الشركاء",
       systemSettings: "إعدادات النظام",
-      myTasks: "مساحة عمل التسجيل",
-      tracker: "متتبع العمليات التقنية",
-      pipeline: "مسار العمليات التقنية",
+      myTasks: "مساحة تأسيس الموردين",
+      vendorSetupWorkspace: "مساحة التجهيز الفني",
+      tracker: "متتبع العروض",
+      pipeline: "مساحة بناء العروض",
     },
     directory: {
       title: 'سجل الشركاء',
