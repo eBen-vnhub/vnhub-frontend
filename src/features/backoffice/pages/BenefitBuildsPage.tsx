@@ -9,7 +9,7 @@ export default function BenefitBuildsPage() {
       <BenefitBoard
         title={t.backoffice.sidebar.benefitBuilds}
         subtitle={t.onboarding.opsSetupSubtitle}
-        columns={['QUEUE', 'BUILDING', 'REVIEW', 'GO_LIVE']}
+        columns={['QUEUE', 'IN_PROGRESS', 'TEST_REVIEW', 'GO_LIVE', 'DONE']}
       />
     </div>
   );

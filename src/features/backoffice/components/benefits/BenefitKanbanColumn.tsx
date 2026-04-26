@@ -11,9 +11,10 @@ interface BenefitKanbanColumnProps {
 
 const COLUMN_ACCENT: Record<string, string> = {
   QUEUE: 'bg-gray-400',
-  BUILDING: 'bg-indigo-400',
-  REVIEW: 'bg-purple-400',
-  GO_LIVE: 'bg-emerald-400',
+  IN_PROGRESS: 'bg-indigo-400',
+  TEST_REVIEW: 'bg-purple-400',
+  GO_LIVE: 'bg-teal-400',
+  DONE: 'bg-emerald-400',
 };
 
 export default function BenefitKanbanColumn({ columnKey, statuses, benefits, onBenefitClick }: BenefitKanbanColumnProps) {

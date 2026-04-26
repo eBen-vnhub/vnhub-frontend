@@ -43,6 +43,15 @@ export default function TicketDetailModal({ ticket, onClose, onUpdate }: TicketD
     }
   };
 
+  const handleChecklistChange = async (field: string, checked: boolean) => {
+    try {
+      const updated = await onboardingService.updateChecklist(ticket.id, { [field]: checked });
+      onUpdate(updated);
+    } catch {
+      toast.error('Failed to update checklist');
+    }
+  };
+
   const handleAssign = () =>
     handleAction(
       () => onboardingService.assignTicket(ticket.id),
@@ -155,8 +164,24 @@ export default function TicketDetailModal({ ticket, onClose, onUpdate }: TicketD
         ) : null;
 
       case 'OPS_IN_PROGRESS':
+        const allChecked = ticket.setup_org && ticket.setup_location && ticket.setup_account && ticket.setup_admin;
         return isOps ? (
-          <ActionButton icon={<CheckCircle className="w-4 h-4" />} label={t.onboarding.actions.markSetupComplete} onClick={handleOpsComplete} disabled={isSubmitting} variant="success" />
+          <div className="space-y-4">
+            <div className="bg-gray-50 border border-gray-200 rounded-xl p-4 space-y-3">
+              <h4 className="text-sm font-bold text-main mb-2">Technical Setup Checklist</h4>
+              <ChecklistItem label="Create Organization in ePN" checked={ticket.setup_org} onChange={(c) => handleChecklistChange('setup_org', c)} disabled={isSubmitting} />
+              <ChecklistItem label="Setup Location / Branch" checked={ticket.setup_location} onChange={(c) => handleChecklistChange('setup_location', c)} disabled={isSubmitting} />
+              <ChecklistItem label="Create Financial Account" checked={ticket.setup_account} onChange={(c) => handleChecklistChange('setup_account', c)} disabled={isSubmitting} />
+              <ChecklistItem label="Generate Admin Credentials" checked={ticket.setup_admin} onChange={(c) => handleChecklistChange('setup_admin', c)} disabled={isSubmitting} />
+            </div>
+            <ActionButton 
+              icon={<CheckCircle className="w-4 h-4" />} 
+              label={t.onboarding.actions.markSetupComplete} 
+              onClick={handleOpsComplete} 
+              disabled={isSubmitting || !allChecked} 
+              variant="success" 
+            />
+          </div>
         ) : null;
 
       case 'VSM_FINAL_REVIEW':
@@ -228,5 +253,22 @@ function DetailField({ label, value }: { label: string; value: string | null | u
       <p className="text-xs font-semibold text-muted mb-1">{label}</p>
       <p className="text-sm font-bold text-main">{value || '—'}</p>
     </div>
+  );
+}
+
+function ChecklistItem({ label, checked, onChange, disabled }: { label: string; checked: boolean; onChange: (c: boolean) => void; disabled: boolean }) {
+  return (
+    <label className={`flex items-center gap-3 p-2 rounded-lg cursor-pointer transition-colors ${checked ? 'bg-emerald-50/50' : 'hover:bg-gray-100/50'} ${disabled ? 'opacity-50 pointer-events-none' : ''}`}>
+      <input 
+        type="checkbox" 
+        checked={checked} 
+        onChange={(e) => onChange(e.target.checked)} 
+        disabled={disabled}
+        className="w-4 h-4 text-brand rounded border-gray-300 focus:ring-brand"
+      />
+      <span className={`text-sm font-medium ${checked ? 'text-emerald-700 line-through opacity-70' : 'text-main'}`}>
+        {label}
+      </span>
+    </label>
   );
 }

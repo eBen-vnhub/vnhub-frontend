@@ -7,7 +7,7 @@ export default function AdminOnboardingPage() {
     <OnboardingBoard
       title={t.onboarding.pageTitle}
       subtitle={t.onboarding.pageSubtitle}
-      columns={['INTAKE', 'VENDOR_INPUT', 'HANDOVER', 'SETUP', 'DONE']}
+      columns={['QUEUE', 'DATA_COLLECTION', 'TECHNICAL_SETUP', 'FINAL_REVIEW', 'DONE']}
     />
   );
 }
