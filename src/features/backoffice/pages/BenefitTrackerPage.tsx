@@ -1,13 +1,16 @@
 import { useLanguage } from '../../../i18n/LanguageContext';
-import OnboardingBoard from '../components/onboarding/OnboardingBoard';
+import BenefitBoard from '../components/benefits/BenefitBoard';
 
 export default function BenefitTrackerPage() {
   const { t } = useLanguage();
+
   return (
-    <OnboardingBoard
-      title={t.onboarding.trackerTitle || 'Operations Tracker'}
-      subtitle={t.onboarding.trackerSubtitle || 'Monitor technical progress of your vendors.'}
-      columns={['OPS_PIPELINE', 'TESTING']}
-    />
+    <div className="animate-in fade-in slide-in-from-bottom-4 duration-700">
+      <BenefitBoard
+        title={t.onboarding.trackerTitle}
+        subtitle={t.onboarding.trackerSubtitle}
+        columns={['QUEUE', 'BUILDING', 'REVIEW', 'GO_LIVE']}
+      />
+    </div>
   );
 }

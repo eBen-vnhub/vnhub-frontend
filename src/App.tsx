@@ -22,6 +22,7 @@ import VendorDetailPage from './features/backoffice/pages/VendorDetailPage';
 import OnboardingPage from './features/backoffice/pages/OnboardingPage';
 import BenefitTrackerPage from './features/backoffice/pages/BenefitTrackerPage';
 import BenefitBuildsPage from './features/backoffice/pages/BenefitBuildsPage';
+import OpsVendorSetupPage from './features/backoffice/pages/OpsVendorSetupPage';
 import VendorOnboardingPage from './features/portal/pages/VendorOnboardingPage';
 
 export default function App() {
@@ -77,12 +78,13 @@ export default function App() {
             <Route path="onboarding" element={<OnboardingPage />} />
           </Route>
 
-          <Route element={<RoleGuard allowedRoles={['VSM']} />}>
-            <Route path="operations-tracker" element={<BenefitTrackerPage />} />
+          <Route element={<RoleGuard allowedRoles={['VSM', 'SUPER_ADMIN', 'ADMIN']} />}>
+            <Route path="benefit-tracker" element={<BenefitTrackerPage />} />
           </Route>
 
           <Route element={<RoleGuard allowedRoles={['SUPER_ADMIN', 'OPERATIONS']} />}>
-            <Route path="pipeline" element={<BenefitBuildsPage />} />
+            <Route path="vendor-setup" element={<OpsVendorSetupPage />} />
+            <Route path="benefit-builds" element={<BenefitBuildsPage />} />
           </Route>
 
           <Route element={<RoleGuard allowedRoles={['SUPER_ADMIN']} />}>

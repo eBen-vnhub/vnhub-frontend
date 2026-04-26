@@ -1,35 +1,34 @@
 export type TicketStatus =
   | 'UNASSIGNED'
   | 'ASSIGNED_TO_VSM'
-  | 'AWAITING_VENDOR_FORMS'
+  | 'AWAITING_VENDOR_LISTING'
   | 'VSM_REVIEW'
   | 'READY_FOR_OPS'
-  | 'OPS_PROCESSING'
-  | 'IN_TESTING'
-  | 'OPS_REVISION'
-  | 'PENDING_LIVE_LINK'
-  | 'AWAITING_FINAL_VSM_APPROVAL'
+  | 'OPS_IN_PROGRESS'
+  | 'VSM_FINAL_REVIEW'
   | 'COMPLETED';
 
 export type BenefitStatus =
   | 'PENDING'
-  | 'VSM_REVIEW'
   | 'ASSIGNED_TO_OPS'
   | 'BUILDING'
-  | 'TESTING'
+  | 'IN_TESTING'
+  | 'REVISION'
+  | 'PENDING_LIVE'
   | 'LIVE';
 
 export interface OnboardingTicket {
   id: string;
+  vendor: number;
+  vendor_id: number;
   vendor_name: string;
+  subscription: number;
   subscription_plan: string;
   status: TicketStatus;
   assigned_vsm: string | null;
   assigned_vsm_name: string | null;
   assigned_ops: string | null;
   assigned_ops_name: string | null;
-  test_link: string | null;
-  live_link: string | null;
   internal_notes: string;
   created_at: string;
   updated_at: string;
@@ -38,6 +37,7 @@ export interface OnboardingTicket {
 export interface BenefitTracker {
   id: string;
   vendor: number;
+  vendor_id: number;
   vendor_name: string;
   subscription: number;
   subscription_plan: string;
@@ -45,6 +45,8 @@ export interface BenefitTracker {
   status: BenefitStatus;
   assigned_ops: string | null;
   assigned_ops_name: string | null;
+  assigned_vsm: string | null;
+  assigned_vsm_name: string | null;
   test_link: string | null;
   live_link: string | null;
   internal_notes: string;
@@ -62,10 +64,17 @@ export interface UploadLinkPayload {
   internal_notes?: string;
 }
 
-export const KANBAN_COLUMNS: Record<string, TicketStatus[]> = {
+export const ONBOARDING_COLUMNS: Record<string, TicketStatus[]> = {
   INTAKE: ['UNASSIGNED', 'ASSIGNED_TO_VSM'],
-  VENDOR_INPUT: ['AWAITING_VENDOR_FORMS', 'VSM_REVIEW'],
-  OPS_PIPELINE: ['READY_FOR_OPS', 'OPS_PROCESSING', 'OPS_REVISION'],
-  TESTING: ['IN_TESTING', 'PENDING_LIVE_LINK'],
-  FINAL: ['AWAITING_FINAL_VSM_APPROVAL', 'COMPLETED'],
+  VENDOR_INPUT: ['AWAITING_VENDOR_LISTING', 'VSM_REVIEW'],
+  HANDOVER: ['READY_FOR_OPS'],
+  SETUP: ['OPS_IN_PROGRESS', 'VSM_FINAL_REVIEW'],
+  DONE: ['COMPLETED'],
+};
+
+export const BENEFIT_COLUMNS: Record<string, BenefitStatus[]> = {
+  QUEUE: ['PENDING', 'ASSIGNED_TO_OPS'],
+  BUILDING: ['BUILDING'],
+  REVIEW: ['IN_TESTING', 'REVISION'],
+  GO_LIVE: ['PENDING_LIVE', 'LIVE'],
 };

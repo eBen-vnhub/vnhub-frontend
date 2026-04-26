@@ -11,37 +11,30 @@ const onboardingService = {
       body: vsmId ? JSON.stringify({ vsm_id: vsmId }) : undefined,
     }),
 
+  assignTicketOps: (ticketId: string, opsUserId: number) =>
+    request<OnboardingTicket>(`/onboarding/tickets/${ticketId}/assign-ops/`, {
+      method: 'POST',
+      body: JSON.stringify({ ops_user_id: opsUserId }),
+    }),
+
   sendForms: (ticketId: string) =>
     request<OnboardingTicket>(`/onboarding/tickets/${ticketId}/send-forms/`, {
       method: 'POST',
     }),
 
-  reviewForms: (ticketId: string, payload: ReviewPayload) =>
+  reviewListing: (ticketId: string, payload: ReviewPayload) =>
     request<OnboardingTicket>(`/onboarding/tickets/${ticketId}/review/`, {
       method: 'POST',
       body: JSON.stringify(payload),
     }),
 
-  uploadTestLink: (ticketId: string, payload: UploadLinkPayload) =>
-    request<OnboardingTicket>(`/onboarding/tickets/${ticketId}/ops-upload-test-link/`, {
+  opsCompleteSetup: (ticketId: string) =>
+    request<OnboardingTicket>(`/onboarding/tickets/${ticketId}/ops-complete/`, {
       method: 'POST',
-      body: JSON.stringify(payload),
     }),
 
-  uploadLiveLink: (ticketId: string, payload: UploadLinkPayload) =>
-    request<OnboardingTicket>(`/onboarding/tickets/${ticketId}/ops-upload-live-link/`, {
-      method: 'POST',
-      body: JSON.stringify(payload),
-    }),
-
-  vendorRespondTestLink: (ticketId: string, payload: ReviewPayload) =>
-    request<OnboardingTicket>(`/onboarding/tickets/${ticketId}/vendor-respond/`, {
-      method: 'POST',
-      body: JSON.stringify(payload),
-    }),
-
-  goLive: (ticketId: string) =>
-    request<OnboardingTicket>(`/onboarding/tickets/${ticketId}/go-live/`, {
+  vsmConfirmCompletion: (ticketId: string) =>
+    request<OnboardingTicket>(`/onboarding/tickets/${ticketId}/vsm-confirm/`, {
       method: 'POST',
     }),
 
@@ -58,6 +51,12 @@ const onboardingService = {
 
   uploadBenefitTestLink: (benefitId: string, payload: UploadLinkPayload) =>
     request<BenefitTracker>(`/onboarding/benefits/${benefitId}/upload-test-link/`, {
+      method: 'POST',
+      body: JSON.stringify(payload),
+    }),
+
+  reviewBenefitTest: (benefitId: string, payload: ReviewPayload) =>
+    request<BenefitTracker>(`/onboarding/benefits/${benefitId}/review-test/`, {
       method: 'POST',
       body: JSON.stringify(payload),
     }),
