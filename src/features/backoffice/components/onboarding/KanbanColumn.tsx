@@ -12,6 +12,7 @@ interface KanbanColumnProps {
 const COLUMN_ACCENT: Record<string, string> = {
   QUEUE: 'bg-gray-400',
   DATA_COLLECTION: 'bg-amber-400',
+  REVIEW: 'bg-purple-400',
   TECHNICAL_SETUP: 'bg-indigo-400',
   FINAL_REVIEW: 'bg-cyan-400',
   DONE: 'bg-emerald-400',

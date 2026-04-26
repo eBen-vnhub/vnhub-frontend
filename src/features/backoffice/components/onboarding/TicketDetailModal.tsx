@@ -59,12 +59,6 @@ export default function TicketDetailModal({ ticket, onClose, onUpdate }: TicketD
       t.onboarding.toast.assignError,
     );
 
-  const handleSendForms = () =>
-    handleAction(
-      () => onboardingService.sendForms(ticket.id),
-      t.onboarding.toast.sendFormsSuccess,
-      t.onboarding.toast.sendFormsError,
-    );
 
   const handleApprove = () =>
     handleAction(
@@ -125,10 +119,6 @@ export default function TicketDetailModal({ ticket, onClose, onUpdate }: TicketD
           <ActionButton icon={<User className="w-4 h-4" />} label={t.onboarding.actions.assignToMe} onClick={handleAssign} disabled={isSubmitting} />
         ) : null;
 
-      case 'ASSIGNED_TO_VSM':
-        return isVsm ? (
-          <ActionButton icon={<Send className="w-4 h-4" />} label={t.onboarding.actions.sendForms} onClick={handleSendForms} disabled={isSubmitting} />
-        ) : null;
 
       case 'VSM_REVIEW':
         return isVsm ? (

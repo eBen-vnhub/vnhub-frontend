@@ -17,11 +17,6 @@ const onboardingService = {
       body: JSON.stringify({ ops_user_id: opsUserId }),
     }),
 
-  sendForms: (ticketId: string) =>
-    request<OnboardingTicket>(`/onboarding/tickets/${ticketId}/send-forms/`, {
-      method: 'POST',
-    }),
-
   reviewListing: (ticketId: string, payload: ReviewPayload) =>
     request<OnboardingTicket>(`/onboarding/tickets/${ticketId}/review/`, {
       method: 'POST',
@@ -55,6 +50,11 @@ const onboardingService = {
       body: JSON.stringify({ ops_user_id: opsUserId }),
     }),
 
+  startBuildingBenefit: (benefitId: string) =>
+    request<BenefitTracker>(`/onboarding/benefits/${benefitId}/start-building/`, {
+      method: 'POST',
+    }),
+
   uploadBenefitTestLink: (benefitId: string, payload: UploadLinkPayload) =>
     request<BenefitTracker>(`/onboarding/benefits/${benefitId}/upload-test-link/`, {
       method: 'POST',
@@ -69,6 +69,12 @@ const onboardingService = {
 
   uploadBenefitLiveLink: (benefitId: string, payload: UploadLinkPayload) =>
     request<BenefitTracker>(`/onboarding/benefits/${benefitId}/upload-live-link/`, {
+      method: 'POST',
+      body: JSON.stringify(payload),
+    }),
+
+  reviewBenefitLive: (benefitId: string, payload: ReviewPayload) =>
+    request<BenefitTracker>(`/onboarding/benefits/${benefitId}/review-live/`, {
       method: 'POST',
       body: JSON.stringify(payload),
     }),

@@ -21,6 +21,7 @@ const STATUS_COLORS: Record<string, string> = {
   IN_TESTING: 'bg-purple-50 text-purple-700',
   REVISION: 'bg-red-50 text-red-700',
   PENDING_LIVE: 'bg-amber-50 text-amber-700',
+  LIVE_REVIEW: 'bg-orange-50 text-orange-700',
   LIVE: 'bg-emerald-50 text-emerald-700',
 };
 
@@ -92,6 +93,27 @@ export default function BenefitDetailModal({ benefit, onClose, onUpdate }: Benef
       t.benefitTracker.toast.reviewFailed,
     );
 
+  const handleStartBuilding = () =>
+    handleAction(
+      () => onboardingService.startBuildingBenefit(benefit.id),
+      t.benefitTracker.toast.assignOpsSuccess,
+      t.benefitTracker.toast.assignOpsFailed,
+    );
+
+  const handleApproveLive = () =>
+    handleAction(
+      () => onboardingService.reviewBenefitLive(benefit.id, { approved: true }),
+      t.benefitTracker.toast.reviewSuccess,
+      t.benefitTracker.toast.reviewFailed,
+    );
+
+  const handleRejectLive = () =>
+    handleAction(
+      () => onboardingService.reviewBenefitLive(benefit.id, { approved: false, feedback }),
+      t.benefitTracker.toast.reviewSuccess,
+      t.benefitTracker.toast.reviewFailed,
+    );
+
   const renderActions = () => {
     switch (benefit.status) {
       case 'PENDING':
@@ -100,6 +122,17 @@ export default function BenefitDetailModal({ benefit, onClose, onUpdate }: Benef
         ) : null;
 
       case 'ASSIGNED_TO_OPS':
+        return isOps ? (
+          <button
+            onClick={handleStartBuilding}
+            disabled={isSubmitting}
+            className="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-brand text-white rounded-xl text-sm font-semibold hover:bg-brand-hover transition-colors disabled:opacity-50"
+          >
+            <Play className="w-4 h-4" />
+            {t.benefitTracker.actions.startBuilding}
+          </button>
+        ) : null;
+
       case 'BUILDING':
       case 'REVISION':
         return isOps ? (
@@ -197,6 +230,58 @@ export default function BenefitDetailModal({ benefit, onClose, onUpdate }: Benef
               <Play className="w-4 h-4" />
               {t.benefitTracker.actions.uploadLiveLink}
             </button>
+          </div>
+        ) : null;
+
+      case 'LIVE_REVIEW':
+        return isVsm ? (
+          <div className="space-y-3">
+            {showRejectForm ? (
+              <>
+                <textarea
+                  value={feedback}
+                  onChange={e => setFeedback(e.target.value)}
+                  placeholder={t.onboarding.labels.feedbackPlaceholder}
+                  className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-brand/20 focus:border-brand outline-none transition-all resize-none"
+                  rows={3}
+                />
+                <div className="flex gap-2">
+                  <button
+                    onClick={handleRejectLive}
+                    disabled={isSubmitting || !feedback}
+                    className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 bg-red-500 text-white rounded-xl text-sm font-semibold hover:bg-red-600 transition-colors disabled:opacity-50"
+                  >
+                    <XCircle className="w-4 h-4" />
+                    {t.benefitTracker.actions.rejectLive}
+                  </button>
+                  <button
+                    onClick={() => setShowRejectForm(false)}
+                    className="px-4 py-2.5 text-sm font-medium text-muted hover:text-main transition-colors"
+                  >
+                    {t.common.cancel}
+                  </button>
+                </div>
+              </>
+            ) : (
+              <div className="flex gap-2">
+                <button
+                  onClick={handleApproveLive}
+                  disabled={isSubmitting}
+                  className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 bg-emerald-500 text-white rounded-xl text-sm font-semibold hover:bg-emerald-600 transition-colors disabled:opacity-50"
+                >
+                  <CheckCircle className="w-4 h-4" />
+                  {t.benefitTracker.actions.approveLive}
+                </button>
+                <button
+                  onClick={() => setShowRejectForm(true)}
+                  disabled={isSubmitting}
+                  className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 bg-red-50 text-red-600 border border-red-200 rounded-xl text-sm font-semibold hover:bg-red-100 transition-colors disabled:opacity-50"
+                >
+                  <XCircle className="w-4 h-4" />
+                  {t.benefitTracker.actions.rejectLive}
+                </button>
+              </div>
+            )}
           </div>
         ) : null;
 

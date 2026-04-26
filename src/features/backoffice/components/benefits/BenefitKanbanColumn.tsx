@@ -13,7 +13,7 @@ const COLUMN_ACCENT: Record<string, string> = {
   QUEUE: 'bg-gray-400',
   IN_PROGRESS: 'bg-indigo-400',
   TEST_REVIEW: 'bg-purple-400',
-  GO_LIVE: 'bg-teal-400',
+  LIVE_REVIEW: 'bg-teal-400',
   DONE: 'bg-emerald-400',
 };
 
