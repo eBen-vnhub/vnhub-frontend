@@ -14,6 +14,7 @@ interface GroupedBenefits {
   benefits: any[];
 }
 export default function MyBenefitsPage() {
+  const { t } = useLanguage();
   const [benefits, setBenefits] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 const [selectedBenefit, setSelectedBenefit] = useState<any>(null);
@@ -119,7 +120,7 @@ return (
       <EmptyBenefits />
     ) : (
       <div className="space-y-8">
-        {groupedBenefits.map((group) => (
+        {groupedBenefits.map((group: GroupedBenefits) => (
           <div key={group.subscriptionId} className="bg-surface border border-border rounded-3xl overflow-hidden shadow-sm">
             <div className="bg-surface-hover px-6 py-4 border-b border-border flex items-center justify-between">
               <h2 className="text-lg font-bold text-main flex items-center gap-2">

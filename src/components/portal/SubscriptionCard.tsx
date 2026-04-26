@@ -24,7 +24,6 @@ export default function SubscriptionCard({ subscription, companyName, onEdit, on
   const [showCancelConfirm, setShowCancelConfirm] = useState(false);
   const statusKey = subscription.status?.toLowerCase() || 'pending';
   const config = STATUS_CONFIG[statusKey] || STATUS_CONFIG.pending;
-  const StatusIcon = config.icon;
   const isCancelled = statusKey === 'cancelled';
   const formattedDate = subscription.createdAt
     ? new Date(subscription.createdAt).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })
