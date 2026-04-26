@@ -6,13 +6,28 @@ import VendorListingModal from '../../../components/portal/VendorListingModal';
 import VendorListingHeader from '../components/vendor-listing/VendorListingHeader';
 import VendorListingDetails from '../components/vendor-listing/VendorListingDetails';
 import VendorListingEmptyState from '../components/vendor-listing/VendorListingEmptyState';
+import vendorsService from '../../../services/vendors';
 
 export default function VendorListingPage() {
-  const { vendor, isLoading: isVendorLoading, error: vendorError, fetchDashboardData } = useVendors();
+  const { vendor, subscriptions, isLoading: isVendorLoading, error: vendorError, fetchDashboardData, updateSubscriptionInContext } = useVendors();
   const { t } = useLanguage();
   const [isVendorModalOpen, setIsVendorModalOpen] = useState(false);
 
   const { listingsData, isLoadingListings, canEditCompanyProfile } = useCompanyProfile(vendor || ({} as any), () => {});
+
+  const handleSuccess = async () => {
+    const pendingSubs = subscriptions.filter(s => s.nextStep === 'VENDOR_LISTING' && s.status !== 'CANCELLED');
+    for (const sub of pendingSubs) {
+      try {
+        const res = await vendorsService.completeSubscriptionStep(sub.id, { stepType: 'VENDOR_LISTING' });
+        updateSubscriptionInContext(res.subscription);
+      } catch (err) {
+        console.error('Failed to auto-complete vendor listing step', err);
+      }
+    }
+    await fetchDashboardData();
+    setIsVendorModalOpen(false);
+  };
 
   if (isVendorLoading || isLoadingListings) {
     return (
@@ -67,7 +82,7 @@ export default function VendorListingPage() {
       <VendorListingModal
         isOpen={isVendorModalOpen}
         onClose={() => setIsVendorModalOpen(false)}
-        onSuccess={() => fetchDashboardData()}
+        onSuccess={handleSuccess}
       />
     </div>
   );

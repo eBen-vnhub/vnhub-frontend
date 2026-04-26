@@ -13,9 +13,10 @@ interface PendingAction {
 interface PendingActionsSectionProps {
   subscriptions: Subscription[];
   onAction: (actionType: string, subscriptionId?: number) => void;
+  hasVendorListing?: boolean;
 }
 
-function usePendingActions(subscriptions: Subscription[]): PendingAction[] {
+function usePendingActions(subscriptions: Subscription[], hasVendorListing?: boolean): PendingAction[] {
   const { t } = useLanguage();
 
   const vendorPendingSub = subscriptions.find(
@@ -28,7 +29,7 @@ function usePendingActions(subscriptions: Subscription[]): PendingAction[] {
 
   const actions: PendingAction[] = [];
 
-  if (vendorPendingSub) {
+  if (vendorPendingSub && !hasVendorListing) {
     actions.push({
       type: 'VENDOR_LISTING',
       label: (t.portal as any).pendingActions?.vendorListing || 'Complete Vendor Listing',
@@ -51,9 +52,9 @@ function usePendingActions(subscriptions: Subscription[]): PendingAction[] {
   return actions;
 }
 
-export default function PendingActionsSection({ subscriptions, onAction }: PendingActionsSectionProps) {
+export default function PendingActionsSection({ subscriptions, onAction, hasVendorListing }: PendingActionsSectionProps) {
   const { t } = useLanguage();
-  const actions = usePendingActions(subscriptions);
+  const actions = usePendingActions(subscriptions, hasVendorListing);
 
   if (actions.length === 0) return null;
 
