@@ -7,8 +7,8 @@ export default function BenefitTrackerPage() {
   return (
     <div className="animate-in fade-in slide-in-from-bottom-4 duration-700">
       <BenefitBoard
-        title={t.onboarding.trackerTitle}
-        subtitle={t.onboarding.trackerSubtitle}
+        title={t.benefitTracker.title}
+        subtitle={t.onboarding.pageSubtitle}
         columns={['QUEUE', 'BUILDING', 'REVIEW', 'GO_LIVE']}
       />
     </div>
