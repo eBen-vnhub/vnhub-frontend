@@ -2,7 +2,6 @@ import type { TicketStatus } from '../../../../types/onboarding';
 
 const STATUS_COLORS: Record<TicketStatus, { bg: string; text: string; dot: string }> = {
   UNASSIGNED: { bg: 'bg-gray-100', text: 'text-gray-700', dot: 'bg-gray-400' },
-  ASSIGNED_TO_VSM: { bg: 'bg-blue-50', text: 'text-blue-700', dot: 'bg-blue-400' },
   AWAITING_VENDOR_LISTING: { bg: 'bg-amber-50', text: 'text-amber-700', dot: 'bg-amber-400' },
   VSM_REVIEW: { bg: 'bg-purple-50', text: 'text-purple-700', dot: 'bg-purple-400' },
   READY_FOR_OPS: { bg: 'bg-indigo-50', text: 'text-indigo-700', dot: 'bg-indigo-400' },
