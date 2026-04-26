@@ -8,7 +8,6 @@ interface OnboardingTicketCardProps {
 
 const STATUS_CONFIG: Record<TicketStatus, { icon: typeof Clock; color: string }> = {
   UNASSIGNED: { icon: Clock, color: 'text-gray-400' },
-  ASSIGNED_TO_VSM: { icon: FileText, color: 'text-blue-500' },
   AWAITING_VENDOR_LISTING: { icon: FileText, color: 'text-amber-500' },
   VSM_REVIEW: { icon: FileText, color: 'text-indigo-500' },
   READY_FOR_OPS: { icon: Settings, color: 'text-purple-500' },
@@ -19,7 +18,6 @@ const STATUS_CONFIG: Record<TicketStatus, { icon: typeof Clock; color: string }>
 
 const PROGRESS_MAP: Record<TicketStatus, number> = {
   UNASSIGNED: 5,
-  ASSIGNED_TO_VSM: 15,
   AWAITING_VENDOR_LISTING: 25,
   VSM_REVIEW: 40,
   READY_FOR_OPS: 55,
