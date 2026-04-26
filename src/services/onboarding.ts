@@ -68,9 +68,10 @@ const onboardingService = {
       body: JSON.stringify(payload),
     }),
 
-  requestVendorListingUpdate: (vendorId: number) =>
+  requestVendorListingUpdate: (vendorId: number, feedback: string) =>
     request<{ success: boolean }>(`/onboarding/vendors/${vendorId}/request-listing-update/`, {
       method: 'POST',
+      body: JSON.stringify({ feedback }),
     }),
 };
 
