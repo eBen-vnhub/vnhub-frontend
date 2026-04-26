@@ -13,7 +13,9 @@ interface GroupedBenefits {
   planName: string;
   benefits: any[];
 }
-const [isLoading, setIsLoading] = useState(true);
+export default function MyBenefitsPage() {
+  const [benefits, setBenefits] = useState<any[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 const [selectedBenefit, setSelectedBenefit] = useState<any>(null);
 const [editingBenefitId, setEditingBenefitId] = useState<number | null>(null);
 const [isDrawerOpen, setIsDrawerOpen] = useState(false);
