@@ -9,7 +9,7 @@ export default function BenefitTrackerPage() {
       <BenefitBoard
         title={t.benefitTracker.title}
         subtitle={t.onboarding.pageSubtitle}
-        columns={['QUEUE', 'IN_PROGRESS', 'TEST_REVIEW', 'GO_LIVE', 'DONE']}
+        columns={['QUEUE', 'IN_PROGRESS', 'TEST_REVIEW', 'LIVE_REVIEW', 'DONE']}
       />
     </div>
   );

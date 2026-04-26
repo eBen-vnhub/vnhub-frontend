@@ -1,6 +1,5 @@
 export type TicketStatus =
   | 'UNASSIGNED'
-  | 'ASSIGNED_TO_VSM'
   | 'AWAITING_VENDOR_LISTING'
   | 'VSM_REVIEW'
   | 'READY_FOR_OPS'
@@ -15,6 +14,7 @@ export type BenefitStatus =
   | 'IN_TESTING'
   | 'REVISION'
   | 'PENDING_LIVE'
+  | 'LIVE_REVIEW'
   | 'LIVE';
 
 export interface OnboardingTicket {
@@ -69,10 +69,11 @@ export interface UploadLinkPayload {
 }
 
 export const ONBOARDING_COLUMNS: Record<string, TicketStatus[]> = {
-  QUEUE: ['UNASSIGNED', 'ASSIGNED_TO_VSM'],
-  DATA_COLLECTION: ['AWAITING_VENDOR_LISTING', 'VSM_REVIEW'],
-  TECHNICAL_SETUP: ['READY_FOR_OPS'],
-  FINAL_REVIEW: ['OPS_IN_PROGRESS', 'VSM_FINAL_REVIEW'],
+  QUEUE: ['UNASSIGNED'],
+  DATA_COLLECTION: ['AWAITING_VENDOR_LISTING'],
+  REVIEW: ['VSM_REVIEW'],
+  TECHNICAL_SETUP: ['READY_FOR_OPS', 'OPS_IN_PROGRESS'],
+  FINAL_REVIEW: ['VSM_FINAL_REVIEW'],
   DONE: ['COMPLETED'],
 };
 
@@ -80,6 +81,6 @@ export const BENEFIT_COLUMNS: Record<string, BenefitStatus[]> = {
   QUEUE: ['PENDING', 'ASSIGNED_TO_OPS'],
   IN_PROGRESS: ['BUILDING'],
   TEST_REVIEW: ['IN_TESTING', 'REVISION'],
-  GO_LIVE: ['PENDING_LIVE'],
+  LIVE_REVIEW: ['PENDING_LIVE', 'LIVE_REVIEW'],
   DONE: ['LIVE'],
 };
