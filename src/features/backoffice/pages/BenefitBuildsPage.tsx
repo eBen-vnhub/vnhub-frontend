@@ -7,8 +7,8 @@ export default function BenefitBuildsPage() {
   return (
     <div className="animate-in fade-in slide-in-from-bottom-4 duration-700">
       <BenefitBoard
-        title={t.onboarding.opsPipelineTitle}
-        subtitle={t.onboarding.opsPipelineSubtitle}
+        title={t.backoffice.sidebar.benefitBuilds}
+        subtitle={t.onboarding.opsSetupSubtitle}
         columns={['QUEUE', 'BUILDING', 'REVIEW', 'GO_LIVE']}
       />
     </div>
