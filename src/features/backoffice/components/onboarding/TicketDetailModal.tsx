@@ -59,6 +59,12 @@ export default function TicketDetailModal({ ticket, onClose, onUpdate }: TicketD
       t.onboarding.toast.assignError,
     );
 
+  const handleStartReview = () =>
+    handleAction(
+      () => onboardingService.startReview(ticket.id),
+      (t.onboarding.toast as any).reviewSuccess || 'Review started',
+      (t.onboarding.toast as any).reviewError || 'Failed to start review',
+    );
 
   const handleApprove = () =>
     handleAction(
@@ -119,6 +125,26 @@ export default function TicketDetailModal({ ticket, onClose, onUpdate }: TicketD
           <ActionButton icon={<User className="w-4 h-4" />} label={t.onboarding.actions.assignToMe} onClick={handleAssign} disabled={isSubmitting} />
         ) : null;
 
+      case 'AWAITING_VENDOR_LISTING':
+        const isListingSubmitted = !!listingsData?.vendorListing;
+        return isVsm ? (
+          <div className="space-y-4">
+            <p className="text-sm text-muted bg-gray-50 p-4 rounded-xl border border-gray-100">
+              {isListingSubmitted 
+                ? "Vendor has completed their profile setup. You can now start the review." 
+                : "Waiting for the vendor to complete their company profile."}
+            </p>
+            {isListingSubmitted && (
+              <ActionButton 
+                icon={<CheckCircle className="w-4 h-4" />} 
+                label="Start VSM Review" 
+                onClick={handleStartReview} 
+                disabled={isSubmitting} 
+                variant="success" 
+              />
+            )}
+          </div>
+        ) : null;
 
       case 'VSM_REVIEW':
         return isVsm ? (
