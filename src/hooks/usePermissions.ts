@@ -3,13 +3,15 @@ import { useAuth } from '../contexts/AuthContext';
 export function usePermissions() {
   const { user } = useAuth();
 
-  const isSuperAdmin = user?.role === 'SUPER_ADMIN' || user?.role === 'SUPERADMIN';
-  const isAdmin = user?.role === 'ADMIN';
+  const isInternal = user?.userType === 'INTERNAL';
+  const isPrimaryAdmin = !isInternal && user?.role === 'ADMIN';
+  const isStandardUser = !isInternal && user?.role === 'STANDARD_USER';
 
   return {
-    isSuperAdmin,
-    isAdmin,
-    canEditCompanyProfile: isSuperAdmin,
-    canManageTeam: isSuperAdmin,
+    isPrimaryAdmin,
+    isStandardUser,
+    canEditCompanyProfile: isPrimaryAdmin || isStandardUser,
+    canManageTeam: isPrimaryAdmin,
+    canCancelSubscription: isPrimaryAdmin,
   };
 }
