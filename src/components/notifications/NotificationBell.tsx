@@ -111,10 +111,10 @@ export default function NotificationBell() {
                   <div className="flex gap-3">
                     <div className="flex-1 min-w-0 cursor-pointer">
                       <p className={`text-sm ${!notification.is_read ? 'text-gray-900 font-bold' : 'text-gray-800 font-semibold'}`}>
-                        {notification.title}
+                        {language === 'ar' && notification.title_ar ? notification.title_ar : notification.title}
                       </p>
                       <p className={`text-xs mt-0.5 ${!notification.is_read ? 'text-gray-700' : 'text-gray-500'}`}>
-                        {notification.message}
+                        {language === 'ar' && notification.message_ar ? notification.message_ar : notification.message}
                       </p>
                       <span className="text-[10px] text-gray-400 mt-1.5 block">
                         {new Date(notification.created_at).toLocaleString(language === 'ar' ? 'ar-EG' : 'en-US')}
