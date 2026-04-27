@@ -7,7 +7,7 @@ const WS_BASE = import.meta.env.VITE_WS_URL || (window.location.protocol === 'ht
 
 export function useNotifications(onNotificationReceived?: () => void) {
   const { isAuthenticated } = useAuth();
-  const { direction } = useLanguage();
+  const { direction, language } = useLanguage();
   const wsRef = useRef<WebSocket | null>(null);
   const callbackRef = useRef(onNotificationReceived);
   callbackRef.current = onNotificationReceived;
@@ -20,9 +20,19 @@ export function useNotifications(onNotificationReceived?: () => void) {
 
     wsRef.current.onmessage = (event) => {
       try {
-        const data = JSON.parse(event.data);
-        if (data.type === 'notification') {
-          toast(data.message, {
+        const payload = JSON.parse(event.data);
+        if (payload.type === 'notification') {
+          const notificationData = payload.data;
+          
+          const title = language === 'ar' && notificationData.title_ar 
+            ? notificationData.title_ar 
+            : notificationData.title;
+            
+          const message = language === 'ar' && notificationData.message_ar 
+            ? notificationData.message_ar 
+            : notificationData.message;
+
+          toast(title || message, {
             icon: '🔔',
             position: direction === 'rtl' ? 'top-left' : 'top-right',
             duration: 5000,
@@ -42,7 +52,7 @@ export function useNotifications(onNotificationReceived?: () => void) {
         wsRef.current.close();
       }
     };
-  }, [isAuthenticated, direction]);
+  }, [isAuthenticated, direction, language]);
 
   return null;
 }
