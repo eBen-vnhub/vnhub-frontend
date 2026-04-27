@@ -4,6 +4,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { notificationsService } from '../../services/notifications';
 import type { Notification } from '../../services/notifications';
 import { useLanguage } from '../../i18n/LanguageContext';
+import { useNotifications } from '../../hooks/useNotifications';
 
 export default function NotificationBell() {
   const { language } = useLanguage();
@@ -24,10 +25,12 @@ export default function NotificationBell() {
     }
   };
 
+  useNotifications(() => {
+    fetchNotifications();
+  });
+
   useEffect(() => {
     fetchNotifications();
-    const intervalId = setInterval(fetchNotifications, 60000);
-    return () => clearInterval(intervalId);
   }, []);
 
   useEffect(() => {
@@ -107,10 +110,13 @@ export default function NotificationBell() {
                 >
                   <div className="flex gap-3">
                     <div className="flex-1 min-w-0 cursor-pointer">
-                      <p className={`text-sm ${!notification.is_read ? 'text-gray-900 font-semibold' : 'text-gray-600'}`}>
-                        {language === 'ar' ? notification.message_ar : notification.message_en}
+                      <p className={`text-sm ${!notification.is_read ? 'text-gray-900 font-bold' : 'text-gray-800 font-semibold'}`}>
+                        {notification.title}
                       </p>
-                      <span className="text-xs text-gray-400 mt-1 block">
+                      <p className={`text-xs mt-0.5 ${!notification.is_read ? 'text-gray-700' : 'text-gray-500'}`}>
+                        {notification.message}
+                      </p>
+                      <span className="text-[10px] text-gray-400 mt-1.5 block">
                         {new Date(notification.created_at).toLocaleString(language === 'ar' ? 'ar-EG' : 'en-US')}
                       </span>
                     </div>
