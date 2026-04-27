@@ -8,6 +8,7 @@ import { useNotifications } from '../../../hooks/useNotifications';
 export default function NotificationsPage() {
   const { language } = useLanguage();
   const [notifications, setNotifications] = useState<Notification[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(false);
 

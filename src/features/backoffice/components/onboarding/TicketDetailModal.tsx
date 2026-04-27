@@ -169,14 +169,12 @@ export default function TicketDetailModal({ ticket, onClose, onUpdate }: TicketD
           </div>
         ) : null;
 
-      case 'READY_FOR_OPS':
-        return isVsm ? (
-          <AssignOpsForm onAssign={handleAssignOps} isSubmitting={isSubmitting} />
-        ) : null;
-
       case 'OPS_IN_PROGRESS':
+        if (!ticket.assigned_ops && isVsm) {
+          return <AssignOpsForm onAssign={handleAssignOps} isSubmitting={isSubmitting} />;
+        }
         const allChecked = ticket.setup_org && ticket.setup_location && ticket.setup_account && ticket.setup_admin;
-        return isOps ? (
+        return isOps && ticket.assigned_ops ? (
           <div className="space-y-4">
             <div className="bg-gray-50 border border-gray-200 rounded-xl p-4 space-y-3">
               <h4 className="text-sm font-bold text-main mb-2">{t.onboarding.labels.techSetupChecklist}</h4>

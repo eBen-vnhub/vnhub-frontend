@@ -26,7 +26,7 @@ export default function AdminOnboardingDashboard() {
   };
 
   const queueTickets = useMemo(() => tickets.filter(t => t.status === 'UNASSIGNED'), [tickets]);
-  const inProgTickets = useMemo(() => tickets.filter(t => ['AWAITING_VENDOR_LISTING', 'READY_FOR_OPS', 'OPS_IN_PROGRESS'].includes(t.status)), [tickets]);
+  const inProgTickets = useMemo(() => tickets.filter(t => ['AWAITING_VENDOR_LISTING', 'OPS_IN_PROGRESS'].includes(t.status)), [tickets]);
   const reviewTickets = useMemo(() => tickets.filter(t => ['VSM_REVIEW', 'VSM_FINAL_REVIEW'].includes(t.status)), [tickets]);
   const completedTickets = useMemo(() => tickets.filter(t => t.status === 'COMPLETED').sort((a, b) => new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime()), [tickets]);
 
