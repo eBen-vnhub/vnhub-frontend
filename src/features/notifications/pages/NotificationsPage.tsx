@@ -101,10 +101,10 @@ export default function NotificationsPage() {
                   </div>
                   <div className="flex-1 min-w-0">
                     <p className={`text-base ${notification.is_read ? 'text-gray-700 font-semibold' : 'text-main font-bold'}`}>
-                      {notification.title}
+                      {language === 'ar' && notification.title_ar ? notification.title_ar : notification.title}
                     </p>
                     <p className="text-sm text-muted mt-1">
-                      {notification.message}
+                      {language === 'ar' && notification.message_ar ? notification.message_ar : notification.message}
                     </p>
                     <p className="text-xs text-muted/60 mt-2">
                       {new Date(notification.created_at).toLocaleString(language === 'ar' ? 'ar-EG' : 'en-US')}
