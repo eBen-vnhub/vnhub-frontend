@@ -516,6 +516,10 @@ export const ar = {
       TECHNICAL_SETUP: "التجهيز التقني",
       FINAL_REVIEW: "المراجعة النهائية",
       DONE: "مكتمل",
+      READY_FOR_OPS: "بانتظار العمليات",
+      OPS_IN_PROGRESS: "قيد التجهيز",
+      VSM_FINAL_REVIEW: "المراجعة النهائية",
+      COMPLETED: "مكتمل",
     },
     status: {
       UNASSIGNED: "غير مُعيّن",
@@ -662,5 +666,31 @@ export const ar = {
     logsTitle: "سجل النشاطات",
     logsSubtitle: "مراقبة جميع أحداث النظام وإجراءات المستخدمين.",
     searchLogs: "البحث في السجلات بواسطة المستخدم، الإجراء، أو الكيان...",
+    table: {
+      user: "المستخدم",
+      role: "الدور",
+      status: "الحالة",
+      actions: "الإجراءات",
+      noUsers: "لا يوجد مستخدمين.",
+      previous: "السابق",
+      next: "التالي",
+      page: "صفحة",
+      of: "من"
+    },
+    modal: {
+      addUser: "إضافة مستخدم",
+      editUser: "تعديل مستخدم",
+      firstName: "الاسم الأول",
+      lastName: "اسم العائلة",
+      email: "البريد الإلكتروني",
+      role: "الدور",
+      superAdmin: "مدير نظام (Super Admin)",
+      admin: "مدير (Admin)",
+      vsm: "مدير نجاح الموردين (VSM)",
+      operations: "عمليات (Operations)",
+      cancel: "إلغاء",
+      saveChanges: "حفظ التغييرات",
+      createUser: "إنشاء مستخدم"
+    }
   },
 };

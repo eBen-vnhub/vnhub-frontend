@@ -1,14 +1,40 @@
-import { useEffect } from 'react';
-import { Building2, Search } from 'lucide-react';
+import { useEffect, useState, useMemo } from 'react';
+import { Building2, Search, ChevronLeft, ChevronRight } from 'lucide-react';
 import VendorsTable from '../components/vendors/VendorsTable';
 import { useBackofficeVendors } from '../hooks/useBackofficeVendors';
 
 export default function VendorsListPage() {
   const { vendors, isLoading, fetchVendors } = useBackofficeVendors();
+  const [search, setSearch] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
 
   useEffect(() => {
     fetchVendors();
   }, [fetchVendors]);
+
+  const filteredVendors = useMemo(() => {
+    if (!search) return vendors;
+    const lowerSearch = search.toLowerCase();
+    return vendors.filter(v => 
+      v.companyName.toLowerCase().includes(lowerSearch) ||
+      (v.businessCategory && v.businessCategory.toLowerCase().includes(lowerSearch)) ||
+      (v.companyCountry && v.companyCountry.toLowerCase().includes(lowerSearch))
+    );
+  }, [vendors, search]);
+
+  const totalPages = Math.ceil(filteredVendors.length / itemsPerPage);
+  
+  const paginatedVendors = useMemo(() => {
+    return filteredVendors.slice(
+      (currentPage - 1) * itemsPerPage,
+      currentPage * itemsPerPage
+    );
+  }, [filteredVendors, currentPage]);
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [search]);
 
   return (
     <div className="animate-in fade-in slide-in-from-bottom-4 duration-700 space-y-8">
@@ -26,6 +52,8 @@ export default function VendorsListPage() {
           <input
             type="text"
             placeholder="Search vendors..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
             className="w-full bg-surface border-border rounded-xl pl-11 pr-4 py-3 focus:outline-none focus:ring-2 focus:ring-brand focus:border-transparent transition-shadow"
           />
         </div>
@@ -35,11 +63,35 @@ export default function VendorsListPage() {
         <div className="mb-6 flex items-center justify-between">
           <h2 className="text-xl font-bold flex items-center gap-2 text-main">
             All Registered Vendors
-            {!isLoading && <span className="bg-surface-hover text-brand text-sm px-2.5 py-0.5 rounded-full">{vendors.length}</span>}
+            {!isLoading && <span className="bg-surface-hover text-brand text-sm px-2.5 py-0.5 rounded-full">{filteredVendors.length}</span>}
           </h2>
         </div>
 
-        <VendorsTable vendors={vendors} isLoading={isLoading} />
+        <VendorsTable vendors={paginatedVendors} isLoading={isLoading} />
+
+        {totalPages > 1 && (
+          <div className="flex items-center justify-between mt-6 pt-6 border-t border-border">
+            <span className="text-sm font-bold text-muted">
+              Page {currentPage} of {totalPages}
+            </span>
+            <div className="flex gap-2">
+              <button
+                onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                disabled={currentPage === 1}
+                className="p-2 rounded-xl border border-border text-muted hover:text-brand hover:border-brand disabled:opacity-50 disabled:hover:border-border disabled:hover:text-muted transition-colors"
+              >
+                <ChevronLeft className="w-5 h-5" />
+              </button>
+              <button
+                onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                disabled={currentPage === totalPages}
+                className="p-2 rounded-xl border border-border text-muted hover:text-brand hover:border-brand disabled:opacity-50 disabled:hover:border-border disabled:hover:text-muted transition-colors"
+              >
+                <ChevronRight className="w-5 h-5" />
+              </button>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

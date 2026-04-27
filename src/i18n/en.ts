@@ -516,6 +516,10 @@ export const en = {
       TECHNICAL_SETUP: "Technical Setup",
       FINAL_REVIEW: "Final Review",
       DONE: "Done",
+      READY_FOR_OPS: "Ready for Ops",
+      OPS_IN_PROGRESS: "Ops In Progress",
+      VSM_FINAL_REVIEW: "Final Review",
+      COMPLETED: "Completed",
     },
     status: {
       UNASSIGNED: "Unassigned",
@@ -662,5 +666,31 @@ export const en = {
     logsTitle: "Activity Logs",
     logsSubtitle: "Monitor all system events and user actions.",
     searchLogs: "Search logs by user, action, or entity...",
+    table: {
+      user: "User",
+      role: "Role",
+      status: "Status",
+      actions: "Actions",
+      noUsers: "No users found.",
+      previous: "Previous",
+      next: "Next",
+      page: "Page",
+      of: "of"
+    },
+    modal: {
+      addUser: "Add User",
+      editUser: "Edit User",
+      firstName: "First Name",
+      lastName: "Last Name",
+      email: "Email",
+      role: "Role",
+      superAdmin: "Super Admin",
+      admin: "Admin",
+      vsm: "VSM",
+      operations: "Operations",
+      cancel: "Cancel",
+      saveChanges: "Save Changes",
+      createUser: "Create User"
+    }
   },
 };

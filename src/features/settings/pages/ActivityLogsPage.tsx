@@ -1,6 +1,5 @@
 import { useState, useMemo, useEffect } from 'react';
 import { useLanguage } from '../../../i18n/LanguageContext';
-import SettingsTabs from '../components/SettingsTabs';
 import PageHeader from '../components/PageHeader';
 import ActivityLogsList from '../components/activity-logs/ActivityLogsList';
 import { ActivitySquare, Search } from 'lucide-react';
@@ -56,8 +55,6 @@ export default function ActivityLogsPage() {
         title={t.settings?.logsTitle || 'Activity Logs'}
         subtitle={t.settings?.logsSubtitle || 'Monitor all system events and user actions.'}
       />
-
-      <SettingsTabs />
 
       <div className="bg-surface border border-border rounded-2xl overflow-hidden shadow-sm">
         <div className="p-4 border-b border-border flex flex-wrap items-center justify-between gap-4">

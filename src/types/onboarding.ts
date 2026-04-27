@@ -75,6 +75,10 @@ export const ONBOARDING_COLUMNS: Record<string, TicketStatus[]> = {
   TECHNICAL_SETUP: ['READY_FOR_OPS', 'OPS_IN_PROGRESS'],
   FINAL_REVIEW: ['VSM_FINAL_REVIEW'],
   DONE: ['COMPLETED'],
+  READY_FOR_OPS: ['READY_FOR_OPS'],
+  OPS_IN_PROGRESS: ['OPS_IN_PROGRESS'],
+  VSM_FINAL_REVIEW: ['VSM_FINAL_REVIEW'],
+  COMPLETED: ['COMPLETED'],
 };
 
 export const BENEFIT_COLUMNS: Record<string, BenefitStatus[]> = {

@@ -17,14 +17,24 @@ export default function VendorListingPage() {
 
   const handleSuccess = async () => {
     const pendingSubs = subscriptions.filter(s => s.nextStep === 'VENDOR_LISTING' && s.status !== 'CANCELLED');
-    for (const sub of pendingSubs) {
+    
+    if (pendingSubs.length > 0) {
+      for (const sub of pendingSubs) {
+        try {
+          const res = await vendorsService.completeSubscriptionStep(sub.id, { stepType: 'VENDOR_LISTING' });
+          updateSubscriptionInContext(res.subscription);
+        } catch (err) {
+          console.error('Failed to auto-complete vendor listing step', err);
+        }
+      }
+    } else {
       try {
-        const res = await vendorsService.completeSubscriptionStep(sub.id, { stepType: 'VENDOR_LISTING' });
-        updateSubscriptionInContext(res.subscription);
+        await vendorsService.notifyListingUpdate();
       } catch (err) {
-        console.error('Failed to auto-complete vendor listing step', err);
+        console.error('Failed to notify vendor listing update', err);
       }
     }
+    
     await fetchDashboardData();
     setIsVendorModalOpen(false);
   };

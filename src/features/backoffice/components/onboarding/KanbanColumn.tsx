@@ -16,6 +16,10 @@ const COLUMN_ACCENT: Record<string, string> = {
   TECHNICAL_SETUP: 'bg-indigo-400',
   FINAL_REVIEW: 'bg-cyan-400',
   DONE: 'bg-emerald-400',
+  READY_FOR_OPS: 'bg-amber-400',
+  OPS_IN_PROGRESS: 'bg-indigo-400',
+  VSM_FINAL_REVIEW: 'bg-purple-400',
+  COMPLETED: 'bg-emerald-400',
 };
 
 export default function KanbanColumn({ columnKey, statuses, tickets, onTicketClick }: KanbanColumnProps) {

@@ -47,6 +47,21 @@ const authService = {
       method: 'POST',
       body: JSON.stringify(data),
     }),
+
+  getUsers: (page: number = 1, search: string = '') =>
+    request<any>(`/auth/users/?page=${page}&search=${search}`),
+
+  createUser: (data: Partial<User>) =>
+    request<User>('/auth/users/', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    }),
+
+  updateUser: (id: string | number, data: Partial<User>) =>
+    request<User>(`/auth/users/${id}/`, {
+      method: 'PATCH',
+      body: JSON.stringify(data),
+    }),
 };
 
 export default authService;

@@ -104,7 +104,7 @@ export default function SubscriptionsPage() {
     closeModal();
     await completeStepLocally('VENDOR_LISTING');
     await fetchDashboardData();
-    setModal({ type: 'next-action', stepType: 'BENEFIT_LISTING' });
+    toast.success((t.portal as any).pendingActions?.vendorSuccess || 'Vendor listing completed successfully!');
   };
 
   const handleBenefitListingSuccess = async () => {
