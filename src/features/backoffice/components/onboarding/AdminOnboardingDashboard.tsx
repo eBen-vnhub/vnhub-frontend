@@ -148,7 +148,7 @@ export default function AdminOnboardingDashboard() {
                       onClick={() => setSelectedTicket(ticket)}
                       className="px-4 py-2 bg-brand/10 text-brand text-sm font-bold rounded-lg hover:bg-brand hover:text-white transition-colors whitespace-nowrap"
                     >
-                      {ticket.status === 'UNASSIGNED' ? t.onboarding.actions.assignVsm : t.onboarding.actions.viewDetails}
+                      {ticket.status === 'UNASSIGNED' ? t.onboarding.actions.assignVsm : (t.onboarding.actions as any).viewDetails || 'View Details'}
                     </button>
                   </div>
                 ))}

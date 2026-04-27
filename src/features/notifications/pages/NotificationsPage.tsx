@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react';
-import { Bell, Check, Loader2, ArrowLeft, ArrowRight } from 'lucide-react';
-import { notificationsService, Notification } from '../../../services/notifications';
+import { Bell, Check, Loader2 } from 'lucide-react';
+import { notificationsService } from '../../../services/notifications';
+import type { Notification } from '../../../services/notifications';
 import { useLanguage } from '../../../i18n/LanguageContext';
 
 export default function NotificationsPage() {
-  const { language, t } = useLanguage();
+  const { language } = useLanguage();
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 

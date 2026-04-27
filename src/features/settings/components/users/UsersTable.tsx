@@ -1,4 +1,4 @@
-import { MoreVertical, Edit2 } from 'lucide-react';
+import { Edit2 } from 'lucide-react';
 import { useLanguage } from '../../../../i18n/LanguageContext';
 
 interface User {
