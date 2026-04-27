@@ -25,6 +25,9 @@ export default function BackofficeSidebar() {
             <nav className="space-y-1">
               <SidebarLink to="/backoffice/vendors" icon={<Users />} label={t.backoffice.sidebar.vendorsDirectory} />
               <SidebarLink to="/backoffice/onboarding" icon={<ClipboardList />} label={t.onboarding.pageTitle} />
+              <SidebarLink to="/backoffice/benefit-tracker" icon={<Activity />} label={t.backoffice.sidebar.benefitTracker} />
+              <SidebarLink to="/backoffice/vendor-setup" icon={<ServerCog />} label={t.backoffice.sidebar.vendorSetup} />
+              <SidebarLink to="/backoffice/benefit-builds" icon={<Activity />} label={t.backoffice.sidebar.benefitBuilds} />
               {isSuperAdmin && (
                 <>
                   <SidebarLink to="/backoffice/users" icon={<Users />} label={t.settings?.users || 'User Management'} />

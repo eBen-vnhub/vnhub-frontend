@@ -1,32 +1,45 @@
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useMemo, useEffect, useCallback } from 'react';
 import { useLanguage } from '../../../i18n/LanguageContext';
 import PageHeader from '../components/PageHeader';
 import ActivityLogsList from '../components/activity-logs/ActivityLogsList';
-import { ActivitySquare, Search } from 'lucide-react';
+import { ActivitySquare, Search, ChevronLeft, ChevronRight } from 'lucide-react';
 import { settingsService } from '../../../services/settings';
 import type { ActivityLog } from '../../../services/settings';
 
 export default function ActivityLogsPage() {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const [search, setSearch] = useState('');
   const [dateFilter, setDateFilter] = useState('');
   const [logs, setLogs] = useState<ActivityLog[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [page, setPage] = useState(1);
+  const [totalCount, setTotalCount] = useState(0);
+  const itemsPerPage = 10;
+
+  const fetchLogs = useCallback(async () => {
+    setIsLoading(true);
+    try {
+      const data = await settingsService.getLogs(dateFilter, page);
+      setLogs(data.results);
+      setTotalCount(data.count);
+    } catch (error) {
+      console.error('Failed to fetch logs:', error);
+      setLogs([]);
+      setTotalCount(0);
+    } finally {
+      setIsLoading(false);
+    }
+  }, [dateFilter, page]);
 
   useEffect(() => {
-    const fetchLogs = async () => {
-      setIsLoading(true);
-      try {
-        const data = await settingsService.getLogs(dateFilter);
-        setLogs(data);
-      } catch (error) {
-        console.error('Failed to fetch logs:', error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
     fetchLogs();
+  }, [fetchLogs]);
+
+  useEffect(() => {
+    setPage(1);
   }, [dateFilter]);
+
+  const totalPages = Math.ceil(totalCount / itemsPerPage);
 
   const filteredLogs = useMemo(() => {
     if (!search) return logs;
@@ -39,7 +52,6 @@ export default function ActivityLogsPage() {
     );
   }, [logs, search]);
 
-  // Map backend format to component format
   const mappedLogs = filteredLogs.map(l => ({
     id: l.id.toString(),
     user: l.user_name || l.user_email || 'System / External',
@@ -80,16 +92,43 @@ export default function ActivityLogsPage() {
                 onClick={() => setDateFilter('')}
                 className="text-xs text-brand font-bold hover:underline"
               >
-                Clear
+                {language === 'ar' ? 'مسح' : 'Clear'}
               </button>
             )}
           </div>
         </div>
 
         {isLoading ? (
-          <div className="p-12 text-center text-muted">Loading logs...</div>
+          <div className="p-12 text-center text-muted">
+            {language === 'ar' ? 'جاري تحميل السجلات...' : 'Loading logs...'}
+          </div>
         ) : (
-          <ActivityLogsList logs={mappedLogs} />
+          <>
+            <ActivityLogsList logs={mappedLogs} />
+            {totalPages > 1 && (
+              <div className="p-4 border-t border-border flex items-center justify-between">
+                <span className="text-sm font-bold text-muted">
+                  {language === 'ar' ? `صفحة ${page} من ${totalPages}` : `Page ${page} of ${totalPages}`}
+                </span>
+                <div className="flex gap-2">
+                  <button
+                    onClick={() => setPage(p => Math.max(1, p - 1))}
+                    disabled={page === 1}
+                    className="p-2 rounded-xl border border-border text-muted hover:text-brand hover:border-brand disabled:opacity-50 transition-colors"
+                  >
+                    <ChevronLeft className="w-5 h-5" />
+                  </button>
+                  <button
+                    onClick={() => setPage(p => Math.min(totalPages, p + 1))}
+                    disabled={page === totalPages}
+                    className="p-2 rounded-xl border border-border text-muted hover:text-brand hover:border-brand disabled:opacity-50 transition-colors"
+                  >
+                    <ChevronRight className="w-5 h-5" />
+                  </button>
+                </div>
+              </div>
+            )}
+          </>
         )}
       </div>
     </div>

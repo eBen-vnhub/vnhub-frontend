@@ -1,6 +1,10 @@
 import { useState, useEffect } from 'react';
-import { X, Loader2 } from 'lucide-react';
+import { X, Loader2, AlertCircle } from 'lucide-react';
 import { useLanguage } from '../../../../i18n/LanguageContext';
+
+interface FieldErrors {
+  [key: string]: string[];
+}
 
 interface UserModalProps {
   isOpen: boolean;
@@ -9,8 +13,34 @@ interface UserModalProps {
   user?: any;
 }
 
+function parseApiErrors(err: any): FieldErrors {
+  if (err?.response?.data && typeof err.response.data === 'object') {
+    return err.response.data;
+  }
+  if (err?.data && typeof err.data === 'object') {
+    return err.data;
+  }
+  try {
+    const parsed = JSON.parse(err?.message || '{}');
+    if (typeof parsed === 'object' && !Array.isArray(parsed)) return parsed;
+  } catch {
+    // not JSON
+  }
+  return {};
+}
+
+function FieldError({ errors }: { errors?: string[] }) {
+  if (!errors || errors.length === 0) return null;
+  return (
+    <div className="flex items-start gap-1.5 mt-1.5">
+      <AlertCircle className="w-3.5 h-3.5 text-red-500 flex-shrink-0 mt-0.5" />
+      <span className="text-xs text-red-600 font-medium">{errors[0]}</span>
+    </div>
+  );
+}
+
 export default function UserModal({ isOpen, onClose, onSave, user }: UserModalProps) {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -18,7 +48,8 @@ export default function UserModal({ isOpen, onClose, onSave, user }: UserModalPr
     role: 'ADMIN',
   });
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState('');
+  const [fieldErrors, setFieldErrors] = useState<FieldErrors>({});
+  const [generalError, setGeneralError] = useState('');
 
   useEffect(() => {
     if (user) {
@@ -29,13 +60,10 @@ export default function UserModal({ isOpen, onClose, onSave, user }: UserModalPr
         role: user.role || 'ADMIN',
       });
     } else {
-      setFormData({
-        firstName: '',
-        lastName: '',
-        email: '',
-        role: 'ADMIN',
-      });
+      setFormData({ firstName: '', lastName: '', email: '', role: 'ADMIN' });
     }
+    setFieldErrors({});
+    setGeneralError('');
   }, [user, isOpen]);
 
   if (!isOpen) return null;
@@ -43,16 +71,33 @@ export default function UserModal({ isOpen, onClose, onSave, user }: UserModalPr
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
-    setError('');
+    setFieldErrors({});
+    setGeneralError('');
     try {
       await onSave(formData);
       onClose();
     } catch (err: any) {
-      setError(err.message || 'Failed to save user');
+      const parsed = parseApiErrors(err);
+      if (Object.keys(parsed).length > 0) {
+        setFieldErrors(parsed);
+      } else {
+        setGeneralError(
+          language === 'ar'
+            ? 'حدث خطأ أثناء حفظ البيانات. تحقق من المدخلات وحاول مرة أخرى.'
+            : 'An error occurred while saving. Please check your inputs and try again.'
+        );
+      }
     } finally {
       setIsLoading(false);
     }
   };
+
+  const inputClass = (field: string) =>
+    `w-full px-4 py-2.5 bg-surface border rounded-xl text-main focus:outline-none focus:ring-1 transition-all ${
+      fieldErrors[field]
+        ? 'border-red-400 focus:border-red-500 focus:ring-red-200'
+        : 'border-border focus:border-brand focus:ring-brand'
+    }`;
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
@@ -69,9 +114,10 @@ export default function UserModal({ isOpen, onClose, onSave, user }: UserModalPr
         </div>
 
         <form onSubmit={handleSubmit} className="p-6 space-y-4">
-          {error && (
-            <div className="p-3 bg-red-50 text-red-600 rounded-lg text-sm">
-              {error}
+          {generalError && (
+            <div className="flex items-start gap-3 p-4 bg-red-50 border border-red-200 text-red-700 rounded-xl text-sm">
+              <AlertCircle className="w-5 h-5 flex-shrink-0 mt-0.5" />
+              <span className="font-medium">{generalError}</span>
             </div>
           )}
 
@@ -83,8 +129,9 @@ export default function UserModal({ isOpen, onClose, onSave, user }: UserModalPr
                 required
                 value={formData.firstName}
                 onChange={e => setFormData({ ...formData, firstName: e.target.value })}
-                className="w-full px-4 py-2.5 bg-surface border border-border rounded-xl text-main focus:outline-none focus:border-brand focus:ring-1 focus:ring-brand transition-all"
+                className={inputClass('firstName')}
               />
+              <FieldError errors={fieldErrors['firstName'] || fieldErrors['first_name']} />
             </div>
             <div>
               <label className="block text-sm font-bold text-main mb-1.5">{t.settings?.modal?.lastName || 'Last Name'}</label>
@@ -93,8 +140,9 @@ export default function UserModal({ isOpen, onClose, onSave, user }: UserModalPr
                 required
                 value={formData.lastName}
                 onChange={e => setFormData({ ...formData, lastName: e.target.value })}
-                className="w-full px-4 py-2.5 bg-surface border border-border rounded-xl text-main focus:outline-none focus:border-brand focus:ring-1 focus:ring-brand transition-all"
+                className={inputClass('lastName')}
               />
+              <FieldError errors={fieldErrors['lastName'] || fieldErrors['last_name']} />
             </div>
           </div>
 
@@ -106,8 +154,9 @@ export default function UserModal({ isOpen, onClose, onSave, user }: UserModalPr
               disabled={!!user}
               value={formData.email}
               onChange={e => setFormData({ ...formData, email: e.target.value })}
-              className="w-full px-4 py-2.5 bg-surface border border-border rounded-xl text-main focus:outline-none focus:border-brand focus:ring-1 focus:ring-brand transition-all disabled:opacity-50 disabled:bg-surface-hover"
+              className={`${inputClass('email')} disabled:opacity-50 disabled:bg-surface-hover`}
             />
+            <FieldError errors={fieldErrors['email']} />
           </div>
 
           <div>
@@ -115,13 +164,14 @@ export default function UserModal({ isOpen, onClose, onSave, user }: UserModalPr
             <select
               value={formData.role}
               onChange={e => setFormData({ ...formData, role: e.target.value })}
-              className="w-full px-4 py-2.5 bg-surface border border-border rounded-xl text-main focus:outline-none focus:border-brand focus:ring-1 focus:ring-brand transition-all"
+              className={inputClass('role')}
             >
               <option value="SUPER_ADMIN">{t.settings?.modal?.superAdmin || 'Super Admin'}</option>
               <option value="ADMIN">{t.settings?.modal?.admin || 'Admin'}</option>
               <option value="VSM">{t.settings?.modal?.vsm || 'VSM'}</option>
               <option value="OPERATIONS">{t.settings?.modal?.operations || 'Operations'}</option>
             </select>
+            <FieldError errors={fieldErrors['role']} />
           </div>
 
           <div className="pt-4 flex justify-end gap-3">

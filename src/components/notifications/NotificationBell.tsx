@@ -10,7 +10,7 @@ export default function NotificationBell() {
   const location = useLocation();
   const isPortal = location.pathname.startsWith('/portal');
   const viewAllLink = isPortal ? '/portal/notifications' : '/backoffice/notifications';
-  
+
   const [isOpen, setIsOpen] = useState(false);
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const dropdownRef = useRef<HTMLDivElement>(null);
