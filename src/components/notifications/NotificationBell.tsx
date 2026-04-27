@@ -1,18 +1,18 @@
 import { useState, useEffect, useRef } from 'react';
-import { Bell, Check, Loader2 } from 'lucide-react';
+import { Bell, Check } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
-import { notificationsService, Notification } from '../../services/notifications';
+import { notificationsService } from '../../services/notifications';
+import type { Notification } from '../../services/notifications';
 import { useLanguage } from '../../i18n/LanguageContext';
 
 export default function NotificationBell() {
-  const { language, t } = useLanguage();
+  const { language } = useLanguage();
   const location = useLocation();
   const isPortal = location.pathname.startsWith('/portal');
   const viewAllLink = isPortal ? '/portal/notifications' : '/backoffice/notifications';
   
   const [isOpen, setIsOpen] = useState(false);
   const [notifications, setNotifications] = useState<Notification[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   const fetchNotifications = async () => {

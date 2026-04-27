@@ -64,7 +64,7 @@ export default function UserManagementPage() {
 
   const handleToggleStatus = async (user: any) => {
     try {
-      await authService.updateUser(user.id, { isActive: !user.isActive });
+      await authService.updateUser(user.id, { is_active: !user.is_active });
       fetchUsers();
     } catch (err) {
       console.error('Failed to toggle status', err);
