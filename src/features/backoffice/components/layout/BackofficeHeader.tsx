@@ -4,8 +4,8 @@ import { useAuth } from '../../../../contexts/AuthContext';
 import { useLanguage } from '../../../../i18n/LanguageContext';
 import EbenLogo from '../../../../components/ui/EbenLogo';
 import LanguageSwitcher from '../../../../components/ui/LanguageSwitcher';
-import { LogOut, ChevronDown, User as UserIcon } from 'lucide-react';
-import NotificationBell from './NotificationBell';
+import { LogOut, ChevronDown, User as UserIcon, Lock } from 'lucide-react';
+import NotificationBell from '../../../../components/notifications/NotificationBell';
 
 export default function BackofficeHeader() {
   const { user, displayName, logout } = useAuth();
@@ -84,6 +84,30 @@ export default function BackofficeHeader() {
                       </div>
 
                       <div className="p-2 space-y-0.5">
+                        <Link
+                          to="/backoffice/profile"
+                          onClick={() => setIsProfileMenuOpen(false)}
+                          className="flex items-center gap-3 w-full px-3 py-2.5 text-sm text-gray-700 hover:text-brand hover:bg-brand/5 rounded-xl transition-all duration-200 group"
+                        >
+                          <div className="w-8 h-8 flex items-center justify-center bg-gray-100 rounded-lg group-hover:bg-brand/10 transition-all flex-shrink-0">
+                            <UserIcon className="w-4 h-4" />
+                          </div>
+                          <span className="font-semibold">My Profile</span>
+                        </Link>
+
+                        <Link
+                          to="/backoffice/change-password"
+                          onClick={() => setIsProfileMenuOpen(false)}
+                          className="flex items-center gap-3 w-full px-3 py-2.5 text-sm text-gray-700 hover:text-brand hover:bg-brand/5 rounded-xl transition-all duration-200 group"
+                        >
+                          <div className="w-8 h-8 flex items-center justify-center bg-gray-100 rounded-lg group-hover:bg-brand/10 transition-all flex-shrink-0">
+                            <Lock className="w-4 h-4" />
+                          </div>
+                          <span className="font-semibold">Change Password</span>
+                        </Link>
+
+                        <div className="border-t border-gray-100 my-1" />
+
                         <button
                           onClick={() => {
                             setIsProfileMenuOpen(false);

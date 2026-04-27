@@ -26,7 +26,10 @@ export default function BackofficeSidebar() {
               <SidebarLink to="/backoffice/vendors" icon={<Users />} label={t.backoffice.sidebar.vendorsDirectory} />
               <SidebarLink to="/backoffice/onboarding" icon={<ClipboardList />} label={t.onboarding.pageTitle} />
               {isSuperAdmin && (
-                <SidebarLink to="/backoffice/settings" icon={<Settings />} label={t.backoffice.sidebar.systemSettings} />
+                <>
+                  <SidebarLink to="/backoffice/users" icon={<Users />} label={t.settings?.users || 'User Management'} />
+                  <SidebarLink to="/backoffice/activity-logs" icon={<Settings />} label={t.settings?.logs || 'Activity Logs'} />
+                </>
               )}
             </nav>
           </div>
