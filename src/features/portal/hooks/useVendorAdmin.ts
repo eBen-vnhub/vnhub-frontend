@@ -11,19 +11,15 @@ export function useVendorAdmin() {
   const [isInviting, setIsInviting] = useState(false);
 
   const fetchTeam = useCallback(async () => {
-    if (!canManageTeam) {
-      setIsLoading(false);
-      return;
-    }
     try {
       const data = await vendorsService.getTeamMembers();
       setTeamMembers(data);
-    } catch (err: any) {
-      toast.error(err.response?.data?.error || 'Failed to fetch team members');
+    } catch (err: unknown) {
+      toast.error('Failed to fetch team members');
     } finally {
       setIsLoading(false);
     }
-  }, [canManageTeam]);
+  }, []);
 
   useEffect(() => {
     fetchTeam();
@@ -35,8 +31,8 @@ export function useVendorAdmin() {
       await vendorsService.inviteTeamMember({ email, role: 'ADMIN' });
       toast.success('Invitation sent successfully');
       fetchTeam();
-    } catch (err: any) {
-      toast.error(err.response?.data?.error || 'Failed to send invitation');
+    } catch (err: unknown) {
+      toast.error('Failed to send invitation');
     } finally {
       setIsInviting(false);
     }
@@ -48,8 +44,8 @@ export function useVendorAdmin() {
       await vendorsService.removeTeamMember(targetId);
       toast.success('User removed successfully');
       fetchTeam();
-    } catch (err: any) {
-      toast.error(err.response?.data?.error || 'Failed to remove user');
+    } catch (err: unknown) {
+      toast.error('Failed to remove user');
     }
   };
 

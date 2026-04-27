@@ -11,9 +11,10 @@ interface SubscriptionCardProps {
   onCancel: (subscriptionId: number) => void;
   onAddBenefit: (subscriptionId: number) => void;
   isCancelling: boolean;
+  canCancelSubscription: boolean;
 }
 
-export default function SubscriptionCard({ subscription, companyName, onEdit, onCancel, onAddBenefit, isCancelling }: SubscriptionCardProps) {
+export default function SubscriptionCard({ subscription, companyName, onEdit, onCancel, onAddBenefit, isCancelling, canCancelSubscription }: SubscriptionCardProps) {
   const { t } = useLanguage();
   const [showCancelConfirm, setShowCancelConfirm] = useState(false);
   const statusKey = subscription.status?.toLowerCase() || 'pending';
@@ -75,32 +76,34 @@ export default function SubscriptionCard({ subscription, companyName, onEdit, on
             </Button>
           )}
 
-          {!showCancelConfirm ? (
-            <button
-              onClick={() => setShowCancelConfirm(true)}
-              className="flex items-center gap-2 px-4 py-2.5 text-sm font-semibold text-error hover:bg-error/5 rounded-xl transition-colors"
-            >
-              <Trash2 className="w-4 h-4" />
-              {t.portal.subscriptionCard.cancel}
-            </button>
-          ) : (
-            <div className="flex items-center gap-2 animate-in fade-in duration-200">
-              <span className="text-sm text-error font-semibold">{t.portal.subscriptionCard.confirmCancel}</span>
-              <Button
-                variant="outline"
-                onClick={() => { onCancel(subscription.id); setShowCancelConfirm(false); }}
-                isLoading={isCancelling}
-                className="!text-error !border-error/30 hover:!bg-error/5 text-sm"
-              >
-                {t.portal.subscriptionCard.yes}
-              </Button>
+          {canCancelSubscription && (
+            !showCancelConfirm ? (
               <button
-                onClick={() => setShowCancelConfirm(false)}
-                className="px-3 py-2 text-sm font-semibold text-muted hover:text-main transition-colors"
+                onClick={() => setShowCancelConfirm(true)}
+                className="flex items-center gap-2 px-4 py-2.5 text-sm font-semibold text-error hover:bg-error/5 rounded-xl transition-colors"
               >
-                {t.portal.subscriptionCard.no}
+                <Trash2 className="w-4 h-4" />
+                {t.portal.subscriptionCard.cancel}
               </button>
-            </div>
+            ) : (
+              <div className="flex items-center gap-2 animate-in fade-in duration-200">
+                <span className="text-sm text-error font-semibold">{t.portal.subscriptionCard.confirmCancel}</span>
+                <Button
+                  variant="outline"
+                  onClick={() => { onCancel(subscription.id); setShowCancelConfirm(false); }}
+                  isLoading={isCancelling}
+                  className="!text-error !border-error/30 hover:!bg-error/5 text-sm"
+                >
+                  {t.portal.subscriptionCard.yes}
+                </Button>
+                <button
+                  onClick={() => setShowCancelConfirm(false)}
+                  className="px-3 py-2 text-sm font-semibold text-muted hover:text-main transition-colors"
+                >
+                  {t.portal.subscriptionCard.no}
+                </button>
+              </div>
+            )
           )}
         </div>
       )}
