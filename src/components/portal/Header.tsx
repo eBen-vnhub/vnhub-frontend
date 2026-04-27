@@ -6,6 +6,7 @@ import EbenLogo from '../ui/EbenLogo';
 import LanguageSwitcher from '../ui/LanguageSwitcher';
 import WorkspaceSwitcher from './WorkspaceSwitcher';
 import InlineSubscriptionModal from './InlineSubscriptionModal';
+import NotificationBell from '../notifications/NotificationBell';
 import { LogOut, ChevronDown, Lock, User as UserIcon } from 'lucide-react';
 
 export default function Header() {
@@ -44,6 +45,7 @@ export default function Header() {
             </div>
 
             <div className="flex items-center gap-3 ms-auto">
+              <NotificationBell />
               <LanguageSwitcher />
 
               <div className="relative" ref={menuRef}>

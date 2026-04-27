@@ -15,6 +15,11 @@ const vendorsService = {
   getListingsData: () =>
     request<{ vendorListing: any; benefitListing: any }>('/vendors/company/listings-data/'),
 
+  notifyListingUpdate: () =>
+    request<ApiSuccessResponse>('/vendors/company/notify-update/', {
+      method: 'POST',
+    }),
+
   updateDashboardData: (data: Partial<Vendor>) =>
     request<ApiSuccessResponse & { vendor: Vendor }>('/vendors/company/', {
       method: 'PUT',

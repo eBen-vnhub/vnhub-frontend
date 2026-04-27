@@ -39,8 +39,8 @@ export default function VendorsTable({ vendors, isLoading }: Props) {
           className="group bg-surface hover:bg-surface-hover/80 border border-border hover:border-brand/30 rounded-2xl p-5 transition-all duration-300 flex items-center justify-between"
         >
           <div className="flex items-center gap-5 flex-1 min-w-0">
-            <div className="w-14 h-14 rounded-xl bg-brand/10 text-brand flex items-center justify-center font-bold text-xl flex-shrink-0">
-              {vendor.companyName?.charAt(0) || 'V'}
+            <div className="w-14 h-14 rounded-xl bg-brand/10 text-brand flex items-center justify-center font-bold text-xl flex-shrink-0 uppercase">
+              {vendor.companyName?.substring(0, 2) || 'VN'}
             </div>
 
             <div className="flex-1 min-w-0">

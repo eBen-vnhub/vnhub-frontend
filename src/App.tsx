@@ -26,6 +26,7 @@ import OpsVendorSetupPage from './features/backoffice/pages/OpsVendorSetupPage';
 import VendorOnboardingPage from './features/portal/pages/VendorOnboardingPage';
 import UserManagementPage from './features/settings/pages/UserManagementPage';
 import ActivityLogsPage from './features/settings/pages/ActivityLogsPage';
+import NotificationsPage from './features/notifications/pages/NotificationsPage';
 
 export default function App() {
   return (
@@ -58,6 +59,7 @@ export default function App() {
           <Route path="profile" element={<UserProfilePage />} />
           <Route path="change-password" element={<ChangePasswordPage />} />
           <Route path="onboarding" element={<VendorOnboardingPage />} />
+          <Route path="notifications" element={<NotificationsPage />} />
         </Route>
 
         <Route path="/backoffice" element={
@@ -86,15 +88,18 @@ export default function App() {
             <Route path="benefit-tracker" element={<BenefitTrackerPage />} />
           </Route>
 
+          <Route path="notifications" element={<NotificationsPage />} />
+          <Route path="profile" element={<UserProfilePage />} />
+          <Route path="change-password" element={<ChangePasswordPage />} />
+
           <Route element={<RoleGuard allowedRoles={['SUPER_ADMIN', 'OPERATIONS']} />}>
             <Route path="vendor-setup" element={<OpsVendorSetupPage />} />
             <Route path="benefit-builds" element={<BenefitBuildsPage />} />
           </Route>
 
           <Route element={<RoleGuard allowedRoles={['SUPER_ADMIN']} />}>
-            <Route path="settings" element={<Navigate to="/backoffice/settings/users" replace />} />
-            <Route path="settings/users" element={<UserManagementPage />} />
-            <Route path="settings/logs" element={<ActivityLogsPage />} />
+            <Route path="users" element={<UserManagementPage />} />
+            <Route path="activity-logs" element={<ActivityLogsPage />} />
           </Route>
         </Route>
 
