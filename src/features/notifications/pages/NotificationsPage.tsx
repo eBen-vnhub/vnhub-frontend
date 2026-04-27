@@ -3,6 +3,7 @@ import { Bell, Check, Loader2 } from 'lucide-react';
 import { notificationsService } from '../../../services/notifications';
 import type { Notification } from '../../../services/notifications';
 import { useLanguage } from '../../../i18n/LanguageContext';
+import { useNotifications } from '../../../hooks/useNotifications';
 
 export default function NotificationsPage() {
   const { language } = useLanguage();
@@ -10,7 +11,6 @@ export default function NotificationsPage() {
   const [isLoading, setIsLoading] = useState(true);
 
   const fetchNotifications = async () => {
-    setIsLoading(true);
     try {
       const data = await notificationsService.getNotifications();
       setNotifications(data);
@@ -20,6 +20,10 @@ export default function NotificationsPage() {
       setIsLoading(false);
     }
   };
+
+  useNotifications(() => {
+    fetchNotifications();
+  });
 
   useEffect(() => {
     fetchNotifications();
@@ -96,10 +100,13 @@ export default function NotificationsPage() {
                     <Bell className={`w-5 h-5 ${notification.is_read ? 'text-gray-400' : 'text-brand'}`} />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className={`text-base ${notification.is_read ? 'text-gray-700' : 'text-main font-bold'}`}>
-                      {language === 'ar' ? notification.message_ar : notification.message_en}
+                    <p className={`text-base ${notification.is_read ? 'text-gray-700 font-semibold' : 'text-main font-bold'}`}>
+                      {notification.title}
                     </p>
-                    <p className="text-sm text-muted mt-1.5">
+                    <p className="text-sm text-muted mt-1">
+                      {notification.message}
+                    </p>
+                    <p className="text-xs text-muted/60 mt-2">
                       {new Date(notification.created_at).toLocaleString(language === 'ar' ? 'ar-EG' : 'en-US')}
                     </p>
                   </div>
