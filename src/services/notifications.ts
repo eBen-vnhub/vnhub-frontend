@@ -11,9 +11,16 @@ export interface Notification {
   created_at: string;
 }
 
+export interface PaginatedResponse<T> {
+  count: number;
+  next: string | null;
+  previous: string | null;
+  results: T[];
+}
+
 export const notificationsService = {
-  getNotifications: () =>
-    request<Notification[]>('/notifications/'),
+  getNotifications: (page = 1) =>
+    request<PaginatedResponse<Notification>>(`/notifications/?page=${page}`),
     
   markAsRead: (ids: (string | number)[]) =>
     request<{ success: boolean }>('/notifications/mark-read/', {
