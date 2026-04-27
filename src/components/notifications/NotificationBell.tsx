@@ -19,7 +19,7 @@ export default function NotificationBell() {
   const fetchNotifications = async () => {
     try {
       const data = await notificationsService.getNotifications();
-      setNotifications(data);
+      setNotifications(data.results);
     } catch (err) {
       console.error('Failed to fetch notifications', err);
     }
