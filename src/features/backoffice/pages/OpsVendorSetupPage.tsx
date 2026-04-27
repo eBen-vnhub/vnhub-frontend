@@ -7,7 +7,7 @@ export default function OpsVendorSetupPage() {
     <OnboardingBoard
       title={t.onboarding.opsSetupTitle}
       subtitle={t.onboarding.opsSetupSubtitle}
-      columns={['READY_FOR_OPS', 'OPS_IN_PROGRESS', 'VSM_FINAL_REVIEW', 'COMPLETED']}
+      columns={['OPS_IN_PROGRESS', 'VSM_FINAL_REVIEW', 'COMPLETED']}
     />
   );
 }
