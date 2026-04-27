@@ -6,7 +6,7 @@ interface TeamMembersListProps {
   members: User[];
   isLoading: boolean;
   currentUser: User | null;
-  onRemove: (id: string) => void;
+  onRemove?: (id: string) => void;
 }
 
 function RoleBadge({ role, t }: { role: string; t: any }) {
@@ -53,7 +53,7 @@ export default function TeamMembersList({ members, isLoading, currentUser, onRem
                 </div>
                 <RoleBadge role={member.role || 'ADMIN'} t={t} />
               </div>
-              {member.id !== currentUser?.id && (
+              {onRemove && member.id !== currentUser?.id && (
                 <button 
                   onClick={() => onRemove(member.id)}
                   className="p-2 text-muted-foreground hover:bg-error/10 hover:text-error transition-colors rounded-lg self-start sm:self-auto group flex items-center gap-2 text-sm"

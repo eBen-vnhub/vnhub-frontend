@@ -1,8 +1,9 @@
-import { useState } from 'react';
-import { X, ExternalLink, User, CheckCircle, XCircle, UserCheck } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { X, ExternalLink, User, CheckCircle, XCircle, UserCheck, Package } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import type { OnboardingTicket } from '../../../../types/onboarding';
+import type { BenefitTracker } from '../../../../types/onboarding';
 import { useLanguage } from '../../../../i18n/LanguageContext';
 import { useAuth } from '../../../../contexts/AuthContext';
 import onboardingService from '../../../../services/onboarding';
@@ -10,6 +11,7 @@ import StatusBadge from './StatusBadge';
 import ActionButton from './ActionButton';
 import AssignVSMForm from './AssignVSMForm';
 import AssignOpsForm from './AssignOpsForm';
+import BenefitDetailModal from '../benefits/BenefitDetailModal';
 
 interface TicketDetailModalProps {
   ticket: OnboardingTicket | null;
@@ -23,6 +25,14 @@ export default function TicketDetailModal({ ticket, onClose, onUpdate }: TicketD
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [feedback, setFeedback] = useState('');
   const [showRejectForm, setShowRejectForm] = useState(false);
+  const [linkedBenefits, setLinkedBenefits] = useState<BenefitTracker[]>([]);
+  const [selectedBenefit, setSelectedBenefit] = useState<BenefitTracker | null>(null);
+
+  useEffect(() => {
+    if (ticket?.vendor_id) {
+      onboardingService.getBenefitTrackers(ticket.vendor_id).then(setLinkedBenefits).catch(() => {});
+    }
+  }, [ticket?.vendor_id]);
 
   if (!ticket) return null;
 
@@ -212,6 +222,8 @@ export default function TicketDetailModal({ ticket, onClose, onUpdate }: TicketD
     }
   };
 
+  const showBenefitsSection = linkedBenefits.length > 0 && ['VSM_REVIEW', 'OPS_IN_PROGRESS', 'VSM_FINAL_REVIEW'].includes(ticket.status);
+
   return (
     <>
       <div className="fixed inset-0 bg-black/40 backdrop-blur-sm z-40 transition-opacity flex items-center justify-center p-4" onClick={onClose}>
@@ -248,6 +260,32 @@ export default function TicketDetailModal({ ticket, onClose, onUpdate }: TicketD
               <DetailField label={t.onboarding.labels.assignedOps} value={ticket.assigned_ops_name} />
             </div>
 
+            {showBenefitsSection && (
+              <div className="bg-indigo-50/50 border border-indigo-100 rounded-xl p-4">
+                <h4 className="text-sm font-bold text-indigo-800 mb-3 flex items-center gap-2">
+                  <Package className="w-4 h-4" />
+                  Linked Benefits ({linkedBenefits.length})
+                </h4>
+                <div className="space-y-2">
+                  {linkedBenefits.map(b => (
+                    <div key={b.id} className="flex items-center justify-between bg-white/70 rounded-lg px-3 py-2 text-sm border border-indigo-50 hover:border-indigo-200 transition-colors cursor-pointer group" onClick={() => setSelectedBenefit(b)}>
+                      <span className="font-medium text-main group-hover:text-brand transition-colors">
+                        {t.benefitTracker.benefitLabel} #{b.benefit_number}
+                      </span>
+                      <div className="flex items-center gap-3">
+                        <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider ${
+                          b.status === 'LIVE' ? 'bg-emerald-100 text-emerald-700' : 'bg-gray-200 text-gray-700'
+                        }`}>
+                          {t.benefitTracker.status[b.status]}
+                        </span>
+                        <ExternalLink className="w-3.5 h-3.5 text-indigo-400 group-hover:text-brand transition-colors" />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
             {ticket.internal_notes && (
               <div className="bg-amber-50/50 p-4 rounded-xl border border-amber-100">
                 <p className="text-xs font-bold text-amber-800 mb-2 uppercase tracking-wide">{t.onboarding.labels.notes}</p>
@@ -261,6 +299,15 @@ export default function TicketDetailModal({ ticket, onClose, onUpdate }: TicketD
           </div>
         </div>
       </div>
+
+      <BenefitDetailModal
+        benefit={selectedBenefit}
+        onClose={() => setSelectedBenefit(null)}
+        onUpdate={(updated) => {
+          setLinkedBenefits(prev => prev.map(b => b.id === updated.id ? updated : b));
+          setSelectedBenefit(updated);
+        }}
+      />
     </>
   );
 }

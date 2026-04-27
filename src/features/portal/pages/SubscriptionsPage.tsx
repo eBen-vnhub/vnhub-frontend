@@ -12,6 +12,7 @@ import EditSubscriptionModal from '../../../components/portal/EditSubscriptionMo
 import PendingActionsSection from '../../../components/portal/PendingActionsSection';
 import LoadingSpinner from '../../../components/ui/LoadingSpinner';
 import vendorsService from '../../../services/vendors';
+import { usePermissions } from '../../../hooks/usePermissions';
 import toast from 'react-hot-toast';
 
 import { Plus } from 'lucide-react';
@@ -33,6 +34,7 @@ export default function SubscriptionsPage() {
   const [modal, setModal] = useState<ModalState>({ type: 'none' });
   const [isSaving, setIsSaving] = useState(false);
   const [cancellingId, setCancellingId] = useState<number | null>(null);
+  const { canCancelSubscription } = usePermissions();
 
   const { listingsData, isLoadingListings } = useCompanyProfile(vendor || ({} as any), () => {});
   const hasVendorListing = !!listingsData?.vendorListing;
@@ -105,6 +107,7 @@ export default function SubscriptionsPage() {
     await completeStepLocally('VENDOR_LISTING');
     await fetchDashboardData();
     toast.success((t.portal as any).pendingActions?.vendorSuccess || 'Vendor listing completed successfully!');
+    setModal({ type: 'benefit-listing' });
   };
 
   const handleBenefitListingSuccess = async () => {
@@ -203,6 +206,7 @@ export default function SubscriptionsPage() {
                 onCancel={handleCancel}
                 onAddBenefit={handleAddBenefit}
                 isCancelling={cancellingId === sub.id}
+                canCancelSubscription={canCancelSubscription}
               />
             ))}
           </div>
