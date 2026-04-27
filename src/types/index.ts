@@ -40,7 +40,7 @@ export interface User {
   mobileNumber?: string;
   role?: string;
   userType?: string;
-  is_active?: boolean;
+  isActive?: boolean;
   workspaces?: Workspace[];
   vendor_profile?: Vendor;
 }

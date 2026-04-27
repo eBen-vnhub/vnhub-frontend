@@ -30,24 +30,32 @@ const fetchBenefits = useCallback(async () => {
       onboardingService.getBenefitTrackers().catch(() => [])
     ]);
 
+    const offersMap: Record<string, any> = {};
     if (listingsData.benefitListing?.benefitOffers) {
-      const sortedTrackers = [...trackersData].sort((a: any, b: any) =>
-        new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
-      );
-
-      const mappedBenefits = listingsData.benefitListing.benefitOffers.map((offer: any, index: number) => {
-        const tracker = sortedTrackers[index] as any;
-        return {
-          ...offer,
-          trackerStatus: tracker?.status || 'PENDING',
-          subscriptionPlan: tracker?.subscription_plan || 'Unknown',
-          subscriptionId: tracker?.subscription || 0
-        };
-      });
-      setBenefits(mappedBenefits);
-    } else {
-      setBenefits([]);
+      for (const offer of listingsData.benefitListing.benefitOffers) {
+        if (offer.id) offersMap[String(offer.id)] = offer;
+      }
     }
+
+    const mappedBenefits = trackersData.map((tracker: any) => {
+      const matchedOffer = tracker.external_benefit_id
+        ? offersMap[String(tracker.external_benefit_id)]
+        : null;
+      return {
+        id: tracker.id,
+        benefitNumber: tracker.benefit_number,
+        offerType: matchedOffer?.offerType || 'Benefit',
+        offerDescription: matchedOffer?.offerDescription || tracker.benefit_number,
+        discountValue: matchedOffer?.discountValue || '',
+        ...matchedOffer,
+        trackerStatus: tracker.status || 'PENDING',
+        subscriptionPlan: tracker.subscription_plan || 'Unknown',
+        subscriptionId: tracker.subscription || 0,
+        testLink: tracker.test_link,
+        liveLink: tracker.live_link,
+      };
+    });
+    setBenefits(mappedBenefits);
   } catch (error) {
     console.error('Failed to fetch benefits', error);
   } finally {

@@ -6,7 +6,7 @@ interface BenefitDetailsDrawerProps {
   benefit: any;
   isOpen: boolean;
   onClose: () => void;
-  onEdit: (id: number) => void;
+  onEdit?: (id: number) => void;
 }
 
 export default function BenefitDetailsDrawer({ benefit, isOpen, onClose, onEdit }: BenefitDetailsDrawerProps) {
@@ -233,18 +233,20 @@ export default function BenefitDetailsDrawer({ benefit, isOpen, onClose, onEdit 
             )}
           </div>
 
-          <div className="shrink-0 bg-surface/80 backdrop-blur-xl border-t border-border p-6 flex justify-end shadow-[0_-10px_40px_-15px_rgba(0,0,0,0.1)]">
-            <Button
-              onClick={() => {
-                onClose();
-                onEdit(benefit.id);
-              }}
-              className="rounded-full shadow-lg px-8 py-2.5 font-bold tracking-wide"
-            >
-              <Edit3 className="w-4 h-4 mr-2" />
-              {labels.editBenefit || 'Edit Benefit'}
-            </Button>
-          </div>
+          {onEdit && (
+            <div className="shrink-0 bg-surface/80 backdrop-blur-xl border-t border-border p-6 flex justify-end shadow-[0_-10px_40px_-15px_rgba(0,0,0,0.1)]">
+              <Button
+                onClick={() => {
+                  onClose();
+                  onEdit(benefit.id);
+                }}
+                className="rounded-full shadow-lg px-8 py-2.5 font-bold tracking-wide"
+              >
+                <Edit3 className="w-4 h-4 mr-2" />
+                {labels.editBenefit || 'Edit Benefit'}
+              </Button>
+            </div>
+          )}
         </div>
       </div>
     </>
