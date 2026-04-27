@@ -10,9 +10,18 @@ export interface ActivityLog {
   timestamp: string;
 }
 
+interface PaginatedResponse<T> {
+  count: number;
+  next: string | null;
+  previous: string | null;
+  results: T[];
+}
+
 export const settingsService = {
-  getLogs: async (date?: string): Promise<ActivityLog[]> => {
-    const url = date ? `/core/logs/?date=${date}` : '/core/logs/';
-    return await request<ActivityLog[]>(url);
+  getLogs: async (date?: string, page: number = 1): Promise<{ results: ActivityLog[]; count: number }> => {
+    let url = `/core/logs/?page=${page}`;
+    if (date) url += `&date=${date}`;
+    const data = await request<PaginatedResponse<ActivityLog>>(url);
+    return { results: data.results || [], count: data.count || 0 };
   },
 };

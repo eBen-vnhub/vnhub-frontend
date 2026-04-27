@@ -54,17 +54,21 @@ export default function UserManagementPage() {
   };
 
   const handleSaveUser = async (data: any) => {
-    if (selectedUser) {
-      await authService.updateUser(selectedUser.id, data);
-    } else {
-      await authService.createUser(data);
+    try {
+      if (selectedUser) {
+        await authService.updateUser(selectedUser.id, data);
+      } else {
+        await authService.createUser(data);
+      }
+      fetchUsers();
+    } catch (err: any) {
+      throw err;
     }
-    fetchUsers();
   };
 
   const handleToggleStatus = async (user: any) => {
     try {
-      await authService.updateUser(user.id, { is_active: !user.is_active });
+      await authService.updateUser(user.id, { isActive: !user.isActive });
       fetchUsers();
     } catch (err) {
       console.error('Failed to toggle status', err);

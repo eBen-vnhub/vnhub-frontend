@@ -92,7 +92,7 @@ export default function App() {
           <Route path="profile" element={<UserProfilePage />} />
           <Route path="change-password" element={<ChangePasswordPage />} />
 
-          <Route element={<RoleGuard allowedRoles={['SUPER_ADMIN', 'OPERATIONS']} />}>
+          <Route element={<RoleGuard allowedRoles={['SUPER_ADMIN', 'ADMIN', 'OPERATIONS']} />}>
             <Route path="vendor-setup" element={<OpsVendorSetupPage />} />
             <Route path="benefit-builds" element={<BenefitBuildsPage />} />
           </Route>
