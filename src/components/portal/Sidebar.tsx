@@ -2,13 +2,11 @@ import { useState } from 'react';
 import { Home, Building, Users, Gift, Store, ClipboardList } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
 import { useLanguage } from '../../i18n/LanguageContext';
-import { useAuth } from '../../contexts/AuthContext';
 import WorkspaceSwitcher from './WorkspaceSwitcher';
 import InlineSubscriptionModal from './InlineSubscriptionModal';
 
 export default function Sidebar() {
   const { t } = useLanguage();
-  const { user } = useAuth();
   const [showBranchModal, setShowBranchModal] = useState(false);
 
   return (
