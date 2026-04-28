@@ -10,7 +10,7 @@ import PortalLayout from './layouts/PortalLayout';
 import SubscriptionsPage from './features/portal/pages/SubscriptionsPage';
 import CompanyProfilePage from './features/portal/pages/CompanyProfilePage';
 import VendorAdminPage from './features/portal/pages/VendorAdminPage';
-import VendorListingPage from './features/portal/pages/VendorListingPage';
+
 import ChangePasswordPage from './features/auth/pages/ChangePasswordPage';
 import UserProfilePage from './features/portal/pages/UserProfilePage';
 import MyBenefitsPage from './features/portal/pages/MyBenefitsPage';
@@ -23,6 +23,7 @@ import OnboardingPage from './features/backoffice/pages/OnboardingPage';
 import BenefitTrackerPage from './features/backoffice/pages/BenefitTrackerPage';
 import BenefitBuildsPage from './features/backoffice/pages/BenefitBuildsPage';
 import OpsVendorSetupPage from './features/backoffice/pages/OpsVendorSetupPage';
+import VsmTasksPage from './features/backoffice/pages/VsmTasksPage';
 import VendorOnboardingPage from './features/portal/pages/VendorOnboardingPage';
 import UserManagementPage from './features/settings/pages/UserManagementPage';
 import ActivityLogsPage from './features/settings/pages/ActivityLogsPage';
@@ -53,7 +54,6 @@ export default function App() {
         }>
           <Route index element={<SubscriptionsPage />} />
           <Route path="company-profile" element={<CompanyProfilePage />} />
-          <Route path="vendor-listing" element={<VendorListingPage />} />
           <Route path="admin" element={<VendorAdminPage />} />
           <Route path="benefits" element={<MyBenefitsPage />} />
           <Route path="profile" element={<UserProfilePage />} />
@@ -95,6 +95,11 @@ export default function App() {
           <Route element={<RoleGuard allowedRoles={['SUPER_ADMIN', 'ADMIN', 'OPERATIONS']} />}>
             <Route path="vendor-setup" element={<OpsVendorSetupPage />} />
             <Route path="benefit-builds" element={<BenefitBuildsPage />} />
+          </Route>
+
+          <Route element={<RoleGuard allowedRoles={['SUPER_ADMIN']} />}>
+            <Route path="vsm-pipeline" element={<VsmTasksPage />} />
+            <Route path="ops-pipeline" element={<OpsVendorSetupPage />} />
           </Route>
 
           <Route element={<RoleGuard allowedRoles={['SUPER_ADMIN']} />}>

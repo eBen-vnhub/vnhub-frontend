@@ -14,9 +14,13 @@ const COLUMN_ACCENT: Record<string, string> = {
   DATA_COLLECTION: 'bg-amber-400',
   REVIEW: 'bg-purple-400',
   TECHNICAL_SETUP: 'bg-indigo-400',
+  TESTING: 'bg-indigo-400',
+  GO_LIVE: 'bg-orange-400',
   FINAL_REVIEW: 'bg-cyan-400',
   DONE: 'bg-emerald-400',
   OPS_IN_PROGRESS: 'bg-indigo-400',
+  BENEFIT_IN_TESTING: 'bg-indigo-400',
+  PENDING_GO_LIVE: 'bg-orange-400',
   VSM_FINAL_REVIEW: 'bg-purple-400',
   COMPLETED: 'bg-emerald-400',
 };

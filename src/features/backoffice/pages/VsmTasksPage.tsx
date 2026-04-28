@@ -7,7 +7,7 @@ export default function VsmTasksPage() {
     <OnboardingBoard
       title={t.onboarding.vsmTasksTitle}
       subtitle={t.onboarding.vsmTasksSubtitle}
-      columns={['QUEUE', 'DATA_COLLECTION', 'REVIEW', 'TECHNICAL_SETUP', 'FINAL_REVIEW', 'DONE']}
+      columns={['DATA_COLLECTION', 'REVIEW', 'TESTING', 'FINAL_REVIEW', 'DONE']}
     />
   );
 }
