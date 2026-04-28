@@ -702,6 +702,25 @@ export const ar = {
     logsTitle: "سجل النشاطات",
     logsSubtitle: "مراقبة جميع أحداث النظام وإجراءات المستخدمين.",
     searchLogs: "البحث في السجلات بواسطة المستخدم، الإجراء، أو الكيان...",
+    activityLog: {
+      ticketAssigned: "قام بتعيين تيكت التسجيل {{vendor}} إلى VSM ({{vsm}})",
+      opsAssigned: "قام بتعيين تيكت التسجيل {{vendor}} إلى مسؤول العمليات ({{ops}})",
+      statusChanged: "تغيرت حالة التيكت {{vendor}} إلى {{status}}",
+      checklistUpdated: "قام بتحديث قائمة المهام {{vendor}}",
+      benefitSubmitted: "قام المورد برفع بيانات الميزة ({{benefit}})",
+      vendorListingUpdated: "قام المورد بتحديث بيانات الشركة",
+      profileUpdated: "قام المورد بتحديث ملف الشركة",
+      userInvited: "قام بدعوة مستخدم جديد ({{email}}) بصلاحية {{role}}",
+      subscriptionUpdated: "تم تحديث بيانات الباقة {{vendor}}",
+      subscriptionCancelled: "تم إلغاء الباقة {{vendor}}",
+      defaultAction: "قام بإجراء {{action}} على {{entity}}",
+      unnamed: "بدون اسم",
+      feedback: "السبب:",
+      liveLink: "رابط التشغيل:",
+      noLogs: "لا توجد سجلات نشاط.",
+      loading: "جاري تحميل السجلات...",
+      clear: "مسح",
+    },
     table: {
       user: "المستخدم",
       role: "الدور",
@@ -742,6 +761,22 @@ export const ar = {
       vendorSetup: "تجهيز الموردين",
       benefitBuilds: "بناء المزايا",
       myWork: "مهامي",
+    },
+    vendors: {
+      vendorNotFound: "لم يتم العثور على المورد",
+      returnToDirectory: "العودة إلى الدليل",
+      backToDirectory: "العودة إلى الدليل",
+      unnamedVendor: "مورد بدون اسم",
+      subscriptions: "الباقات",
+      teamMembers: "أعضاء الفريق",
+      primaryAdmin: "المسؤول الرئيسي",
+      standardUser: "مستخدم عادي",
+    },
+    listing: {
+      webSocial: "الويب والتواصل الاجتماعي",
+      website: "الموقع الإلكتروني",
+      watchVideo: "مشاهدة الفيديو",
+      noLinks: "لا توجد روابط متاحة",
     }
   }
 };
