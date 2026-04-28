@@ -389,16 +389,17 @@ export const en = {
       sendRequest: 'Send Request',
     },
     sidebar: {
-      adminSection: "VNHub Administration",
-      vsmSection: "Vendor Success Management",
-      opsSection: "Technical Operations",
-      dashboard: "Dashboard",
-      vendorsDirectory: "Partner Registry",
-      systemSettings: "System Settings",
+      adminSection: "Management",
+      vendorsDirectory: "Vendors Directory",
+      onboardingPipeline: "Onboarding Pipeline",
+      monitoringSection: "Monitoring",
+      vsmPipeline: "VSM Pipeline",
+      opsPipeline: "Ops Pipeline",
       vendorOnboarding: "Vendor Onboarding",
       benefitTracker: "Benefit Tracker",
       vendorSetup: "Vendor Setup",
       benefitBuilds: "Benefit Builds",
+      myWork: "My Work",
     },
     directory: {
       title: 'Partner Registry',
@@ -748,35 +749,4 @@ export const en = {
       createUser: "Create User"
     }
   },
-  backoffice: {
-    sidebar: {
-      adminSection: "Management",
-      vendorsDirectory: "Vendors Directory",
-      onboardingPipeline: "Onboarding Pipeline",
-      monitoringSection: "Monitoring",
-      vsmPipeline: "VSM Pipeline",
-      opsPipeline: "Ops Pipeline",
-      vendorOnboarding: "Vendor Onboarding",
-      benefitTracker: "Benefit Tracker",
-      vendorSetup: "Vendor Setup",
-      benefitBuilds: "Benefit Builds",
-      myWork: "My Work",
-    },
-    vendors: {
-      vendorNotFound: "Vendor not found",
-      returnToDirectory: "Return to Directory",
-      backToDirectory: "Back to Directory",
-      unnamedVendor: "Unnamed Vendor",
-      subscriptions: "Subscriptions",
-      teamMembers: "Team Members",
-      primaryAdmin: "Primary Admin",
-      standardUser: "Standard User",
-    },
-    listing: {
-      webSocial: "Web & Social",
-      website: "Website",
-      watchVideo: "Watch Video",
-      noLinks: "No links available",
-    }
-  }
 };
