@@ -17,10 +17,7 @@ const onboardingService = {
       body: JSON.stringify({ ops_user_id: opsUserId }),
     }),
 
-  startReview: (ticketId: string) =>
-    request<OnboardingTicket>(`/onboarding/tickets/${ticketId}/start-review/`, {
-      method: 'POST',
-    }),
+
 
   reviewListing: (ticketId: string, payload: ReviewPayload) =>
     request<OnboardingTicket>(`/onboarding/tickets/${ticketId}/review/`, {
@@ -28,7 +25,7 @@ const onboardingService = {
       body: JSON.stringify(payload),
     }),
 
-  updateChecklist: (ticketId: string, payload: Partial<Pick<OnboardingTicket, 'setup_org' | 'setup_location' | 'setup_account' | 'setup_admin'>>) =>
+  updateChecklist: (ticketId: string, payload: Record<string, boolean | string>) =>
     request<OnboardingTicket>(`/onboarding/tickets/${ticketId}/checklist/`, {
       method: 'PATCH',
       body: JSON.stringify(payload),
@@ -42,6 +39,18 @@ const onboardingService = {
   vsmConfirmCompletion: (ticketId: string) =>
     request<OnboardingTicket>(`/onboarding/tickets/${ticketId}/vsm-confirm/`, {
       method: 'POST',
+    }),
+
+  approveTest: (ticketId: string, payload: ReviewPayload) =>
+    request<OnboardingTicket>(`/onboarding/tickets/${ticketId}/approve-test/`, {
+      method: 'POST',
+      body: JSON.stringify(payload),
+    }),
+
+  submitLiveLink: (ticketId: string, liveLink: string) =>
+    request<OnboardingTicket>(`/onboarding/tickets/${ticketId}/submit-live-link/`, {
+      method: 'POST',
+      body: JSON.stringify({ live_link: liveLink }),
     }),
 
   getBenefitTrackers: (vendorId?: number) =>

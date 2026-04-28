@@ -4,9 +4,12 @@ export interface ActivityLog {
   id: string | number;
   user_name: string;
   user_email: string;
+  user_role: string;
+  vendor_name?: string;
+  vendor_country?: string;
   action: string;
   entity: string;
-  details: string;
+  details: any;
   timestamp: string;
 }
 
@@ -19,8 +22,8 @@ interface PaginatedResponse<T> {
 
 export const settingsService = {
   getLogs: async (date?: string, page: number = 1): Promise<{ results: ActivityLog[]; count: number }> => {
-    let url = `/core/logs/?page=${page}`;
-    if (date) url += `&date=${date}`;
+    let url = `/activity/logs/?page=${page}`;
+    if (date) url += `&timestamp__date=${date}`;
     const data = await request<PaginatedResponse<ActivityLog>>(url);
     return { results: data.results || [], count: data.count || 0 };
   },

@@ -62,19 +62,7 @@ export default function TicketDetailModal({ ticket, onClose, onUpdate }: TicketD
     }
   };
 
-  const handleAssign = () =>
-    handleAction(
-      () => onboardingService.assignTicket(ticket.id),
-      t.onboarding.toast.assignSuccess,
-      t.onboarding.toast.assignError,
-    );
 
-  const handleStartReview = () =>
-    handleAction(
-      () => onboardingService.startReview(ticket.id),
-      (t.onboarding.toast as any).reviewSuccess || 'Review started',
-      (t.onboarding.toast as any).reviewError || 'Failed to start review',
-    );
 
   const handleApprove = () =>
     handleAction(
@@ -104,6 +92,20 @@ export default function TicketDetailModal({ ticket, onClose, onUpdate }: TicketD
       t.onboarding.toast.confirmError,
     );
 
+  const handleApproveTest = () =>
+    handleAction(
+      () => onboardingService.approveTest(ticket.id, { approved: true }),
+      'Test approved',
+      'Failed to approve test',
+    );
+
+  const handleRejectTest = () =>
+    handleAction(
+      () => onboardingService.approveTest(ticket.id, { approved: false, feedback }),
+      'Revision requested',
+      'Failed to request revision',
+    );
+
   const isVsm = ['SUPER_ADMIN', 'VSM'].includes(userRole);
   const isOps = ['SUPER_ADMIN', 'OPERATIONS'].includes(userRole);
 
@@ -125,35 +127,47 @@ export default function TicketDetailModal({ ticket, onClose, onUpdate }: TicketD
     );
   };
 
+  const [liveLinkInput, setLiveLinkInput] = useState('');
+
+  const handleSubmitLiveLink = () =>
+    handleAction(
+      () => onboardingService.submitLiveLink(ticket.id, liveLinkInput),
+      t.onboarding.toast.liveLinkSuccess,
+      t.onboarding.toast.liveLinkError,
+    );
+
   const renderActions = () => {
     switch (ticket.status) {
       case 'UNASSIGNED':
         if (['SUPER_ADMIN', 'ADMIN'].includes(userRole)) {
           return <AssignVSMForm onAssign={handleAdminAssign} isSubmitting={isSubmitting} />;
         }
-        return userRole === 'VSM' ? (
-          <ActionButton icon={<User className="w-4 h-4" />} label={t.onboarding.actions.assignToMe} onClick={handleAssign} disabled={isSubmitting} />
-        ) : null;
+        return null;
 
-      case 'AWAITING_VENDOR_LISTING':
-        return isVsm ? (
-          <div className="space-y-4">
-            <p className="text-sm text-muted bg-gray-50 p-4 rounded-xl border border-gray-100">
-              {t.onboarding.labels.advanceToReviewDesc}
+      case 'DATA_COLLECTION':
+        return (
+          <div className="bg-blue-50 border border-blue-100 rounded-xl p-4">
+            <p className="text-sm text-blue-800 font-medium">
+              {t.onboarding.labels.waitingVendorListing}
             </p>
-            <ActionButton 
-              icon={<CheckCircle className="w-4 h-4" />} 
-              label={t.onboarding.actions.advanceToReview} 
-              onClick={handleStartReview} 
-              disabled={isSubmitting} 
-              variant="success" 
-            />
+            <div className="mt-3 flex gap-3 text-xs">
+              <span className={`px-2 py-1 rounded-full font-bold ${ticket.has_vendor_listing ? 'bg-emerald-100 text-emerald-700' : 'bg-gray-100 text-gray-500'}`}>
+                {t.onboarding.labels.vendorListing} {ticket.has_vendor_listing ? '✓' : '○'}
+              </span>
+              <span className={`px-2 py-1 rounded-full font-bold ${ticket.has_benefit_listing ? 'bg-emerald-100 text-emerald-700' : 'bg-gray-100 text-gray-500'}`}>
+                {t.onboarding.labels.benefitListing} {ticket.has_benefit_listing ? '✓' : '○'}
+              </span>
+            </div>
           </div>
-        ) : null;
+        );
 
       case 'VSM_REVIEW':
-        return isVsm ? (
+        if (!isVsm) return null;
+        return (
           <div className="space-y-3">
+            {!ticket.assigned_ops && (
+              <AssignOpsForm onAssign={handleAssignOps} isSubmitting={isSubmitting} />
+            )}
             {showRejectForm ? (
               <>
                 <textarea
@@ -172,18 +186,18 @@ export default function TicketDetailModal({ ticket, onClose, onUpdate }: TicketD
               </>
             ) : (
               <div className="flex gap-2">
-                <ActionButton icon={<CheckCircle className="w-4 h-4" />} label={t.onboarding.actions.approve} onClick={handleApprove} disabled={isSubmitting} variant="success" />
+                <ActionButton icon={<CheckCircle className="w-4 h-4" />} label={t.onboarding.actions.approve} onClick={handleApprove} disabled={isSubmitting || !ticket.assigned_ops} variant="success" />
                 <ActionButton icon={<XCircle className="w-4 h-4" />} label={t.onboarding.actions.requestChanges} onClick={() => setShowRejectForm(true)} disabled={isSubmitting} variant="danger" />
               </div>
             )}
           </div>
-        ) : null;
+        );
 
       case 'OPS_IN_PROGRESS':
-        if (!ticket.assigned_ops && isVsm) {
+        if (!ticket.assigned_ops && ['SUPER_ADMIN', 'ADMIN'].includes(userRole)) {
           return <AssignOpsForm onAssign={handleAssignOps} isSubmitting={isSubmitting} />;
         }
-        const allChecked = ticket.setup_org && ticket.setup_location && ticket.setup_account && ticket.setup_admin;
+        const allChecked = ticket.setup_org && ticket.setup_location && ticket.setup_account && ticket.setup_admin_account && ticket.setup_admin_credentials && ticket.benefit_built && !!ticket.test_link;
         return isOps && ticket.assigned_ops ? (
           <div className="space-y-4">
             <div className="bg-gray-50 border border-gray-200 rounded-xl p-4 space-y-3">
@@ -191,7 +205,22 @@ export default function TicketDetailModal({ ticket, onClose, onUpdate }: TicketD
               <ChecklistItem label={t.onboarding.labels.createOrgEpn} checked={ticket.setup_org} onChange={(c) => handleChecklistChange('setup_org', c)} disabled={isSubmitting} />
               <ChecklistItem label={t.onboarding.labels.setupLocation} checked={ticket.setup_location} onChange={(c) => handleChecklistChange('setup_location', c)} disabled={isSubmitting} />
               <ChecklistItem label={t.onboarding.labels.createFinance} checked={ticket.setup_account} onChange={(c) => handleChecklistChange('setup_account', c)} disabled={isSubmitting} />
-              <ChecklistItem label={t.onboarding.labels.generateAdmin} checked={ticket.setup_admin} onChange={(c) => handleChecklistChange('setup_admin', c)} disabled={isSubmitting} />
+              <ChecklistItem label={t.onboarding.labels.generateAdminAccount} checked={ticket.setup_admin_account} onChange={(c) => handleChecklistChange('setup_admin_account', c)} disabled={isSubmitting} />
+              <ChecklistItem label={t.onboarding.labels.generateAdminCredentials} checked={ticket.setup_admin_credentials} onChange={(c) => handleChecklistChange('setup_admin_credentials', c)} disabled={isSubmitting} />
+            </div>
+            <div className="bg-gray-50 border border-gray-200 rounded-xl p-4 space-y-3">
+              <h4 className="text-sm font-bold text-main mb-2">{t.onboarding.labels.benefitBuild}</h4>
+              <ChecklistItem label={t.onboarding.labels.benefitBuiltCheck} checked={ticket.benefit_built} onChange={(c) => handleChecklistChange('benefit_built', c)} disabled={isSubmitting} />
+              <div className="pt-2">
+                <label className="block text-xs font-bold text-muted mb-1.5">{t.onboarding.labels.testLink}</label>
+                <input
+                  type="url"
+                  value={ticket.test_link || ''}
+                  onChange={(e) => handleChecklistChange('test_link', e.target.value as any)}
+                  placeholder="https://..."
+                  className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-brand/20 focus:border-brand outline-none"
+                />
+              </div>
             </div>
             <ActionButton 
               icon={<CheckCircle className="w-4 h-4" />} 
@@ -203,19 +232,81 @@ export default function TicketDetailModal({ ticket, onClose, onUpdate }: TicketD
           </div>
         ) : null;
 
-      case 'VSM_FINAL_REVIEW':
-        return isVsm ? (
+      case 'BENEFIT_IN_TESTING':
+        if (!isVsm) return null;
+        return (
           <div className="space-y-4">
-            <div className="bg-gray-50 border border-gray-200 rounded-xl p-4 space-y-3">
-              <h4 className="text-sm font-bold text-main mb-2">{t.onboarding.labels.techSetupChecklist}</h4>
-              <ChecklistItem label={t.onboarding.labels.createOrgEpn} checked={ticket.setup_org} onChange={() => {}} disabled={true} />
-              <ChecklistItem label={t.onboarding.labels.setupLocation} checked={ticket.setup_location} onChange={() => {}} disabled={true} />
-              <ChecklistItem label={t.onboarding.labels.createFinance} checked={ticket.setup_account} onChange={() => {}} disabled={true} />
-              <ChecklistItem label={t.onboarding.labels.generateAdmin} checked={ticket.setup_admin} onChange={() => {}} disabled={true} />
+            {ticket.test_link && (
+              <div className="bg-blue-50 border border-blue-100 rounded-xl p-4">
+                <p className="text-xs font-bold text-blue-800 mb-1">{t.onboarding.labels.testLink}</p>
+                <a href={ticket.test_link} target="_blank" rel="noopener noreferrer" className="text-sm text-brand hover:underline break-all">
+                  {ticket.test_link}
+                </a>
+              </div>
+            )}
+            {showRejectForm ? (
+              <>
+                <textarea
+                  value={feedback}
+                  onChange={e => setFeedback(e.target.value)}
+                  placeholder={t.onboarding.labels.describeFix}
+                  className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-brand/20 focus:border-brand outline-none transition-all resize-none"
+                  rows={3}
+                />
+                <div className="flex gap-2">
+                  <ActionButton icon={<XCircle className="w-4 h-4" />} label={t.onboarding.labels.requestRevision} onClick={handleRejectTest} disabled={isSubmitting || !feedback} variant="danger" />
+                  <button onClick={() => setShowRejectForm(false)} className="px-4 py-2 text-sm font-medium text-muted hover:text-main transition-colors">
+                    {t.onboarding.labels.cancel}
+                  </button>
+                </div>
+              </>
+            ) : (
+              <div className="flex gap-2">
+                <ActionButton icon={<CheckCircle className="w-4 h-4" />} label={t.onboarding.labels.approveTest} onClick={handleApproveTest} disabled={isSubmitting} variant="success" />
+                <ActionButton icon={<XCircle className="w-4 h-4" />} label={t.onboarding.labels.requestRevision} onClick={() => setShowRejectForm(true)} disabled={isSubmitting} variant="danger" />
+              </div>
+            )}
+          </div>
+        );
+
+      case 'PENDING_GO_LIVE':
+        return isOps ? (
+          <div className="space-y-4">
+            <div className="bg-gray-50 border border-gray-200 rounded-xl p-4">
+              <label className="block text-xs font-bold text-muted mb-1.5">{t.onboarding.labels.liveLink}</label>
+              <input
+                type="url"
+                value={liveLinkInput}
+                onChange={(e) => setLiveLinkInput(e.target.value)}
+                placeholder="https://..."
+                className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-brand/20 focus:border-brand outline-none"
+              />
             </div>
-            <ActionButton icon={<UserCheck className="w-4 h-4" />} label={t.onboarding.actions.confirmCompletion} onClick={handleVSMConfirm} disabled={isSubmitting} variant="success" />
+            <ActionButton
+              icon={<CheckCircle className="w-4 h-4" />}
+              label="Submit Live Link"
+              onClick={handleSubmitLiveLink}
+              disabled={isSubmitting || !liveLinkInput}
+              variant="success"
+            />
           </div>
         ) : null;
+
+      case 'VSM_FINAL_REVIEW':
+        if (!isVsm) return null;
+        return (
+          <div className="space-y-4">
+            {ticket.live_link && (
+              <div className="bg-emerald-50 border border-emerald-100 rounded-xl p-4">
+                <p className="text-xs font-bold text-emerald-800 mb-1">Live Link</p>
+                <a href={ticket.live_link} target="_blank" rel="noopener noreferrer" className="text-sm text-brand hover:underline break-all">
+                  {ticket.live_link}
+                </a>
+              </div>
+            )}
+            <ActionButton icon={<UserCheck className="w-4 h-4" />} label={t.onboarding.actions.confirmCompletion} onClick={handleVSMConfirm} disabled={isSubmitting} variant="success" />
+          </div>
+        );
 
       default:
         return null;

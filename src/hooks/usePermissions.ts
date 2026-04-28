@@ -4,7 +4,7 @@ export function usePermissions() {
   const { user } = useAuth();
 
   const isInternal = user?.userType === 'INTERNAL';
-  const isPrimaryAdmin = !isInternal && user?.role === 'ADMIN';
+  const isPrimaryAdmin = !isInternal && user?.role === 'PRIMARY_ADMIN';
   const isStandardUser = !isInternal && user?.role === 'STANDARD_USER';
 
   return {

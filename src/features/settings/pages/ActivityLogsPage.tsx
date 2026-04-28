@@ -48,7 +48,9 @@ export default function ActivityLogsPage() {
       (l.user_name && l.user_name.toLowerCase().includes(lower)) || 
       (l.user_email && l.user_email.toLowerCase().includes(lower)) ||
       l.action.toLowerCase().includes(lower) || 
-      l.entity.toLowerCase().includes(lower)
+      l.entity.toLowerCase().includes(lower) ||
+      (l.vendor_name && l.vendor_name.toLowerCase().includes(lower)) ||
+      (l.vendor_country && l.vendor_country.toLowerCase().includes(lower))
     );
   }, [logs, search]);
 
@@ -57,6 +59,9 @@ export default function ActivityLogsPage() {
     user: l.user_name || l.user_email || 'System / External',
     action: l.action,
     entity: l.entity,
+    vendor_name: l.vendor_name,
+    vendor_country: l.vendor_country,
+    details: l.details,
     timestamp: l.timestamp
   }));
 
