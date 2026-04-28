@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Home, Building, Users, Gift, Store, ClipboardList } from 'lucide-react';
+import { Home, Building, Users, Gift, ClipboardList } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
 import { useLanguage } from '../../i18n/LanguageContext';
 import WorkspaceSwitcher from './WorkspaceSwitcher';

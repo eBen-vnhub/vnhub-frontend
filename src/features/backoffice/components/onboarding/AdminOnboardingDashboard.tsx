@@ -3,7 +3,7 @@ import { useLanguage } from '../../../../i18n/LanguageContext';
 import { useOnboardingTickets } from '../../hooks/useOnboardingTickets';
 import type { OnboardingTicket, TicketStatus } from '../../../../types/onboarding';
 import TicketDetailModal from './TicketDetailModal';
-import { ClipboardList, Search, Filter, Loader2, ChevronLeft, ChevronRight, User } from 'lucide-react';
+import { ClipboardList, Search, Filter, ChevronLeft, ChevronRight, User } from 'lucide-react';
 import { useNotifications } from '../../../../hooks/useNotifications';
 import StatusBadge from './StatusBadge';
 import AssignVSMForm from './AssignVSMForm';
