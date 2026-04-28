@@ -702,6 +702,25 @@ export const en = {
     logsTitle: "Activity Logs",
     logsSubtitle: "Monitor all system events and user actions.",
     searchLogs: "Search logs by user, action, or entity...",
+    activityLog: {
+      ticketAssigned: "Assigned onboarding ticket {{vendor}} to VSM ({{vsm}})",
+      opsAssigned: "Assigned onboarding ticket {{vendor}} to Ops ({{ops}})",
+      statusChanged: "Changed ticket status {{vendor}} to {{status}}",
+      checklistUpdated: "Updated checklist items {{vendor}}",
+      benefitSubmitted: "Vendor submitted benefit data ({{benefit}})",
+      vendorListingUpdated: "Vendor updated their listing profile",
+      profileUpdated: "Vendor updated company profile",
+      userInvited: "Invited new user ({{email}}) with role {{role}}",
+      subscriptionUpdated: "Updated subscription details {{vendor}}",
+      subscriptionCancelled: "Cancelled subscription {{vendor}}",
+      defaultAction: "Performed {{action}} on {{entity}}",
+      unnamed: "Unnamed",
+      feedback: "Feedback:",
+      liveLink: "Live Link:",
+      noLogs: "No activity logs found.",
+      loading: "Loading logs...",
+      clear: "Clear",
+    },
     table: {
       user: "User",
       role: "Role",
@@ -742,6 +761,22 @@ export const en = {
       vendorSetup: "Vendor Setup",
       benefitBuilds: "Benefit Builds",
       myWork: "My Work",
+    },
+    vendors: {
+      vendorNotFound: "Vendor not found",
+      returnToDirectory: "Return to Directory",
+      backToDirectory: "Back to Directory",
+      unnamedVendor: "Unnamed Vendor",
+      subscriptions: "Subscriptions",
+      teamMembers: "Team Members",
+      primaryAdmin: "Primary Admin",
+      standardUser: "Standard User",
+    },
+    listing: {
+      webSocial: "Web & Social",
+      website: "Website",
+      watchVideo: "Watch Video",
+      noLinks: "No links available",
     }
   }
 };

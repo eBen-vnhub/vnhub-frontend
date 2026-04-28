@@ -8,25 +8,29 @@ interface OnboardingTicketCardProps {
 
 const STATUS_CONFIG: Record<TicketStatus, { icon: typeof Clock; color: string }> = {
   UNASSIGNED: { icon: Clock, color: 'text-amber-500' },
-  AWAITING_VENDOR_LISTING: { icon: Clock, color: 'text-amber-500' },
+  DATA_COLLECTION: { icon: Clock, color: 'text-amber-500' },
   VSM_REVIEW: { icon: Loader2, color: 'text-brand' },
   OPS_IN_PROGRESS: { icon: Loader2, color: 'text-brand' },
+  BENEFIT_IN_TESTING: { icon: Loader2, color: 'text-brand' },
+  PENDING_GO_LIVE: { icon: Loader2, color: 'text-brand' },
   VSM_FINAL_REVIEW: { icon: Loader2, color: 'text-brand' },
   COMPLETED: { icon: CheckCircle, color: 'text-emerald-500' },
 };
 
 const PROGRESS_MAP: Record<TicketStatus, number> = {
   UNASSIGNED: 10,
-  AWAITING_VENDOR_LISTING: 25,
-  VSM_REVIEW: 45,
-  OPS_IN_PROGRESS: 75,
+  DATA_COLLECTION: 25,
+  VSM_REVIEW: 40,
+  OPS_IN_PROGRESS: 55,
+  BENEFIT_IN_TESTING: 70,
+  PENDING_GO_LIVE: 80,
   VSM_FINAL_REVIEW: 90,
   COMPLETED: 100,
 };
 
 function getVendorFacingStatus(status: TicketStatus, t: any) {
   if (status === 'COMPLETED') return (t.vendorPortal as any).onboarding?.statuses?.completed || 'Completed';
-  if (status === 'UNASSIGNED' || status === 'AWAITING_VENDOR_LISTING') return (t.vendorPortal as any).onboarding?.statuses?.actionRequired || 'Action Required';
+  if (status === 'UNASSIGNED' || status === 'DATA_COLLECTION') return (t.vendorPortal as any).onboarding?.statuses?.actionRequired || 'Action Required';
   return (t.vendorPortal as any).onboarding?.statuses?.inSetup || 'In Setup & Review';
 }
 
@@ -54,7 +58,7 @@ export default function OnboardingTicketCard({ ticket }: OnboardingTicketCardPro
           <span className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold ${
             ticket.status === 'COMPLETED'
               ? 'bg-emerald-50 text-emerald-700'
-              : ticket.status === 'UNASSIGNED' || ticket.status === 'AWAITING_VENDOR_LISTING'
+              : ticket.status === 'UNASSIGNED' || ticket.status === 'DATA_COLLECTION'
               ? 'bg-amber-50 text-amber-700'
               : 'bg-brand/10 text-brand'
           }`}>
