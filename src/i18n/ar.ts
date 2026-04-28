@@ -389,16 +389,17 @@ export const ar = {
       sendRequest: 'إرسال الطلب',
     },
     sidebar: {
-      adminSection: "إدارة VNHub",
-      vsmSection: "إدارة نجاح الموردين",
-      opsSection: "العمليات التقنية",
-      dashboard: "لوحة التحكم",
-      vendorsDirectory: "سجل الشركاء",
-      systemSettings: "إعدادات النظام",
+      adminSection: "الإدارة",
+      vendorsDirectory: "دليل الموردين",
+      onboardingPipeline: "مراحل التسجيل",
+      monitoringSection: "المراقبة",
+      vsmPipeline: "تذاكر مسؤولي VSM",
+      opsPipeline: "تذاكر العمليات",
       vendorOnboarding: "تسجيل الموردين",
-      benefitTracker: "متتبع العروض",
+      benefitTracker: "متابعة المزايا",
       vendorSetup: "تجهيز الموردين",
-      benefitBuilds: "بناء العروض",
+      benefitBuilds: "بناء المزايا",
+      myWork: "مهامي",
     },
     directory: {
       title: 'سجل الشركاء',
@@ -748,35 +749,4 @@ export const ar = {
       createUser: "إنشاء مستخدم"
     }
   },
-  backoffice: {
-    sidebar: {
-      adminSection: "الإدارة",
-      vendorsDirectory: "دليل الموردين",
-      onboardingPipeline: "مراحل التسجيل",
-      monitoringSection: "المراقبة",
-      vsmPipeline: "تذاكر مسؤولي VSM",
-      opsPipeline: "تذاكر العمليات",
-      vendorOnboarding: "تسجيل الموردين",
-      benefitTracker: "متابعة المزايا",
-      vendorSetup: "تجهيز الموردين",
-      benefitBuilds: "بناء المزايا",
-      myWork: "مهامي",
-    },
-    vendors: {
-      vendorNotFound: "لم يتم العثور على المورد",
-      returnToDirectory: "العودة إلى الدليل",
-      backToDirectory: "العودة إلى الدليل",
-      unnamedVendor: "مورد بدون اسم",
-      subscriptions: "الباقات",
-      teamMembers: "أعضاء الفريق",
-      primaryAdmin: "المسؤول الرئيسي",
-      standardUser: "مستخدم عادي",
-    },
-    listing: {
-      webSocial: "الويب والتواصل الاجتماعي",
-      website: "الموقع الإلكتروني",
-      watchVideo: "مشاهدة الفيديو",
-      noLinks: "لا توجد روابط متاحة",
-    }
-  }
 };

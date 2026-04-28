@@ -7,7 +7,7 @@ import { settingsService } from '../../../services/settings';
 import type { ActivityLog } from '../../../services/settings';
 
 export default function ActivityLogsPage() {
-  const { t, language } = useLanguage();
+  const { t } = useLanguage();
   const [search, setSearch] = useState('');
   const [dateFilter, setDateFilter] = useState('');
   const [logs, setLogs] = useState<ActivityLog[]>([]);
