@@ -97,7 +97,7 @@ export default function ActivityLogsPage() {
                 onClick={() => setDateFilter('')}
                 className="text-xs text-brand font-bold hover:underline"
               >
-                {language === 'ar' ? 'مسح' : 'Clear'}
+                {t.settings?.activityLog?.clear}
               </button>
             )}
           </div>
@@ -105,7 +105,7 @@ export default function ActivityLogsPage() {
 
         {isLoading ? (
           <div className="p-12 text-center text-muted">
-            {language === 'ar' ? 'جاري تحميل السجلات...' : 'Loading logs...'}
+            {t.settings?.activityLog?.loading}
           </div>
         ) : (
           <>
@@ -113,7 +113,7 @@ export default function ActivityLogsPage() {
             {totalPages > 1 && (
               <div className="p-4 border-t border-border flex items-center justify-between">
                 <span className="text-sm font-bold text-muted">
-                  {language === 'ar' ? `صفحة ${page} من ${totalPages}` : `Page ${page} of ${totalPages}`}
+                  {t.settings?.table?.page} {page} {t.settings?.table?.of} {totalPages}
                 </span>
                 <div className="flex gap-2">
                   <button
