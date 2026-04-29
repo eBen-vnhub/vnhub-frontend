@@ -14,6 +14,8 @@ export default function AdminOnboardingDashboard() {
   const { t } = useLanguage();
   const { tickets, isLoading, error, updateTicketLocally, refetch } = useOnboardingTickets();
   const [selectedTicket, setSelectedTicket] = useState<OnboardingTicket | null>(null);
+  const [expandedVsm, setExpandedVsm] = useState<string | null>(null);
+  const [expandedOps, setExpandedOps] = useState<string | null>(null);
 
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState<TicketStatus | 'ALL'>('ALL');
@@ -70,6 +72,23 @@ export default function AdminOnboardingDashboard() {
     return Object.entries(workload).sort((a, b) => b[1] - a[1]);
   }, [tickets]);
 
+  const opsWorkload = useMemo(() => {
+    const workload: Record<string, number> = {};
+    tickets.forEach(ticket => {
+      if (ticket.assigned_ops_name && ticket.status !== 'COMPLETED') {
+        workload[ticket.assigned_ops_name] = (workload[ticket.assigned_ops_name] || 0) + 1;
+      }
+    });
+    return Object.entries(workload).sort((a, b) => b[1] - a[1]);
+  }, [tickets]);
+
+  const getTicketsForPerson = (name: string, type: 'vsm' | 'ops') => {
+    return tickets.filter(t => {
+      const match = type === 'vsm' ? t.assigned_vsm_name : t.assigned_ops_name;
+      return match === name && t.status !== 'COMPLETED';
+    });
+  };
+
   if (isLoading) {
     return (
       <div className="flex items-center justify-center h-64">
@@ -104,20 +123,79 @@ export default function AdminOnboardingDashboard() {
         </div>
       </div>
 
-      {vsmWorkload.length > 0 && (
-        <div className="bg-surface border border-border rounded-2xl p-6 shadow-sm">
-          <h2 className="text-sm font-bold text-main mb-4 flex items-center gap-2">
-            <User className="w-4 h-4 text-brand" />
-            {t.onboarding.dashboard?.vsmActiveWorkload || 'VSM Active Workload'}
-          </h2>
-          <div className="flex flex-wrap gap-3">
-            {vsmWorkload.map(([vsm, count]) => (
-              <div key={vsm} className="flex items-center gap-2 bg-surface-hover border border-border px-3 py-1.5 rounded-full text-sm">
-                <span className="font-semibold text-main">{vsm}</span>
-                <span className="bg-brand/10 text-brand text-xs font-bold px-2 py-0.5 rounded-full">{count}</span>
+      {(vsmWorkload.length > 0 || opsWorkload.length > 0) && (
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+          {vsmWorkload.length > 0 && (
+            <div className="bg-surface border border-border rounded-2xl p-6 shadow-sm">
+              <h2 className="text-sm font-bold text-main mb-4 flex items-center gap-2">
+                <User className="w-4 h-4 text-brand" />
+                {t.onboarding.dashboard?.vsmActiveWorkload || 'VSM Active Workload'}
+              </h2>
+              <div className="space-y-2">
+                {vsmWorkload.map(([vsm, count]) => (
+                  <div key={vsm}>
+                    <button
+                      onClick={() => setExpandedVsm(expandedVsm === vsm ? null : vsm)}
+                      className={`w-full flex items-center justify-between gap-2 px-4 py-2.5 rounded-xl text-sm transition-all ${expandedVsm === vsm ? 'bg-brand/10 border border-brand/20' : 'bg-surface-hover border border-border hover:border-brand/30'}`}
+                    >
+                      <span className="font-semibold text-main">{vsm}</span>
+                      <span className="bg-brand/10 text-brand text-xs font-bold px-2 py-0.5 rounded-full">{count}</span>
+                    </button>
+                    {expandedVsm === vsm && (
+                      <div className="mt-2 ml-2 space-y-1.5 animate-in fade-in slide-in-from-top-2 duration-200">
+                        {getTicketsForPerson(vsm, 'vsm').map(ticket => (
+                          <button
+                            key={ticket.id}
+                            onClick={() => setSelectedTicket(ticket)}
+                            className="w-full flex items-center justify-between px-3 py-2 rounded-lg bg-surface-hover/50 hover:bg-surface-hover text-xs transition-colors text-left"
+                          >
+                            <span className="font-bold text-main truncate">{ticket.vendor_name}</span>
+                            <StatusBadge status={ticket.status} label={t.onboarding.status[ticket.status]} />
+                          </button>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                ))}
               </div>
-            ))}
-          </div>
+            </div>
+          )}
+
+          {opsWorkload.length > 0 && (
+            <div className="bg-surface border border-border rounded-2xl p-6 shadow-sm">
+              <h2 className="text-sm font-bold text-main mb-4 flex items-center gap-2">
+                <User className="w-4 h-4 text-brand" />
+                {t.onboarding.dashboard?.opsActiveWorkload || 'Ops Active Workload'}
+              </h2>
+              <div className="space-y-2">
+                {opsWorkload.map(([ops, count]) => (
+                  <div key={ops}>
+                    <button
+                      onClick={() => setExpandedOps(expandedOps === ops ? null : ops)}
+                      className={`w-full flex items-center justify-between gap-2 px-4 py-2.5 rounded-xl text-sm transition-all ${expandedOps === ops ? 'bg-brand/10 border border-brand/20' : 'bg-surface-hover border border-border hover:border-brand/30'}`}
+                    >
+                      <span className="font-semibold text-main">{ops}</span>
+                      <span className="bg-brand/10 text-brand text-xs font-bold px-2 py-0.5 rounded-full">{count}</span>
+                    </button>
+                    {expandedOps === ops && (
+                      <div className="mt-2 ml-2 space-y-1.5 animate-in fade-in slide-in-from-top-2 duration-200">
+                        {getTicketsForPerson(ops, 'ops').map(ticket => (
+                          <button
+                            key={ticket.id}
+                            onClick={() => setSelectedTicket(ticket)}
+                            className="w-full flex items-center justify-between px-3 py-2 rounded-lg bg-surface-hover/50 hover:bg-surface-hover text-xs transition-colors text-left"
+                          >
+                            <span className="font-bold text-main truncate">{ticket.vendor_name}</span>
+                            <StatusBadge status={ticket.status} label={t.onboarding.status[ticket.status]} />
+                          </button>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
       )}
 
