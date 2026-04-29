@@ -9,6 +9,7 @@ export interface BackofficeVendorSummary {
   teamCount: number;
   createdAt: string;
   latestStatus: string | null;
+  subscriptions: BackofficeSubscription[];
 }
 
 export interface BackofficeTeamMember {

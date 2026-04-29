@@ -1,14 +1,17 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useLanguage } from '../../../i18n/LanguageContext';
+import { useAuth } from '../../../contexts/AuthContext';
 import PageHeader from '../components/PageHeader';
 import UsersToolbar from '../components/users/UsersToolbar';
 import UsersTable from '../components/users/UsersTable';
 import UserModal from '../components/users/UserModal';
 import { Users, Loader2 } from 'lucide-react';
 import authService from '../../../services/auth';
+import { useNotifications } from '../../../hooks/useNotifications';
 
 export default function UserManagementPage() {
   const { t } = useLanguage();
+  const { user } = useAuth();
   const [search, setSearch] = useState('');
   const [debouncedSearch, setDebouncedSearch] = useState('');
   const [users, setUsers] = useState<any[]>([]);
@@ -38,6 +41,10 @@ export default function UserManagementPage() {
       setIsLoading(false);
     }
   }, [page, debouncedSearch]);
+
+  useNotifications(() => {
+    fetchUsers();
+  });
 
   useEffect(() => {
     fetchUsers();
@@ -98,7 +105,8 @@ export default function UserManagementPage() {
             <UsersTable 
               users={users} 
               onEdit={handleEditUser} 
-              onToggleStatus={handleToggleStatus} 
+              onToggleStatus={handleToggleStatus}
+              currentUserId={user?.id}
             />
             {totalPages > 1 && (
               <div className="p-4 border-t border-border flex items-center justify-between">

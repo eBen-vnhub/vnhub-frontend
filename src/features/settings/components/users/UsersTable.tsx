@@ -1,4 +1,4 @@
-import { Edit2 } from 'lucide-react';
+import { Edit2, ShieldCheck } from 'lucide-react';
 import { useLanguage } from '../../../../i18n/LanguageContext';
 
 interface User {
@@ -16,9 +16,10 @@ interface UsersTableProps {
   users: User[];
   onEdit?: (user: User) => void;
   onToggleStatus?: (user: User) => void;
+  currentUserId?: string | number;
 }
 
-export default function UsersTable({ users, onEdit, onToggleStatus }: UsersTableProps) {
+export default function UsersTable({ users, onEdit, onToggleStatus, currentUserId }: UsersTableProps) {
   const { t } = useLanguage();
   
   return (
@@ -36,10 +37,19 @@ export default function UsersTable({ users, onEdit, onToggleStatus }: UsersTable
           {users.map(u => {
             const displayName = u.name || `${u.firstName || ''} ${u.lastName || ''}`.trim() || 'Unknown';
             const isActive = u.isActive ?? (u.status === 'ACTIVE');
+            const isSelf = String(u.id) === String(currentUserId);
             return (
               <tr key={u.id} className="hover:bg-surface-hover/30 transition-colors">
                 <td className="px-6 py-4">
-                  <div className="font-bold text-main">{displayName}</div>
+                  <div className="flex items-center gap-2">
+                    <span className="font-bold text-main">{displayName}</span>
+                    {isSelf && (
+                      <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-brand/10 text-brand text-[10px] font-bold rounded-full">
+                        <ShieldCheck className="w-3 h-3" />
+                        {t.settings?.table?.you || 'You'}
+                      </span>
+                    )}
+                  </div>
                   <div className="text-xs text-muted mt-1">{u.email}</div>
                 </td>
                 <td className="px-6 py-4">
@@ -53,24 +63,28 @@ export default function UsersTable({ users, onEdit, onToggleStatus }: UsersTable
                   </span>
                 </td>
                 <td className="px-6 py-4 text-right">
-                  <div className="flex items-center justify-end gap-2">
-                    {onToggleStatus && (
-                      <button
-                        onClick={() => onToggleStatus(u)}
-                        className={`relative inline-flex h-5 w-9 items-center rounded-full transition-colors ${isActive ? 'bg-brand' : 'bg-gray-300'}`}
-                      >
-                        <span className={`inline-block h-3 w-3 transform rounded-full bg-white transition-transform ${isActive ? 'translate-x-5' : 'translate-x-1'}`} />
-                      </button>
-                    )}
-                    {onEdit && (
-                      <button 
-                        onClick={() => onEdit(u)}
-                        className="p-2 text-muted hover:text-brand hover:bg-brand/10 rounded-lg transition-colors"
-                      >
-                        <Edit2 className="w-4 h-4" />
-                      </button>
-                    )}
-                  </div>
+                  {isSelf ? (
+                    <span className="text-xs text-muted italic">—</span>
+                  ) : (
+                    <div className="flex items-center justify-end gap-2">
+                      {onToggleStatus && (
+                        <button
+                          onClick={() => onToggleStatus(u)}
+                          className={`relative inline-flex h-5 w-9 items-center rounded-full transition-colors ${isActive ? 'bg-brand' : 'bg-gray-300'}`}
+                        >
+                          <span className={`inline-block h-3 w-3 transform rounded-full bg-white transition-transform ${isActive ? 'translate-x-5' : 'translate-x-1'}`} />
+                        </button>
+                      )}
+                      {onEdit && (
+                        <button 
+                          onClick={() => onEdit(u)}
+                          className="p-2 text-muted hover:text-brand hover:bg-brand/10 rounded-lg transition-colors"
+                        >
+                          <Edit2 className="w-4 h-4" />
+                        </button>
+                      )}
+                    </div>
+                  )}
                 </td>
               </tr>
             );
@@ -87,3 +101,4 @@ export default function UsersTable({ users, onEdit, onToggleStatus }: UsersTable
     </div>
   );
 }
+

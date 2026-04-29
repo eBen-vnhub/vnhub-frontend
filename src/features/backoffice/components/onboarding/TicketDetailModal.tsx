@@ -27,6 +27,7 @@ export default function TicketDetailModal({ ticket, onClose, onUpdate }: TicketD
   const [showRejectForm, setShowRejectForm] = useState(false);
   const [linkedBenefits, setLinkedBenefits] = useState<BenefitTracker[]>([]);
   const [selectedBenefit, setSelectedBenefit] = useState<BenefitTracker | null>(null);
+  const [liveLinkInput, setLiveLinkInput] = useState('');
 
   useEffect(() => {
     if (ticket?.vendor_id) {
@@ -126,8 +127,6 @@ export default function TicketDetailModal({ ticket, onClose, onUpdate }: TicketD
       t.onboarding.toast.assignOpsError,
     );
   };
-
-  const [liveLinkInput, setLiveLinkInput] = useState('');
 
   const handleSubmitLiveLink = () =>
     handleAction(
