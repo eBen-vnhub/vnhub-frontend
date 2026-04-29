@@ -20,11 +20,21 @@ interface PaginatedResponse<T> {
   results: T[];
 }
 
+interface LogFilters {
+  date?: string;
+  page?: number;
+  search?: string;
+  country?: string;
+}
+
 export const settingsService = {
-  getLogs: async (date?: string, page: number = 1): Promise<{ results: ActivityLog[]; count: number }> => {
-    let url = `/activity/logs/?page=${page}`;
-    if (date) url += `&timestamp__date=${date}`;
-    const data = await request<PaginatedResponse<ActivityLog>>(url);
+  getLogs: async (filters: LogFilters = {}): Promise<{ results: ActivityLog[]; count: number }> => {
+    const params = new URLSearchParams();
+    params.set('page', String(filters.page || 1));
+    if (filters.date) params.set('timestamp__date', filters.date);
+    if (filters.search) params.set('search', filters.search);
+    if (filters.country) params.set('vendor_country', filters.country);
+    const data = await request<PaginatedResponse<ActivityLog>>(`/activity/logs/?${params.toString()}`);
     return { results: data.results || [], count: data.count || 0 };
   },
 };
