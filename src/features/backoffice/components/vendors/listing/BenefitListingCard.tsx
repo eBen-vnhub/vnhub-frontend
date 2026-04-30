@@ -18,7 +18,6 @@ export default function BenefitListingCard({ benefitListing }: Props) {
         <ListingCardHeader
           icon={<Ticket className="w-5 h-5 text-emerald-600" />}
           title={t.backoffice.listing.benefitListingData}
-          status={benefitListing ? benefitListing.formStatus || 'SUBMITTED' : null}
           submittedAt={benefitListing?.submittedAt}
           accentClass="bg-emerald-500/10"
         />
