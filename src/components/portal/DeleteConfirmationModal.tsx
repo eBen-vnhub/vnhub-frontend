@@ -1,4 +1,4 @@
-import { X, AlertTriangle } from 'lucide-react';
+import { AlertTriangle } from 'lucide-react';
 import { useLanguage } from '../../i18n/LanguageContext';
 
 interface DeleteConfirmationModalProps {

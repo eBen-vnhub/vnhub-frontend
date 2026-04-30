@@ -117,14 +117,14 @@ export default function SetPasswordForm() {
           <>
             <div className="grid grid-cols-2 gap-4">
               <Input
-                label={t.portal.companyProfile?.adminInfo?.firstName || 'First Name'}
+                label={t.portal.userProfile?.firstName || 'First Name'}
                 value={firstName}
                 onChange={(e) => setFirstName(e.target.value)}
                 icon={<UserIcon className="h-4 w-4" />}
                 required
               />
               <Input
-                label={t.portal.companyProfile?.adminInfo?.lastName || 'Last Name'}
+                label={t.portal.userProfile?.lastName || 'Last Name'}
                 value={lastName}
                 onChange={(e) => setLastName(e.target.value)}
                 icon={<UserIcon className="h-4 w-4" />}
@@ -132,7 +132,7 @@ export default function SetPasswordForm() {
               />
             </div>
             <Input
-              label={t.portal.companyProfile?.adminInfo?.jobTitle || 'Job Title'}
+              label={t.portal.userProfile?.jobTitle || 'Job Title'}
               value={jobTitle}
               onChange={(e) => setJobTitle(e.target.value)}
               icon={<Briefcase className="h-4 w-4" />}
@@ -140,7 +140,7 @@ export default function SetPasswordForm() {
             />
             <div>
               <label className="block text-sm font-semibold text-main mb-2">
-                {t.portal.companyProfile?.adminInfo?.mobile || 'Mobile Number'} <span className="text-error">*</span>
+                {t.portal.userProfile?.mobileNumber || 'Mobile Number'} <span className="text-error">*</span>
               </label>
               <div className="flex gap-2">
                 <div className="w-1/3">
