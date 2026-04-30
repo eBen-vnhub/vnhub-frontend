@@ -560,7 +560,9 @@ export const ar = {
     actions: {
       assignToMe: "تعيين لي",
       assignVsm: "تعيين مسؤول",
+      reassignVsm: "إعادة تعيين المسؤول",
       assignOps: "تعيين العمليات",
+      reassignOps: "إعادة تعيين العمليات",
       approve: "موافقة",
       requestChanges: "طلب تعديلات",
       confirmReject: "إرسال الملاحظات وطلب التعديل",
@@ -568,7 +570,8 @@ export const ar = {
       confirmCompletion: "تأكيد واكتمال",
       advanceToReview: "تقديم للمراجعة",
       viewDetails: "عرض التفاصيل",
-      startWork: "بدء العمل"
+      startWork: "بدء العمل",
+      confirmReassign: "تأكيد إعادة التعيين"
     },
     labels: {
       vendor: "المورد",
@@ -584,6 +587,10 @@ export const ar = {
       selectVsmPlaceholder: "اختر مسؤول الموردين",
       selectOps: "اختر مسؤول العمليات",
       selectOpsPlaceholder: "اختر مسؤول العمليات",
+      currentAssignee: "المسؤول الحالي",
+      newAssignee: "المسؤول الجديد *",
+      reassignReason: "السبب (اختياري)",
+      reassignReasonPlaceholder: "لماذا تقوم بإعادة تعيين هذا الطلب؟",
       noTickets: "لا توجد طلبات في هذه المرحلة",
       unassigned: "غير مُعيّن",
       ticketDetails: "تفاصيل الطلب",
@@ -706,6 +713,8 @@ export const ar = {
       listingUpdateFailed: "فشل إرسال طلب التحديث",
       assignOpsSuccess: "تم تعيين العرض للعمليات",
       assignOpsFailed: "فشل تعيين العرض",
+      startBuildingSuccess: "تم بدء العمل بنجاح",
+      startBuildingFailed: "فشل بدء العمل",
       uploadTestSuccess: "تم رفع رابط الاختبار",
       uploadTestFailed: "فشل رفع رابط الاختبار",
       uploadLiveSuccess: "تم رفع رابط التشغيل",

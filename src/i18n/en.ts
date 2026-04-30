@@ -560,7 +560,9 @@ export const en = {
     actions: {
       assignToMe: "Assign to Me",
       assignVsm: "Assign VSM",
+      reassignVsm: "Re-assign VSM",
       assignOps: "Assign Operations",
+      reassignOps: "Re-assign Operations",
       approve: "Approve",
       requestChanges: "Request Changes",
       confirmReject: "Submit Feedback & Request Changes",
@@ -568,7 +570,8 @@ export const en = {
       confirmCompletion: "Confirm & Complete",
       advanceToReview: "Advance to Review",
       viewDetails: "View Details",
-      startWork: "Start Work"
+      startWork: "Start Work",
+      confirmReassign: "Confirm Re-assignment"
     },
     labels: {
       vendor: "Vendor",
@@ -584,6 +587,10 @@ export const en = {
       selectVsmPlaceholder: "Select a VSM",
       selectOps: "Select Operations Member",
       selectOpsPlaceholder: "Select an Ops member",
+      currentAssignee: "Current Assignee",
+      newAssignee: "New Assignee *",
+      reassignReason: "Reason (Optional)",
+      reassignReasonPlaceholder: "Why are you re-assigning this ticket?",
       noTickets: "No tickets in this stage",
       unassigned: "Unassigned",
       ticketDetails: "Ticket Details",
@@ -706,6 +713,8 @@ export const en = {
       listingUpdateFailed: "Failed to send update request",
       assignOpsSuccess: "Benefit assigned to Ops",
       assignOpsFailed: "Failed to assign benefit",
+      startBuildingSuccess: "Work started successfully",
+      startBuildingFailed: "Failed to start work",
       uploadTestSuccess: "Test link uploaded",
       uploadTestFailed: "Failed to upload test link",
       uploadLiveSuccess: "Live link uploaded",

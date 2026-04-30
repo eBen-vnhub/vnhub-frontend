@@ -12,9 +12,10 @@ interface SubscriptionCardProps {
   onAddBenefit: (subscriptionId: number) => void;
   isCancelling: boolean;
   canCancelSubscription: boolean;
+  hasFirstBenefit?: boolean;
 }
 
-export default function SubscriptionCard({ subscription, companyName, onEdit, onCancel, onAddBenefit, isCancelling, canCancelSubscription }: SubscriptionCardProps) {
+export default function SubscriptionCard({ subscription, companyName, onEdit, onCancel, onAddBenefit, isCancelling, canCancelSubscription, hasFirstBenefit = true }: SubscriptionCardProps) {
   const { t } = useLanguage();
   const [showCancelConfirm, setShowCancelConfirm] = useState(false);
   const statusKey = subscription.status?.toLowerCase() || 'pending';
@@ -63,7 +64,7 @@ export default function SubscriptionCard({ subscription, companyName, onEdit, on
             {t.portal.subscriptionCard.edit}
           </Button>
 
-          {subscription.benefitsSubmitted !== undefined && subscription.maxBenefits !== undefined && subscription.benefitsSubmitted < subscription.maxBenefits && (
+          {hasFirstBenefit && subscription.benefitsSubmitted !== undefined && subscription.maxBenefits !== undefined && subscription.benefitsSubmitted < subscription.maxBenefits && (
             <Button
               onClick={() => onAddBenefit(subscription.id)}
               className="bg-portal-accent text-white hover:bg-portal-accent/90 text-sm flex items-center gap-2 py-2"
