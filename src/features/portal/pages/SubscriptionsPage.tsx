@@ -36,7 +36,7 @@ export default function SubscriptionsPage() {
   const [cancellingId, setCancellingId] = useState<number | null>(null);
   const { canCancelSubscription } = usePermissions();
 
-  const { listingsData, isLoadingListings } = useCompanyProfile(vendor || ({} as any), () => {});
+  const { listingsData, isLoadingListings, refetchListings } = useCompanyProfile(vendor || ({} as any), () => {});
   const hasVendorListing = !!listingsData?.vendorListing;
 
   const closeModal = () => setModal({ type: 'none' });
@@ -50,8 +50,8 @@ export default function SubscriptionsPage() {
     try {
       const response = await vendorsService.updateSubscription(subscriptionId, data);
       updateSubscriptionInContext(response.subscription);
-      closeModal();
       toast.success(t.portal.subscriptionCard.updateSuccess);
+      closeModal();
     } catch (err: any) {
       toast.error(err.response?.data?.error || t.portal.subscriptionCard.updateFailed);
     } finally {
@@ -59,10 +59,15 @@ export default function SubscriptionsPage() {
     }
   };
 
-  const handleCancel = async (subscriptionId: number) => {
+  const handleCancel = (subscriptionId: number) => {
     setCancellingId(subscriptionId);
+    setModal({ type: 'none' });
+  };
+
+  const confirmCancel = async () => {
+    if (!cancellingId) return;
     try {
-      const response = await vendorsService.cancelSubscription(subscriptionId);
+      const response = await vendorsService.cancelSubscription(cancellingId);
       updateSubscriptionInContext(response.subscription);
       toast.success(t.portal.subscriptionCard.cancelSuccess);
     } catch (err: any) {
@@ -106,6 +111,7 @@ export default function SubscriptionsPage() {
     closeModal();
     await completeStepLocally('VENDOR_LISTING');
     await fetchDashboardData();
+    await refetchListings();
     toast.success((t.portal as any).pendingActions?.vendorSuccess || 'Vendor listing completed successfully!');
     setModal({ type: 'benefit-listing' });
   };

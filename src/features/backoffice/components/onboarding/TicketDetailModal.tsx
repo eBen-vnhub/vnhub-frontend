@@ -49,8 +49,8 @@ export default function TicketDetailModal({ ticket, onClose, onUpdate }: TicketD
       toast.success(successMsg);
       setFeedback('');
       setShowRejectForm(false);
-    } catch {
-      toast.error(errorMsg);
+    } catch (err: any) {
+      toast.error(err.response?.data?.error || errorMsg);
     } finally {
       setIsSubmitting(false);
     }
@@ -69,22 +69,22 @@ export default function TicketDetailModal({ ticket, onClose, onUpdate }: TicketD
   const handleReject = () =>
     handleAction(
       () => onboardingService.reviewListing(ticket.id, { approved: false, feedback }),
-      t.onboarding.toast.reviewSuccess,
-      t.onboarding.toast.reviewError,
+      (t.toast as any).reviewSuccess,
+      (t.toast as any).reviewError,
     );
 
   const handleOpsComplete = () =>
     handleAction(
       () => onboardingService.opsCompleteSetup(ticket.id),
-      t.onboarding.toast.opsCompleteSuccess,
-      t.onboarding.toast.opsCompleteError,
+      (t.toast as any).opsCompleteSuccess,
+      (t.toast as any).opsCompleteError,
     );
 
   const handleVSMConfirm = () =>
     handleAction(
       () => onboardingService.vsmConfirmCompletion(ticket.id, { approved: true }),
-      t.onboarding.toast.confirmSuccess,
-      t.onboarding.toast.confirmError,
+      (t.toast as any).confirmSuccess,
+      (t.toast as any).confirmError,
     );
 
   const handleRejectFinal = () =>
@@ -97,8 +97,8 @@ export default function TicketDetailModal({ ticket, onClose, onUpdate }: TicketD
   const handleApproveTest = () =>
     handleAction(
       () => onboardingService.approveTest(ticket.id, { approved: true }),
-      'Test approved',
-      'Failed to approve test',
+      (t.toast as any).testApproveSuccess || 'Test approved',
+      (t.toast as any).testApproveError || 'Failed to approve test',
     );
 
   const handleRejectTest = () =>
@@ -115,8 +115,8 @@ export default function TicketDetailModal({ ticket, onClose, onUpdate }: TicketD
     if (!vsmId) return;
     handleAction(
       () => onboardingService.assignTicket(ticket.id, parseInt(vsmId)),
-      t.onboarding.toast.assignSuccess,
-      t.onboarding.toast.assignError,
+      (t.toast as any).assignSuccess,
+      (t.toast as any).assignError,
     );
   };
 
@@ -124,8 +124,8 @@ export default function TicketDetailModal({ ticket, onClose, onUpdate }: TicketD
     if (!opsId) return;
     handleAction(
       () => onboardingService.assignTicketOps(ticket.id, parseInt(opsId)),
-      t.onboarding.toast.assignOpsSuccess,
-      t.onboarding.toast.assignOpsError,
+      (t.toast as any).assignOpsSuccess,
+      (t.toast as any).assignOpsError,
     );
   };
 
@@ -133,14 +133,14 @@ export default function TicketDetailModal({ ticket, onClose, onUpdate }: TicketD
     if (reassignType === 'VSM') {
       return handleAction(
         () => onboardingService.assignTicket(ticket.id, userId),
-        (t.onboarding.toast as any).assignSuccess,
-        (t.onboarding.toast as any).assignError,
+        (t.toast as any).assignSuccess,
+        (t.toast as any).assignError,
       );
     } else {
       return handleAction(
         () => onboardingService.assignTicketOps(ticket.id, userId),
-        (t.onboarding.toast as any).assignOpsSuccess,
-        (t.onboarding.toast as any).assignOpsError,
+        (t.toast as any).assignOpsSuccess,
+        (t.toast as any).assignOpsError,
       );
     }
   };
