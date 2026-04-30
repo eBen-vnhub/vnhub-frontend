@@ -39,9 +39,10 @@ const onboardingService = {
       method: 'POST',
     }),
 
-  vsmConfirmCompletion: (ticketId: string) =>
+  vsmConfirmCompletion: (ticketId: string, payload: ReviewPayload) =>
     request<OnboardingTicket>(`/onboarding/tickets/${ticketId}/vsm-confirm/`, {
       method: 'POST',
+      body: JSON.stringify(payload),
     }),
 
   approveTest: (ticketId: string, payload: ReviewPayload) =>

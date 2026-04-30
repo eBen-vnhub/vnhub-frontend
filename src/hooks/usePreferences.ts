@@ -13,7 +13,7 @@ async function fetchPreferences(): Promise<Record<string, any>> {
   if (cachedPreferences) return cachedPreferences;
   if (fetchPromise) return fetchPromise;
 
-  fetchPromise = request<PreferencesData>('/accounts/me/preferences/').then(data => {
+  fetchPromise = request<PreferencesData>('/auth/me/preferences/').then(data => {
     cachedPreferences = data.preferences || {};
     fetchPromise = null;
     return cachedPreferences;
@@ -26,7 +26,7 @@ async function fetchPreferences(): Promise<Record<string, any>> {
 }
 
 async function patchPreferences(partial: Record<string, any>): Promise<Record<string, any>> {
-  const data = await request<PreferencesData>('/accounts/me/preferences/', {
+  const data = await request<PreferencesData>('/auth/me/preferences/', {
     method: 'PATCH',
     body: JSON.stringify({ preferences: partial }),
   });
