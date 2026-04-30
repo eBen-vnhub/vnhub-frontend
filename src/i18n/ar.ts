@@ -532,7 +532,6 @@ export const ar = {
       GO_LIVE: "في انتظار التشغيل",
       FINAL_REVIEW: "المراجعة النهائية",
       DONE: "مكتمل",
-      OPS_QUEUE: "قائمة الانتظار",
       OPS_IN_PROGRESS: "قيد التجهيز",
       BENEFIT_IN_TESTING: "اختبار الميزة",
       PENDING_GO_LIVE: "في انتظار التشغيل",
@@ -566,9 +565,10 @@ export const ar = {
       requestChanges: "طلب تعديلات",
       confirmReject: "إرسال الملاحظات وطلب التعديل",
       markSetupComplete: "تأكيد تجهيز المورد",
-      confirmCompletion: "تأكيد وإنهاء",
-      advanceToReview: "التقديم للمراجعة",
-      viewDetails: "عرض التفاصيل"
+      confirmCompletion: "تأكيد واكتمال",
+      advanceToReview: "تقديم للمراجعة",
+      viewDetails: "عرض التفاصيل",
+      startWork: "بدء العمل"
     },
     labels: {
       vendor: "المورد",
@@ -591,6 +591,8 @@ export const ar = {
       close: "إغلاق",
       confirm: "تأكيد",
       cancel: "إلغاء",
+      opsQueueMessage: "هذا الطلب في قائمتك. راجع التفاصيل وابدأ العمل عندما تكون جاهزاً.",
+      opsQueueWaiting: "في انتظار بدء العمل من قبل العمليات.",
       advanceToReviewDesc: "إذا كان المورد قد أكمل ملفه، يمكنك تقديم هذه التيكت للمراجعة.",
       techSetupChecklist: "قائمة التجهيز التقني",
       createOrgEpn: "إنشاء مؤسسة في ePN",
@@ -613,6 +615,8 @@ export const ar = {
     toast: {
       assignSuccess: "تم تعيين الطلب بنجاح",
       assignError: "فشل تعيين الطلب",
+      startWorkSuccess: "تم بدء العمل بنجاح",
+      startWorkError: "فشل بدء العمل",
       assignOpsSuccess: "تم تعيين مسؤول العمليات",
       assignOpsError: "فشل تعيين العمليات",
       sendFormsSuccess: "تم إرسال النموذج للمورد",
