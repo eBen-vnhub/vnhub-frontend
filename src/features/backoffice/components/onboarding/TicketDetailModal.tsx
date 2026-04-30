@@ -64,14 +64,6 @@ export default function TicketDetailModal({ ticket, onClose, onUpdate }: TicketD
   };
 
 
-
-  const handleApprove = () =>
-    handleAction(
-      () => onboardingService.reviewListing(ticket.id, { approved: true }),
-      t.onboarding.toast.reviewSuccess,
-      t.onboarding.toast.reviewError,
-    );
-
   const handleReject = () =>
     handleAction(
       () => onboardingService.reviewListing(ticket.id, { approved: false, feedback }),
