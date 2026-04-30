@@ -10,7 +10,7 @@ interface TeamMembersListProps {
 }
 
 function RoleBadge({ role, t }: { role: string; t: any }) {
-  const isPrimary = role === 'SUPER_ADMIN';
+  const isPrimary = role === 'PRIMARY_ADMIN';
   return (
     <div className="flex flex-col gap-0.5">
       <div className={`inline-flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1 rounded-lg ${

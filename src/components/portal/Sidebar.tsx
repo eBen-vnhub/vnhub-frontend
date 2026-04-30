@@ -2,11 +2,14 @@ import { useState } from 'react';
 import { Home, Building, Users, Gift, ClipboardList } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
 import { useLanguage } from '../../i18n/LanguageContext';
+import { useAuth } from '../../contexts/AuthContext';
 import WorkspaceSwitcher from './WorkspaceSwitcher';
 import InlineSubscriptionModal from './InlineSubscriptionModal';
 
 export default function Sidebar() {
   const { t } = useLanguage();
+  const { user } = useAuth();
+  const isPrimaryAdmin = user?.role === 'PRIMARY_ADMIN';
   const [showBranchModal, setShowBranchModal] = useState(false);
 
   return (
@@ -77,19 +80,21 @@ export default function Sidebar() {
             <span className="text-sm font-semibold truncate">{(t.portal as any).myBenefits?.title || 'My Benefits'}</span>
           </NavLink>
 
-          <NavLink
-            to="/portal/admin"
-            className={({ isActive }) =>
-              `group w-full flex items-center gap-3 rounded-xl px-4 py-3 transition-all duration-300 ${
-                isActive
-                  ? 'bg-brand text-white shadow-lg shadow-brand/25'
-                  : 'text-gray-500 hover:bg-gray-50 hover:text-gray-700'
-              }`
-            }
-          >
-            <Users className="w-5 h-5" />
-            <span className="text-sm font-semibold truncate">{t.portal.sidebar.vendorAdmin}</span>
-          </NavLink>
+          {isPrimaryAdmin && (
+            <NavLink
+              to="/portal/admin"
+              className={({ isActive }) =>
+                `group w-full flex items-center gap-3 rounded-xl px-4 py-3 transition-all duration-300 ${
+                  isActive
+                    ? 'bg-brand text-white shadow-lg shadow-brand/25'
+                    : 'text-gray-500 hover:bg-gray-50 hover:text-gray-700'
+                }`
+              }
+            >
+              <Users className="w-5 h-5" />
+              <span className="text-sm font-semibold truncate">{t.portal.sidebar.vendorAdmin}</span>
+            </NavLink>
+          )}
         </nav>
       </div>
 

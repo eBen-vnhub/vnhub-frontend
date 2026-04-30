@@ -185,10 +185,38 @@ export default function TicketDetailModal({ ticket, onClose, onUpdate }: TicketD
               </>
             ) : (
               <div className="flex gap-2">
-                <ActionButton icon={<CheckCircle className="w-4 h-4" />} label={t.onboarding.actions.approve} onClick={handleApprove} disabled={isSubmitting || !ticket.assigned_ops} variant="success" />
                 <ActionButton icon={<XCircle className="w-4 h-4" />} label={t.onboarding.actions.requestChanges} onClick={() => setShowRejectForm(true)} disabled={isSubmitting} variant="danger" />
               </div>
             )}
+          </div>
+        );
+
+      case 'OPS_QUEUE':
+        if (isOps && ticket.assigned_ops) {
+          return (
+            <div className="bg-blue-50 border border-blue-100 rounded-xl p-4 space-y-3">
+              <p className="text-sm text-blue-800 font-medium">
+                {t.onboarding.labels?.opsQueueMessage || 'This ticket is in your queue. Review the details and start work when ready.'}
+              </p>
+              <ActionButton
+                icon={<CheckCircle className="w-4 h-4" />}
+                label={t.onboarding.actions?.startWork || 'Start Work'}
+                onClick={() => handleAction(
+                  () => onboardingService.startOpsWork(ticket.id),
+                  t.onboarding.toast?.startWorkSuccess || 'Work started successfully',
+                  t.onboarding.toast?.startWorkError || 'Failed to start work',
+                )}
+                disabled={isSubmitting}
+                variant="primary"
+              />
+            </div>
+          );
+        }
+        return (
+          <div className="bg-blue-50 border border-blue-100 rounded-xl p-4">
+            <p className="text-sm text-blue-800 font-medium">
+              {t.onboarding.labels?.opsQueueWaiting || 'Waiting for Operations to start work.'}
+            </p>
           </div>
         );
 

@@ -12,9 +12,10 @@ interface OnboardingBoardProps {
   title: string;
   subtitle: string;
   columns: (keyof typeof ONBOARDING_COLUMNS)[];
+  boardId?: string;
 }
 
-export default function OnboardingBoard({ title, subtitle, columns }: OnboardingBoardProps) {
+export default function OnboardingBoard({ title, subtitle, columns, boardId }: OnboardingBoardProps) {
   const { t } = useLanguage();
   const { tickets, isLoading, error, updateTicketLocally, refetch } = useOnboardingTickets();
   const [selectedTicket, setSelectedTicket] = useState<OnboardingTicket | null>(null);
@@ -65,6 +66,7 @@ export default function OnboardingBoard({ title, subtitle, columns }: Onboarding
               statuses={statuses}
               tickets={tickets}
               onTicketClick={setSelectedTicket}
+              boardId={boardId || 'onboarding'}
             />
           );
         })}

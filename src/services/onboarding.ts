@@ -17,7 +17,10 @@ const onboardingService = {
       body: JSON.stringify({ ops_user_id: opsUserId }),
     }),
 
-
+  startOpsWork: (ticketId: string) =>
+    request<OnboardingTicket>(`/onboarding/tickets/${ticketId}/start-work/`, {
+      method: 'POST',
+    }),
 
   reviewListing: (ticketId: string, payload: ReviewPayload) =>
     request<OnboardingTicket>(`/onboarding/tickets/${ticketId}/review/`, {
