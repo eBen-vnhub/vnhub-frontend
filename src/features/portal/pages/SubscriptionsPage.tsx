@@ -207,6 +207,7 @@ export default function SubscriptionsPage() {
                 onAddBenefit={handleAddBenefit}
                 isCancelling={cancellingId === sub.id}
                 canCancelSubscription={canCancelSubscription}
+                hasFirstBenefit={subscriptions.reduce((sum, s) => sum + (s.benefitsSubmitted || 0), 0) > 0}
               />
             ))}
           </div>

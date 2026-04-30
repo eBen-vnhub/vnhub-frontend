@@ -103,7 +103,7 @@ export default function VendorDetailPage() {
     );
   }
 
-  const canRequestUpdate = user?.role === 'SUPER_ADMIN' || user?.role === 'VSM';
+  const canRequestUpdate = user?.role === 'SUPER_ADMIN' || (user?.role === 'VSM' && user.id === String(vendorDetail?.assignedVsmId));
   const canEditTeam = user?.role === 'SUPER_ADMIN' || user?.role === 'VSM';
 
   return (

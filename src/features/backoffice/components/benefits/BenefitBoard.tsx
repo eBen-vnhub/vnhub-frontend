@@ -65,6 +65,7 @@ export default function BenefitBoard({ title, subtitle, columns }: BenefitBoardP
               statuses={statuses}
               benefits={benefits}
               onBenefitClick={setSelectedBenefit}
+              boardId="benefit_tracker"
             />
           );
         })}

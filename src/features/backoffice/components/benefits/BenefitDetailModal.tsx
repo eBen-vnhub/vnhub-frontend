@@ -96,8 +96,8 @@ export default function BenefitDetailModal({ benefit, onClose, onUpdate }: Benef
   const handleStartBuilding = () =>
     handleAction(
       () => onboardingService.startBuildingBenefit(benefit.id),
-      t.benefitTracker.toast.assignOpsSuccess,
-      t.benefitTracker.toast.assignOpsFailed,
+      t.benefitTracker.toast.startBuildingSuccess,
+      t.benefitTracker.toast.startBuildingFailed,
     );
 
   const handleApproveLive = () =>

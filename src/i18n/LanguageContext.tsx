@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useCallback, type ReactNode } from 'react';
+import { createContext, useContext, useState, useCallback, useEffect, type ReactNode } from 'react';
 import { en } from './en';
 import { ar } from './ar';
 import type { Language, Direction } from '../types';
@@ -12,6 +12,8 @@ interface LanguageContextType {
   setLanguage: (lang: Language) => void;
 }
 
+import { usePreferences } from '../hooks/usePreferences';
+
 const translations: Record<Language, Translations> = { en, ar };
 
 const LanguageContext = createContext<LanguageContextType | null>(null);
@@ -24,6 +26,18 @@ function getInitialLanguage(): Language {
 
 export function LanguageProvider({ children }: { children: ReactNode }) {
   const [language, setLanguageState] = useState<Language>(getInitialLanguage);
+  const { preferences, updatePreference, isLoading } = usePreferences();
+
+  useEffect(() => {
+    if (!isLoading && preferences?.language && preferences.language !== language) {
+      if (preferences.language === 'ar' || preferences.language === 'en') {
+        setLanguageState(preferences.language as Language);
+        localStorage.setItem('vnhub-lang', preferences.language);
+        document.documentElement.dir = preferences.language === 'ar' ? 'rtl' : 'ltr';
+        document.documentElement.lang = preferences.language;
+      }
+    }
+  }, [preferences?.language, isLoading]);
 
   const direction: Direction = language === 'ar' ? 'rtl' : 'ltr';
 
@@ -32,7 +46,10 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
     localStorage.setItem('vnhub-lang', lang);
     document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
     document.documentElement.lang = lang;
-  }, []);
+    try {
+      updatePreference('language', lang);
+    } catch {}
+  }, [updatePreference]);
 
   return (
     <LanguageContext.Provider value={{ language, direction, t: translations[language], setLanguage }}>
