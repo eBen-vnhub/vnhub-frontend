@@ -129,7 +129,7 @@ export default function TicketDetailModal({ ticket, onClose, onUpdate }: TicketD
     );
   };
 
-  const handleReassign = async (userId: number, reason: string) => {
+  const handleReassign = async (userId: number, _reason: string) => {
     if (reassignType === 'VSM') {
       return handleAction(
         () => onboardingService.assignTicket(ticket.id, userId),
