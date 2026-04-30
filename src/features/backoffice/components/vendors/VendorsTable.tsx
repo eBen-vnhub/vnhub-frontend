@@ -15,12 +15,6 @@ const PLAN_STYLES: Record<string, { bg: string; text: string; border: string }> 
   CATEGORY: { bg: 'bg-rose-50', text: 'text-rose-700', border: 'border-rose-200' },
 };
 
-const STATUS_STYLES: Record<string, string> = {
-  ACTIVE: 'bg-emerald-500/10 text-emerald-600 border-emerald-200',
-  PENDING: 'bg-amber-500/10 text-amber-600 border-amber-200',
-  CANCELLED: 'bg-gray-100 text-gray-500 border-gray-200',
-};
-
 function VendorAvatar({ name }: { name: string }) {
   const initials = (name || 'VN').substring(0, 2).toUpperCase();
   return (
@@ -36,16 +30,6 @@ function PlanBadge({ plan }: { plan: string }) {
     <span className={`inline-flex items-center gap-1 text-[10px] uppercase font-bold px-2 py-0.5 rounded-md border ${style.bg} ${style.text} ${style.border}`}>
       <Crown className="w-3 h-3" />
       {plan}
-    </span>
-  );
-}
-
-function StatusDot({ status }: { status: string | null }) {
-  if (!status) return null;
-  const style = STATUS_STYLES[status] || STATUS_STYLES.PENDING;
-  return (
-    <span className={`text-[10px] uppercase font-bold px-2 py-0.5 rounded-md border ${style}`}>
-      {status}
     </span>
   );
 }
@@ -106,7 +90,6 @@ export default function VendorsTable({ vendors, isLoading }: Props) {
                   <h3 className="font-bold text-main text-lg truncate max-w-[300px]">
                     {vendor.companyName || vendorLabels.unnamedVendor || 'Unnamed Vendor'}
                   </h3>
-                  <StatusDot status={vendor.latestStatus} />
                   {plans.map(p => <PlanBadge key={p} plan={p} />)}
                 </div>
 

@@ -23,7 +23,7 @@ const BENEFIT_STATUS_STYLES: Record<string, string> = {
 };
 
 function MemberRoleBadge({ role, t }: { role: string; t: any }) {
-  const isPrimary = role === 'SUPER_ADMIN';
+  const isPrimary = role === 'PRIMARY_ADMIN';
   return (
     <span className={`inline-flex items-center gap-1 text-[10px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wider ${
       isPrimary ? 'bg-brand/10 text-brand border border-brand/20' : 'bg-surface-hover text-muted border border-border'

@@ -28,7 +28,7 @@ export function useVendorAdmin() {
   const handleInvite = async (email: string) => {
     setIsInviting(true);
     try {
-      await vendorsService.inviteTeamMember({ email, role: 'ADMIN' });
+      await vendorsService.inviteTeamMember({ email, role: 'STANDARD_USER' });
       toast.success('Invitation sent successfully');
       fetchTeam();
     } catch (err: unknown) {

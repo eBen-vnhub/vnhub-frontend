@@ -1,14 +1,17 @@
 import { NavLink } from 'react-router-dom';
 import { Users, ClipboardList, Briefcase, Activity, ServerCog, Settings, ChevronDown } from 'lucide-react';
-import { useState } from 'react';
 import { useLanguage } from '../../../../i18n/LanguageContext';
 import { useAuth } from '../../../../contexts/AuthContext';
+import { usePreferences } from '../../../../hooks/usePreferences';
 
 export default function BackofficeSidebar() {
   const { t } = useLanguage();
   const { user } = useAuth();
   const role = user?.role || '';
-  const [monitoringExpanded, setMonitoringExpanded] = useState(true);
+  const { getPreference, updatePreference } = usePreferences();
+
+  const managementExpanded = getPreference('sidebar_management', true);
+  const monitoringExpanded = getPreference('sidebar_monitoring', true);
 
   const isSuperAdmin = role === 'SUPER_ADMIN';
   const isAdmin = role === 'ADMIN';
@@ -22,20 +25,26 @@ export default function BackofficeSidebar() {
         {isSuperAdmin && (
           <>
             <div className="space-y-1">
-              <h2 className="px-3 text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-2">
+              <button
+                onClick={() => updatePreference('sidebar_management', !managementExpanded)}
+                className="w-full flex items-center justify-between px-3 text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-2 hover:text-gray-500 transition-colors"
+              >
                 {t.backoffice.sidebar.adminSection}
-              </h2>
-              <nav className="space-y-1">
-                <SidebarLink to="/backoffice/vendors" icon={<Users />} label={t.backoffice.sidebar.vendorsDirectory} />
-                <SidebarLink to="/backoffice/onboarding" icon={<ClipboardList />} label={t.backoffice.sidebar.onboardingPipeline} />
-                <SidebarLink to="/backoffice/users" icon={<Users />} label={t.settings?.users || 'User Management'} />
-                <SidebarLink to="/backoffice/activity-logs" icon={<Settings />} label={t.settings?.logs || 'Activity Logs'} />
-              </nav>
+                <ChevronDown className={`w-3.5 h-3.5 transition-transform ${managementExpanded ? '' : '-rotate-90'}`} />
+              </button>
+              {managementExpanded && (
+                <nav className="space-y-1">
+                  <SidebarLink to="/backoffice/vendors" icon={<Users />} label={t.backoffice.sidebar.vendorsDirectory} />
+                  <SidebarLink to="/backoffice/onboarding" icon={<ClipboardList />} label={t.backoffice.sidebar.onboardingPipeline} />
+                  <SidebarLink to="/backoffice/users" icon={<Users />} label={t.settings?.users || 'User Management'} />
+                  <SidebarLink to="/backoffice/activity-logs" icon={<Settings />} label={t.settings?.logs || 'Activity Logs'} />
+                </nav>
+              )}
             </div>
 
             <div className="space-y-1">
               <button
-                onClick={() => setMonitoringExpanded(!monitoringExpanded)}
+                onClick={() => updatePreference('sidebar_monitoring', !monitoringExpanded)}
                 className="w-full flex items-center justify-between px-3 text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-2 hover:text-gray-500 transition-colors"
               >
                 {t.backoffice.sidebar.monitoringSection}

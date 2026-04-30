@@ -117,9 +117,9 @@ export default function AdminOnboardingDashboard() {
         <div>
           <div className="flex items-center gap-3 mb-1">
             <ClipboardList className="w-6 h-6 text-brand" />
-            <h1 className="text-2xl font-bold text-main">Onboarding Pipeline</h1>
+            <h1 className="text-2xl font-bold text-main">Vendor Onboarding</h1>
           </div>
-          <p className="text-sm text-muted ms-9">Master overview of all vendor onboarding tickets.</p>
+          <p className="text-sm text-muted ms-9">Manage onboarding tickets, assignments, and progress tracking.</p>
         </div>
       </div>
 
@@ -224,6 +224,7 @@ export default function AdminOnboardingDashboard() {
                 <option value="UNASSIGNED">{t.onboarding.status.UNASSIGNED}</option>
                 <option value="DATA_COLLECTION">{t.onboarding.status.DATA_COLLECTION}</option>
                 <option value="VSM_REVIEW">{t.onboarding.status.VSM_REVIEW}</option>
+                <option value="OPS_QUEUE">{t.onboarding.status.OPS_QUEUE}</option>
                 <option value="OPS_IN_PROGRESS">{t.onboarding.status.OPS_IN_PROGRESS}</option>
                 <option value="BENEFIT_IN_TESTING">{t.onboarding.status.BENEFIT_IN_TESTING}</option>
                 <option value="PENDING_GO_LIVE">{t.onboarding.status.PENDING_GO_LIVE}</option>
