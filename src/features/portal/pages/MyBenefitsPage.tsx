@@ -60,22 +60,22 @@ const fetchBenefits = useCallback(async () => {
     });
 
     trackersData.forEach((tracker: any) => {
-      const matchedOffer = tracker.external_benefit_id
-        ? offersMap[String(tracker.external_benefit_id)]
-        : null;
-      mappedBenefits.push({
-        id: tracker.id,
-        benefitNumber: tracker.benefit_number,
-        offerType: matchedOffer?.offerType || 'Benefit',
-        offerDescription: matchedOffer?.offerDescription || tracker.benefit_name || `Benefit ${tracker.benefit_number}`,
-        discountValue: matchedOffer?.discountValue || '',
-        ...matchedOffer,
-        trackerStatus: tracker.status || 'PENDING',
-        subscriptionPlan: tracker.subscription_plan || 'Unknown',
-        subscriptionId: tracker.subscription || 0,
-        testLink: tracker.test_link,
-        liveLink: tracker.live_link,
-      });
+      if (tracker.external_benefit_id) {
+        const matchedOffer = offersMap[String(tracker.external_benefit_id)];
+        mappedBenefits.push({
+          id: tracker.id,
+          benefitNumber: tracker.benefit_number,
+          offerType: matchedOffer?.offerType || 'Benefit',
+          offerDescription: matchedOffer?.offerDescription || tracker.benefit_name || `Benefit ${tracker.benefit_number}`,
+          discountValue: matchedOffer?.discountValue || '',
+          ...matchedOffer,
+          trackerStatus: tracker.status || 'PENDING',
+          subscriptionPlan: tracker.subscription_plan || 'Unknown',
+          subscriptionId: tracker.subscription || 0,
+          testLink: tracker.test_link,
+          liveLink: tracker.live_link,
+        });
+      }
     });
 
     setBenefits(mappedBenefits.sort((a, b) => a.benefitNumber - b.benefitNumber));

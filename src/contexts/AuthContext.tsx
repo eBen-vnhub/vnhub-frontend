@@ -1,6 +1,7 @@
 import { createContext, useContext, useState, useCallback, useEffect, type ReactNode } from 'react';
 import type { User } from '../types';
 import authService from '../services/auth';
+import { refetchPreferences } from '../hooks/usePreferences';
 
 interface AuthContextType {
   user: User | null;
@@ -29,6 +30,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const login = useCallback((userData: User) => {
     setUser(userData);
+    refetchPreferences();
   }, []);
 
   const logout = useCallback(async () => {
