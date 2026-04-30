@@ -532,7 +532,6 @@ export const en = {
       GO_LIVE: "Pending Live",
       FINAL_REVIEW: "Final Review",
       DONE: "Done",
-      OPS_QUEUE: "Ops Queue",
       OPS_IN_PROGRESS: "Ops In Progress",
       BENEFIT_IN_TESTING: "Benefit Testing",
       PENDING_GO_LIVE: "Pending Go Live",
@@ -568,7 +567,8 @@ export const en = {
       markSetupComplete: "Mark Setup Complete",
       confirmCompletion: "Confirm & Complete",
       advanceToReview: "Advance to Review",
-      viewDetails: "View Details"
+      viewDetails: "View Details",
+      startWork: "Start Work"
     },
     labels: {
       vendor: "Vendor",
@@ -591,6 +591,8 @@ export const en = {
       close: "Close",
       confirm: "Confirm",
       cancel: "Cancel",
+      opsQueueMessage: "This ticket is in your queue. Review the details and start work when ready.",
+      opsQueueWaiting: "Waiting for Operations to start work.",
       advanceToReviewDesc: "If the vendor has submitted their profile, you can advance this ticket to review.",
       techSetupChecklist: "Technical Setup Checklist",
       createOrgEpn: "Create Organization in ePN",
@@ -613,6 +615,8 @@ export const en = {
     toast: {
       assignSuccess: "Ticket assigned successfully",
       assignError: "Failed to assign ticket",
+      startWorkSuccess: "Work started successfully",
+      startWorkError: "Failed to start work",
       assignOpsSuccess: "Operations member assigned",
       assignOpsError: "Failed to assign operations",
       sendFormsSuccess: "Listing form sent to vendor",
