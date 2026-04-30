@@ -80,9 +80,16 @@ export default function TicketDetailModal({ ticket, onClose, onUpdate }: TicketD
 
   const handleVSMConfirm = () =>
     handleAction(
-      () => onboardingService.vsmConfirmCompletion(ticket.id),
+      () => onboardingService.vsmConfirmCompletion(ticket.id, { approved: true }),
       t.onboarding.toast.confirmSuccess,
       t.onboarding.toast.confirmError,
+    );
+
+  const handleRejectFinal = () =>
+    handleAction(
+      () => onboardingService.vsmConfirmCompletion(ticket.id, { approved: false, feedback }),
+      'Revision requested',
+      'Failed to request revision',
     );
 
   const handleApproveTest = () =>
@@ -154,32 +161,42 @@ export default function TicketDetailModal({ ticket, onClose, onUpdate }: TicketD
 
       case 'VSM_REVIEW':
         if (!isVsm) return null;
+        
+        if (showRejectForm) {
+          return (
+            <div className="space-y-3">
+              <textarea
+                value={feedback}
+                onChange={e => setFeedback(e.target.value)}
+                placeholder={t.onboarding.labels.feedbackPlaceholder}
+                className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-brand/20 focus:border-brand outline-none transition-all resize-none"
+                rows={3}
+              />
+              <div className="flex gap-2">
+                <ActionButton icon={<XCircle className="w-4 h-4" />} label={t.onboarding.actions.confirmReject} onClick={handleReject} disabled={isSubmitting || !feedback} variant="danger" />
+                <button onClick={() => setShowRejectForm(false)} className="px-4 py-2 text-sm font-medium text-muted hover:text-main transition-colors">
+                  {t.common.cancel}
+                </button>
+              </div>
+            </div>
+          );
+        }
+
         return (
           <div className="space-y-3">
-            {!ticket.assigned_ops && (
-              <AssignOpsForm onAssign={handleAssignOps} isSubmitting={isSubmitting} />
-            )}
-            {showRejectForm ? (
-              <>
-                <textarea
-                  value={feedback}
-                  onChange={e => setFeedback(e.target.value)}
-                  placeholder={t.onboarding.labels.feedbackPlaceholder}
-                  className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-brand/20 focus:border-brand outline-none transition-all resize-none"
-                  rows={3}
+            <AssignOpsForm 
+              onAssign={handleAssignOps} 
+              isSubmitting={isSubmitting}
+              extraButtons={
+                <ActionButton 
+                  icon={<XCircle className="w-4 h-4" />} 
+                  label={t.onboarding.actions.requestChanges} 
+                  onClick={() => setShowRejectForm(true)} 
+                  disabled={isSubmitting} 
+                  variant="danger" 
                 />
-                <div className="flex gap-2">
-                  <ActionButton icon={<XCircle className="w-4 h-4" />} label={t.onboarding.actions.confirmReject} onClick={handleReject} disabled={isSubmitting || !feedback} variant="danger" />
-                  <button onClick={() => setShowRejectForm(false)} className="px-4 py-2 text-sm font-medium text-muted hover:text-main transition-colors">
-                    {t.common.cancel}
-                  </button>
-                </div>
-              </>
-            ) : (
-              <div className="flex gap-2">
-                <ActionButton icon={<XCircle className="w-4 h-4" />} label={t.onboarding.actions.requestChanges} onClick={() => setShowRejectForm(true)} disabled={isSubmitting} variant="danger" />
-              </div>
-            )}
+              }
+            />
           </div>
         );
 
@@ -249,7 +266,13 @@ export default function TicketDetailModal({ ticket, onClose, onUpdate }: TicketD
               variant="success" 
             />
           </div>
-        ) : null;
+        ) : (
+          <div className="bg-brand/5 border border-brand/10 rounded-xl p-4">
+            <p className="text-sm text-brand font-medium">
+              Operations is currently setting up the benefit.
+            </p>
+          </div>
+        );
 
       case 'BENEFIT_IN_TESTING':
         if (!isVsm) return null;
@@ -323,7 +346,28 @@ export default function TicketDetailModal({ ticket, onClose, onUpdate }: TicketD
                 </a>
               </div>
             )}
-            <ActionButton icon={<UserCheck className="w-4 h-4" />} label={t.onboarding.actions.confirmCompletion} onClick={handleVSMConfirm} disabled={isSubmitting} variant="success" />
+            {showRejectForm ? (
+              <>
+                <textarea
+                  value={feedback}
+                  onChange={e => setFeedback(e.target.value)}
+                  placeholder={t.onboarding.labels.describeFix}
+                  className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-brand/20 focus:border-brand outline-none transition-all resize-none"
+                  rows={3}
+                />
+                <div className="flex gap-2">
+                  <ActionButton icon={<XCircle className="w-4 h-4" />} label={t.onboarding.labels.requestRevision} onClick={handleRejectFinal} disabled={isSubmitting || !feedback} variant="danger" />
+                  <button onClick={() => setShowRejectForm(false)} className="px-4 py-2 text-sm font-medium text-muted hover:text-main transition-colors">
+                    {t.onboarding.labels.cancel}
+                  </button>
+                </div>
+              </>
+            ) : (
+              <div className="flex gap-2">
+                <ActionButton icon={<UserCheck className="w-4 h-4" />} label={t.onboarding.actions.confirmCompletion} onClick={handleVSMConfirm} disabled={isSubmitting} variant="success" />
+                <ActionButton icon={<XCircle className="w-4 h-4" />} label={t.onboarding.labels.requestRevision} onClick={() => setShowRejectForm(true)} disabled={isSubmitting} variant="danger" />
+              </div>
+            )}
           </div>
         );
 
