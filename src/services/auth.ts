@@ -42,6 +42,12 @@ const authService = {
       body: JSON.stringify(data),
     }),
 
+  verifySignupToken: (token: string, email: string) =>
+    request<{ success: boolean; requires_profile_completion: boolean }>('/auth/verify-signup-token/', {
+      method: 'POST',
+      body: JSON.stringify({ token, email }),
+    }),
+
   changePassword: (data: ChangePasswordData) =>
     request<ApiSuccessResponse>('/auth/change-password/', {
       method: 'POST',

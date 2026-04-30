@@ -128,6 +128,15 @@ export const ar = {
       cancelSuccess: "تم إلغاء الاشتراك بنجاح.",
       cancelFailed: "فشل إلغاء الاشتراك.",
     },
+    pendingActions: {
+      setupTitle: "إعداد الحساب",
+      setupSubtitle: "أكمل ملفك التعريفي لتفعيل مساحة عملك وبدء تقديم عروضك.",
+      startButton: "البدء",
+      vendorListingTitle: "إكمال بيانات المورد",
+      vendorListingDesc: "قدم تفاصيل شركتك لتفعيل مساحة عملك.",
+      benefitListingTitle: "إكمال بيانات العروض",
+      benefitListingDesc: "قم بإعداد عروضك وخصوماتك لمركز المميزات.",
+    },
     nextActionModal: {
       title: "الخطوة التالية: تسجيل المنافع",
       comingSoon: "قريباً",
@@ -341,6 +350,7 @@ export const ar = {
       standardUserDescription: "يمكنه إدارة الاشتراكات والوصول للمنتجات.",
       remove: "إزالة",
       removeUser: "إزالة المستخدم",
+      removeUserConfirm: "هل أنت متأكد من رغبتك في إزالة عضو الفريق هذا؟ سيفقد إمكانية الوصول إلى مساحة العمل هذه.",
       inviteUser: "دعوة مستخدم",
       inviteNote: "سيتم تعيين الأعضاء المدعوين كمستخدمين عاديين. يمكنهم إدارة الاشتراكات والوصول للمنتجات، لكن لا يمكنهم تعديل معلومات الشركة أو إدارة الفريق.",
       emailAddress: "البريد الإلكتروني",
@@ -377,7 +387,7 @@ export const ar = {
       benefitSuccess: "تم تقديم بيانات المزايا بنجاح!",
     },
     footer: {
-      allRightsReserved: "© 2026 جميع الحقوق محفوظة لشركة eBen",
+      allRightsReserved: "جميع الحقوق محفوظة",
     },
   },
   backoffice: {
@@ -608,7 +618,7 @@ export const ar = {
       generateAdminAccount: "إنشاء حساب مدير للمورد",
       generateAdminCredentials: "إنشاء اسم المستخدم وكلمة المرور",
       benefitBuild: "بناء الميزة الأولى",
-      benefitBuiltCheck: "تم بناء الميزة (الفئة، المنتج، العناصر)",
+      benefitBuiltCheck: "تم بناء الميزة",
       testLink: "رابط الاختبار",
       liveLink: "رابط التشغيل",
       waitingVendorListing: "في انتظار إكمال المورد لبياناته وبيانات الميزة.",

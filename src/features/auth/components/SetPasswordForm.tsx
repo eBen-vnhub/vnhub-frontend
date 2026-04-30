@@ -1,6 +1,6 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
-import { Mail } from 'lucide-react';
+import { Mail, User as UserIcon, Briefcase, Phone } from 'lucide-react';
 import { useLanguage } from '../../../i18n/LanguageContext';
 import { usePasswordValidation } from '../../../hooks/usePasswordValidation';
 import authService from '../../../services/auth';
@@ -18,7 +18,16 @@ export default function SetPasswordForm() {
 
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [jobTitle, setJobTitle] = useState('');
+  const [mobileCountryCode, setMobileCountryCode] = useState('+971');
+  const [mobileNumber, setMobileNumber] = useState('');
+
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isValidatingToken, setIsValidatingToken] = useState(true);
+  const [requiresProfileCompletion, setRequiresProfileCompletion] = useState(false);
 
   const { errors: passwordErrors, isValid: passwordValid } = usePasswordValidation(password);
   const passwordsMatch = password === confirmPassword;
@@ -30,14 +39,46 @@ export default function SetPasswordForm() {
     number: t.auth.setPassword.passwordNumber,
   };
 
+  useEffect(() => {
+    const checkToken = async () => {
+      try {
+        const res = await authService.verifySignupToken(token, emailFromLink);
+        setRequiresProfileCompletion(res.requires_profile_completion);
+      } catch (err) {
+        showToast.error('Invalid or expired token.');
+        navigate('/login');
+      } finally {
+        setIsValidatingToken(false);
+      }
+    };
+    if (token && emailFromLink) {
+      checkToken();
+    } else {
+      navigate('/login');
+    }
+  }, [token, emailFromLink, navigate]);
+
+  const isProfileValid = requiresProfileCompletion
+    ? firstName.trim() !== '' && lastName.trim() !== '' && jobTitle.trim() !== '' && mobileNumber.trim() !== ''
+    : true;
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!passwordValid || !passwordsMatch) return;
+    if (!passwordValid || !passwordsMatch || !isProfileValid) return;
 
     setIsSubmitting(true);
 
     try {
-      await authService.setPassword({ token, email: emailFromLink, password });
+      const data: any = { token, email: emailFromLink, password };
+      if (requiresProfileCompletion) {
+        data.first_name = firstName;
+        data.last_name = lastName;
+        data.job_title = jobTitle;
+        data.mobile_country_code = mobileCountryCode;
+        data.mobile_number = mobileNumber;
+      }
+
+      await authService.setPassword(data);
       showToast.success(t.common.success);
       navigate('/login');
     } catch (err: any) {
@@ -46,6 +87,10 @@ export default function SetPasswordForm() {
       setIsSubmitting(false);
     }
   };
+
+  if (isValidatingToken) {
+    return <div className="text-center py-12">{t.common.loading || 'Loading...'}</div>;
+  }
 
   return (
     <>
@@ -67,6 +112,58 @@ export default function SetPasswordForm() {
           icon={<Mail className="h-4 w-4 sm:h-5 sm:w-5" />}
           className="bg-gray-100 cursor-not-allowed"
         />
+
+        {requiresProfileCompletion && (
+          <>
+            <div className="grid grid-cols-2 gap-4">
+              <Input
+                label={t.portal.companyProfile?.adminInfo?.firstName || 'First Name'}
+                value={firstName}
+                onChange={(e) => setFirstName(e.target.value)}
+                icon={<UserIcon className="h-4 w-4" />}
+                required
+              />
+              <Input
+                label={t.portal.companyProfile?.adminInfo?.lastName || 'Last Name'}
+                value={lastName}
+                onChange={(e) => setLastName(e.target.value)}
+                icon={<UserIcon className="h-4 w-4" />}
+                required
+              />
+            </div>
+            <Input
+              label={t.portal.companyProfile?.adminInfo?.jobTitle || 'Job Title'}
+              value={jobTitle}
+              onChange={(e) => setJobTitle(e.target.value)}
+              icon={<Briefcase className="h-4 w-4" />}
+              required
+            />
+            <div>
+              <label className="block text-sm font-semibold text-main mb-2">
+                {t.portal.companyProfile?.adminInfo?.mobile || 'Mobile Number'} <span className="text-error">*</span>
+              </label>
+              <div className="flex gap-2">
+                <div className="w-1/3">
+                  <Input
+                    value={mobileCountryCode}
+                    onChange={(e) => setMobileCountryCode(e.target.value)}
+                    placeholder="+971"
+                    required
+                  />
+                </div>
+                <div className="w-2/3">
+                  <Input
+                    value={mobileNumber}
+                    onChange={(e) => setMobileNumber(e.target.value)}
+                    icon={<Phone className="h-4 w-4 text-muted" />}
+                    placeholder="50 123 4567"
+                    required
+                  />
+                </div>
+              </div>
+            </div>
+          </>
+        )}
 
         <div>
           <PasswordInput
@@ -114,7 +211,7 @@ export default function SetPasswordForm() {
           type="submit"
           size="lg"
           isLoading={isSubmitting}
-          disabled={!passwordValid || !passwordsMatch}
+          disabled={!passwordValid || !passwordsMatch || !isProfileValid}
           className="w-full"
         >
           <span>{t.auth.setPassword.setPassword}</span>
