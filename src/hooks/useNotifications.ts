@@ -5,6 +5,8 @@ import { useLanguage } from '../i18n/LanguageContext';
 
 const WS_BASE = import.meta.env.VITE_WS_URL || (window.location.protocol === 'https:' ? 'wss:' : 'ws:') + '//' + window.location.host + '/ws';
 
+const seenNotifications = new Set<string>();
+
 export function useNotifications(onNotificationReceived?: () => void) {
   const { isAuthenticated } = useAuth();
   const { direction, language } = useLanguage();
@@ -24,20 +26,24 @@ export function useNotifications(onNotificationReceived?: () => void) {
         if (payload.type === 'notification') {
           const notificationData = payload.data;
           
-          const title = language === 'ar' && notificationData.title_ar 
-            ? notificationData.title_ar 
-            : notificationData.title;
+          if (!seenNotifications.has(notificationData.id)) {
+            seenNotifications.add(notificationData.id);
             
-          const message = language === 'ar' && notificationData.message_ar 
-            ? notificationData.message_ar 
-            : notificationData.message;
+            const title = language === 'ar' && notificationData.title_ar 
+              ? notificationData.title_ar 
+              : notificationData.title;
+              
+            const message = language === 'ar' && notificationData.message_ar 
+              ? notificationData.message_ar 
+              : notificationData.message;
 
-          toast(title || message, {
-            icon: '🔔',
-            position: direction === 'rtl' ? 'top-left' : 'top-right',
-            duration: 5000,
-            className: 'bg-white text-main font-semibold border border-gray-200'
-          });
+            toast(title || message, {
+              icon: '🔔',
+              position: direction === 'rtl' ? 'top-left' : 'top-right',
+              duration: 5000,
+              className: 'bg-white text-main font-semibold border border-gray-200'
+            });
+          }
 
           if (callbackRef.current) {
             callbackRef.current();

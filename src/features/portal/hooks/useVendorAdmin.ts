@@ -39,13 +39,13 @@ export function useVendorAdmin() {
   };
 
   const handleRemove = async (targetId: string) => {
-    if (!window.confirm('Are you sure you want to remove this team member?')) return;
     try {
       await vendorsService.removeTeamMember(targetId);
       toast.success('User removed successfully');
       fetchTeam();
-    } catch (err: unknown) {
-      toast.error('Failed to remove user');
+    } catch (err: any) {
+      toast.error(err.response?.data?.error || 'Failed to remove user');
+      throw err;
     }
   };
 
