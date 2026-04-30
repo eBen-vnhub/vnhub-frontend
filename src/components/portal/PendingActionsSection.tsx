@@ -32,6 +32,16 @@ function usePendingActions(subscriptions: Subscription[], hasVendorListing?: boo
       description: (t.portal as any).pendingActions?.vendorListingDesc || 'Provide your brand details to activate your storefront.',
       subscriptionId: vendorPendingSub.id
     });
+  } else if (hasVendorListing) {
+    const totalBenefits = subscriptions.reduce((sum, s) => sum + (s.benefitsSubmitted || 0), 0);
+    if (totalBenefits === 0) {
+      actions.push({
+        type: 'BENEFIT_LISTING',
+        label: (t.portal as any).pendingActions?.benefitListing || 'Complete First Benefit Listing',
+        description: (t.portal as any).pendingActions?.benefitListingDesc || 'Add your first benefit to complete the onboarding process.',
+        subscriptionId: subscriptions.find(s => s.status !== 'CANCELLED')?.id
+      });
+    }
   }
 
   return actions;

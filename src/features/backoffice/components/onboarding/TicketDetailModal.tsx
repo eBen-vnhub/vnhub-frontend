@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { X, ExternalLink, CheckCircle, XCircle, UserCheck, Package } from 'lucide-react';
+import { X, ExternalLink, CheckCircle, XCircle, UserCheck, Package, Edit2 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import type { OnboardingTicket } from '../../../../types/onboarding';
@@ -11,6 +11,7 @@ import StatusBadge from './StatusBadge';
 import ActionButton from './ActionButton';
 import AssignVSMForm from './AssignVSMForm';
 import AssignOpsForm from './AssignOpsForm';
+import ReassignModal from './ReassignModal';
 import BenefitDetailModal from '../benefits/BenefitDetailModal';
 
 interface TicketDetailModalProps {
@@ -28,6 +29,7 @@ export default function TicketDetailModal({ ticket, onClose, onUpdate }: TicketD
   const [linkedBenefits, setLinkedBenefits] = useState<BenefitTracker[]>([]);
   const [selectedBenefit, setSelectedBenefit] = useState<BenefitTracker | null>(null);
   const [liveLinkInput, setLiveLinkInput] = useState('');
+  const [reassignType, setReassignType] = useState<'VSM' | 'OPERATIONS' | null>(null);
 
   useEffect(() => {
     if (ticket?.vendor_id) {
@@ -126,6 +128,25 @@ export default function TicketDetailModal({ ticket, onClose, onUpdate }: TicketD
       t.onboarding.toast.assignOpsError,
     );
   };
+
+  const handleReassign = async (userId: number, reason: string) => {
+    if (reassignType === 'VSM') {
+      return handleAction(
+        () => onboardingService.assignTicket(ticket.id, userId),
+        (t.onboarding.toast as any).assignSuccess,
+        (t.onboarding.toast as any).assignError,
+      );
+    } else {
+      return handleAction(
+        () => onboardingService.assignTicketOps(ticket.id, userId),
+        (t.onboarding.toast as any).assignOpsSuccess,
+        (t.onboarding.toast as any).assignOpsError,
+      );
+    }
+  };
+
+  const canReassignVsm = ['SUPER_ADMIN', 'ADMIN'].includes(userRole);
+  const canReassignOps = (['SUPER_ADMIN', 'ADMIN'].includes(userRole) || (userRole === 'VSM' && user?.id === String(ticket.assigned_vsm))) && ticket.status === 'OPS_QUEUE';
 
   const handleSubmitLiveLink = () =>
     handleAction(
@@ -410,8 +431,16 @@ export default function TicketDetailModal({ ticket, onClose, onUpdate }: TicketD
             <div className="grid grid-cols-2 gap-y-6 gap-x-4 bg-gray-50/50 p-4 rounded-xl border border-gray-100">
               <DetailField label={t.onboarding.labels.plan} value={ticket.subscription_plan} />
               <DetailField label={t.onboarding.labels.createdAt} value={new Date(ticket.created_at).toLocaleDateString()} />
-              <DetailField label={t.onboarding.labels.assignedVsm} value={ticket.assigned_vsm_name} />
-              <DetailField label={t.onboarding.labels.assignedOps} value={ticket.assigned_ops_name} />
+              <DetailField 
+                label={t.onboarding.labels.assignedVsm} 
+                value={ticket.assigned_vsm_name} 
+                onEdit={canReassignVsm && ticket.assigned_vsm ? () => setReassignType('VSM') : undefined}
+              />
+              <DetailField 
+                label={t.onboarding.labels.assignedOps} 
+                value={ticket.assigned_ops_name} 
+                onEdit={canReassignOps && ticket.assigned_ops ? () => setReassignType('OPERATIONS') : undefined}
+              />
             </div>
 
             {showBenefitsSection && (
@@ -462,15 +491,30 @@ export default function TicketDetailModal({ ticket, onClose, onUpdate }: TicketD
           setSelectedBenefit(updated);
         }}
       />
+
+      <ReassignModal
+        isOpen={!!reassignType}
+        onClose={() => setReassignType(null)}
+        type={reassignType || 'VSM'}
+        currentAssigneeName={reassignType === 'VSM' ? ticket.assigned_vsm_name : ticket.assigned_ops_name}
+        onAssign={handleReassign}
+      />
     </>
   );
 }
 
-function DetailField({ label, value }: { label: string; value: string | null | undefined }) {
+function DetailField({ label, value, onEdit }: { label: string; value: string | null | undefined; onEdit?: () => void }) {
   return (
     <div>
       <p className="text-xs font-semibold text-muted mb-1">{label}</p>
-      <p className="text-sm font-bold text-main">{value || '—'}</p>
+      <div className="flex items-center gap-2">
+        <p className="text-sm font-bold text-main">{value || '—'}</p>
+        {onEdit && (
+          <button onClick={onEdit} title="Re-assign" className="p-1 text-muted hover:text-brand hover:bg-brand/10 rounded-md transition-colors">
+            <Edit2 className="w-3.5 h-3.5" />
+          </button>
+        )}
+      </div>
     </div>
   );
 }

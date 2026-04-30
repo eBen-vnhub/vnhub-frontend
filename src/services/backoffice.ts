@@ -36,6 +36,7 @@ export interface BackofficeVendorDetail extends BackofficeVendorSummary {
   businessTypeB2B: boolean;
   subscriptions: BackofficeSubscription[];
   teamMembers: BackofficeTeamMember[];
+  assignedVsmId: number | null;
 }
 
 const backofficeService = {
