@@ -4,12 +4,11 @@ import { formatListingDate } from './utils';
 interface Props {
   icon: React.ReactNode;
   title: string;
-  status: string | null;
   submittedAt?: string;
   accentClass?: string;
 }
 
-export default function ListingCardHeader({ icon, title, status, submittedAt, accentClass = 'bg-brand/5' }: Props) {
+export default function ListingCardHeader({ icon, title, submittedAt, accentClass = 'bg-brand/5' }: Props) {
   return (
     <div className={`${accentClass} border-b border-border/50 px-6 py-4 flex flex-wrap items-center justify-between gap-3`}>
       <div className="flex items-center gap-2">
