@@ -128,6 +128,15 @@ export const en = {
       cancelSuccess: "Subscription cancelled successfully.",
       cancelFailed: "Failed to cancel subscription.",
     },
+    pendingActions: {
+      setupTitle: "Account Setup",
+      setupSubtitle: "Complete your profile to unlock and activate your VN Hub.",
+      startButton: "Start",
+      vendorListingTitle: "Complete Vendor Listing",
+      vendorListingDesc: "Provide your company details to activate your workspace.",
+      benefitListingTitle: "Complete Benefit Listing",
+      benefitListingDesc: "Set up your offers and discounts for the benefits center.",
+    },
     nextActionModal: {
       title: "Next Step: Benefit Listing",
       comingSoon: "Coming Soon",
@@ -341,6 +350,7 @@ export const en = {
       standardUserDescription: "Can manage subscriptions and access products.",
       remove: "Remove",
       removeUser: "Remove User",
+      removeUserConfirm: "Are you sure you want to remove this team member? They will lose access to this workspace.",
       inviteUser: "Invite User",
       inviteNote: "Invited members will be assigned as Standard Users. They can manage subscriptions and access products, but cannot modify company information or manage team members.",
       emailAddress: "Email Address",
@@ -377,7 +387,7 @@ export const en = {
       benefitSuccess: "Benefit listing submitted successfully!",
     },
     footer: {
-      allRightsReserved: "© 2026 eBen All rights reserved",
+      allRightsReserved: "All rights reserved",
     },
   },
   backoffice: {
@@ -608,7 +618,7 @@ export const en = {
       generateAdminAccount: "Create Vendor Admin Account",
       generateAdminCredentials: "Generate Vendor Admin User & Password",
       benefitBuild: "Benefit 1 Build",
-      benefitBuiltCheck: "Benefit Built (Category, Product, Items)",
+      benefitBuiltCheck: "Benefit Built",
       testLink: "Test Link",
       liveLink: "Live Link",
       waitingVendorListing: "Waiting for vendor to complete Vendor Listing and Benefit Listing.",

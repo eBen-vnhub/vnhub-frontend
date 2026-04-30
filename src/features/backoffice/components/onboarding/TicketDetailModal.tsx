@@ -42,6 +42,7 @@ export default function TicketDetailModal({ ticket, onClose, onUpdate }: TicketD
   const userRole = user?.role || user?.userType || '';
 
   const handleAction = async (action: () => Promise<OnboardingTicket>, successMsg: string, errorMsg: string) => {
+    if (isSubmitting) return;
     setIsSubmitting(true);
     try {
       const updated = await action();
