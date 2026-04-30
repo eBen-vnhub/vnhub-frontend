@@ -7,9 +7,10 @@ import { useLanguage } from '../../../../i18n/LanguageContext';
 interface AssignOpsFormProps {
   onAssign: (opsId: string) => void;
   isSubmitting: boolean;
+  extraButtons?: React.ReactNode;
 }
 
-export default function AssignOpsForm({ onAssign, isSubmitting }: AssignOpsFormProps) {
+export default function AssignOpsForm({ onAssign, isSubmitting, extraButtons }: AssignOpsFormProps) {
   const { t } = useLanguage();
   const [opsUsers, setOpsUsers] = useState<any[]>([]);
   const [selectedOpsId, setSelectedOpsId] = useState<string>('');
@@ -38,12 +39,17 @@ export default function AssignOpsForm({ onAssign, isSubmitting }: AssignOpsFormP
           ))}
         </select>
       </div>
-      <ActionButton
-        icon={<UserCheck className="w-4 h-4" />}
-        label={t.onboarding.actions.assignOps}
-        onClick={() => onAssign(selectedOpsId)}
-        disabled={isSubmitting || !selectedOpsId}
-      />
+      <div className="flex gap-2">
+        <div className="flex-1">
+          <ActionButton
+            icon={<UserCheck className="w-4 h-4" />}
+            label={t.onboarding.actions.assignOps}
+            onClick={() => onAssign(selectedOpsId)}
+            disabled={isSubmitting || !selectedOpsId}
+          />
+        </div>
+        {extraButtons && <div className="flex-1">{extraButtons}</div>}
+      </div>
     </div>
   );
 }

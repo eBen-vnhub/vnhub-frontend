@@ -107,8 +107,20 @@ const handleModalClose = () => {
   setEditingBenefitId(null);
 };
 
-const handleModalSuccess = () => {
+const handleModalSuccess = async () => {
   handleModalClose();
+  
+  const activeSubId = sessionStorage.getItem('activeSubscriptionId');
+  if (activeSubId) {
+    try {
+      await vendorsService.completeSubscriptionStep(Number(activeSubId), { stepType: 'BENEFIT_LISTING' });
+    } catch (err) {
+      console.error('Failed to complete benefit step:', err);
+    } finally {
+      sessionStorage.removeItem('activeSubscriptionId');
+    }
+  }
+  
   fetchBenefits();
 };
 
