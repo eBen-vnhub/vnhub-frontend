@@ -26,7 +26,6 @@ export default function ListingsAggregatedView({ data }: Props) {
         <ListingCardHeader
           icon={<Building className="w-5 h-5 text-brand" />}
           title={t.backoffice.listing.vendorListingData}
-          status={vendorListing ? vendorListing.formStatus || 'SUBMITTED' : null}
           submittedAt={vendorListing?.submittedAt}
         />
 

@@ -59,15 +59,10 @@ export default function SubscriptionsPage() {
     }
   };
 
-  const handleCancel = (subscriptionId: number) => {
+  const handleCancel = async (subscriptionId: number) => {
     setCancellingId(subscriptionId);
-    setModal({ type: 'none' });
-  };
-
-  const confirmCancel = async () => {
-    if (!cancellingId) return;
     try {
-      const response = await vendorsService.cancelSubscription(cancellingId);
+      const response = await vendorsService.cancelSubscription(subscriptionId);
       updateSubscriptionInContext(response.subscription);
       toast.success(t.portal.subscriptionCard.cancelSuccess);
     } catch (err: any) {

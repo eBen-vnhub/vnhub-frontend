@@ -159,21 +159,9 @@ export default function VendorDetailPage() {
       <div className="bg-surface rounded-3xl p-6 sm:p-8 shadow-sm border border-border">
         <div className="flex flex-col sm:flex-row items-center gap-6">
           <div className="flex-1 text-center sm:text-start">
-            <div className="flex items-center gap-4 mb-3 justify-center sm:justify-start">
-              {(() => {
-                const logoFile = listingsData?.vendorListing?.files?.find((f: any) => f.fileType === 'LOGO');
-                return logoFile?.fileUrl ? (
-                  <img src={logoFile.fileUrl} alt="Logo" className="w-10 h-10 object-contain rounded-md" />
-                ) : (
-                  <div className="w-10 h-10 rounded-md bg-brand/10 text-brand flex items-center justify-center font-bold text-lg">
-                    {vendorDetail.companyName?.charAt(0) || 'V'}
-                  </div>
-                );
-              })()}
-              <h1 className="text-3xl font-bold text-main">
-                {vendorDetail.companyName || t.backoffice.vendors.unnamedVendor}
-              </h1>
-            </div>
+            <h1 className="text-3xl font-bold text-main mb-3">
+              {vendorDetail.companyName || t.backoffice.vendors.unnamedVendor}
+            </h1>
 
             <div className="flex flex-wrap items-center justify-center sm:justify-start gap-4 text-sm text-muted">
               {vendorDetail.companyCountry && (
