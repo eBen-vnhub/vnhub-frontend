@@ -129,13 +129,19 @@ export const ar = {
       cancelFailed: "فشل إلغاء الاشتراك.",
     },
     pendingActions: {
+      title: "إجراء مطلوب",
+      subtitle: "يرجى إكمال الخطوات التالية لتفعيل مساحة العمل الخاصة بك:",
       setupTitle: "إعداد الحساب",
       setupSubtitle: "أكمل ملفك التعريفي لتفعيل مساحة عملك وبدء تقديم عروضك.",
       startButton: "البدء",
+      vendorListing: "إكمال بيانات المورد",
       vendorListingTitle: "إكمال بيانات المورد",
       vendorListingDesc: "قدم تفاصيل شركتك لتفعيل مساحة عملك.",
+      benefitListing: "إكمال بيانات العروض",
       benefitListingTitle: "إكمال بيانات العروض",
       benefitListingDesc: "قم بإعداد عروضك وخصوماتك لمركز المميزات.",
+      vendorSuccess: "تم تقديم بيانات المورد بنجاح!",
+      benefitSuccess: "تم تقديم بيانات المزايا بنجاح!",
     },
     nextActionModal: {
       title: "الخطوة التالية: تسجيل المنافع",
@@ -375,17 +381,7 @@ export const ar = {
       mobileCode: "الكود",
       mobileNumber: "رقم الموبايل",
     },
-    pendingActions: {
-      title: "إجراء مطلوب",
-      subtitle: "يرجى إكمال الخطوات التالية لتفعيل بيئة العمل الخاصة بك:",
-      vendorListing: "إكمال بيانات المورد",
-      vendorListingDesc: "قم بتقديم تفاصيل شركتك لتفعيل حسابك ومساحة عملك.",
-      benefitListing: "إكمال عروض المزايا",
-      benefitListingDesc: "قم بإعداد العروض، الخصومات والقواعد الخاصة بك لمركز المزايا.",
-      startButton: "ابدأ الآن",
-      vendorSuccess: "تم تقديم بيانات المورد بنجاح!",
-      benefitSuccess: "تم تقديم بيانات المزايا بنجاح!",
-    },
+
     footer: {
       allRightsReserved: "جميع الحقوق محفوظة",
     },

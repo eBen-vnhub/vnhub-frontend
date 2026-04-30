@@ -129,13 +129,19 @@ export const en = {
       cancelFailed: "Failed to cancel subscription.",
     },
     pendingActions: {
+      title: "Action Required",
+      subtitle: "Please complete the following steps to activate your workspace:",
       setupTitle: "Account Setup",
       setupSubtitle: "Complete your profile to unlock and activate your VN Hub.",
       startButton: "Start",
+      vendorListing: "Complete Vendor Listing",
       vendorListingTitle: "Complete Vendor Listing",
       vendorListingDesc: "Provide your company details to activate your workspace.",
+      benefitListing: "Complete Benefit Listing",
       benefitListingTitle: "Complete Benefit Listing",
       benefitListingDesc: "Set up your offers and discounts for the benefits center.",
+      vendorSuccess: "Vendor listing submitted successfully!",
+      benefitSuccess: "Benefit listing submitted successfully!",
     },
     nextActionModal: {
       title: "Next Step: Benefit Listing",
@@ -375,17 +381,7 @@ export const en = {
       mobileCode: "Code",
       mobileNumber: "Mobile Number",
     },
-    pendingActions: {
-      title: "Action Required",
-      subtitle: "Please complete the following steps to activate your workspace:",
-      vendorListing: "Complete Vendor Listing",
-      vendorListingDesc: "Provide your company details to activate your workspace.",
-      benefitListing: "Complete Benefit Listing",
-      benefitListingDesc: "Set up your offers and discounts for the benefits center.",
-      startButton: "Start",
-      vendorSuccess: "Vendor listing submitted successfully!",
-      benefitSuccess: "Benefit listing submitted successfully!",
-    },
+
     footer: {
       allRightsReserved: "All rights reserved",
     },
