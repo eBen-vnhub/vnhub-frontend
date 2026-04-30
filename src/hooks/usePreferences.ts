@@ -19,10 +19,24 @@ async function fetchPreferences(): Promise<Record<string, any>> {
     return cachedPreferences;
   }).catch(() => {
     fetchPromise = null;
+    cachedPreferences = null; // Do not cache empty on 401
     return {};
   });
 
   return fetchPromise;
+}
+
+let listeners: Array<(prefs: Record<string, any>) => void> = [];
+
+function notifyListeners(prefs: Record<string, any>) {
+  listeners.forEach(l => l(prefs));
+}
+
+export async function refetchPreferences() {
+  cachedPreferences = null;
+  const prefs = await fetchPreferences();
+  notifyListeners(prefs);
+  return prefs;
 }
 
 async function patchPreferences(partial: Record<string, any>): Promise<Record<string, any>> {
@@ -31,6 +45,7 @@ async function patchPreferences(partial: Record<string, any>): Promise<Record<st
     body: JSON.stringify({ preferences: partial }),
   });
   cachedPreferences = data.preferences || {};
+  notifyListeners(cachedPreferences);
   return cachedPreferences;
 }
 
@@ -40,15 +55,25 @@ export function usePreferences() {
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
+    const listener = (prefs: Record<string, any>) => {
+      setPreferences(prefs);
+      setIsLoading(false);
+    };
+    listeners.push(listener);
+
     if (cachedPreferences) {
       setPreferences(cachedPreferences);
       setIsLoading(false);
-      return;
+    } else {
+      fetchPreferences().then(prefs => {
+        setPreferences(prefs);
+        setIsLoading(false);
+      });
     }
-    fetchPreferences().then(prefs => {
-      setPreferences(prefs);
-      setIsLoading(false);
-    });
+
+    return () => {
+      listeners = listeners.filter(l => l !== listener);
+    };
   }, []);
 
   const updatePreference = useCallback((key: string, value: any) => {

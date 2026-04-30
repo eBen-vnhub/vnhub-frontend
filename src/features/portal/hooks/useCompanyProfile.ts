@@ -21,17 +21,18 @@ export function useCompanyProfile(initialData: Vendor, onUpdate: (vendor: Vendor
   const [listingsData, setListingsData] = useState<{ vendorListing: any; benefitListing: any } | null>(null);
   const [isLoadingListings, setIsLoadingListings] = useState(true);
 
+  const fetchListings = async () => {
+    try {
+      const data = await vendorsService.getListingsData();
+      setListingsData(data);
+    } catch (err) {
+      console.error("Failed to load listings data", err);
+    } finally {
+      setIsLoadingListings(false);
+    }
+  };
+
   useEffect(() => {
-    const fetchListings = async () => {
-      try {
-        const data = await vendorsService.getListingsData();
-        setListingsData(data);
-      } catch (err) {
-        console.error("Failed to load listings data", err);
-      } finally {
-        setIsLoadingListings(false);
-      }
-    };
     fetchListings();
   }, []);
 
@@ -64,5 +65,6 @@ export function useCompanyProfile(initialData: Vendor, onUpdate: (vendor: Vendor
     canEditCompanyProfile,
     handleChange,
     handleSubmit,
+    refetchListings: fetchListings,
   };
 }

@@ -23,11 +23,6 @@ export default function ListingCardHeader({ icon, title, status, submittedAt, ac
             {formatListingDate(submittedAt)}
           </span>
         )}
-        <span className={`text-[10px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wider ${
-          status ? 'bg-green-100 text-green-700 border border-green-200' : 'bg-gray-100 text-gray-500'
-        }`}>
-          {status || 'NOT SUBMITTED'}
-        </span>
       </div>
     </div>
   );

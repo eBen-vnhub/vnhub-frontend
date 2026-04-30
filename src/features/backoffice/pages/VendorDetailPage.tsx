@@ -11,6 +11,7 @@ import RequestListingUpdateModal from '../components/onboarding/RequestListingUp
 import onboardingService from '../../../services/onboarding';
 import type { BackofficeTeamMember } from '../../../services/backoffice';
 import type { BenefitTracker } from '../../../types/onboarding';
+import BenefitDetailsDrawer from '../../portal/components/benefits/BenefitDetailsDrawer';
 
 const BENEFIT_STATUS_STYLES: Record<string, string> = {
   PENDING: 'bg-gray-100 text-gray-700',
@@ -54,6 +55,8 @@ export default function VendorDetailPage() {
   const [benefits, setBenefits] = useState<BenefitTracker[]>([]);
   const [isRequestingUpdate, setIsRequestingUpdate] = useState(false);
   const [isRequestModalOpen, setIsRequestModalOpen] = useState(false);
+  const [selectedBenefit, setSelectedBenefit] = useState<any>(null);
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
   const fetchBenefits = useCallback(async () => {
     if (!id) return;
@@ -103,8 +106,25 @@ export default function VendorDetailPage() {
     );
   }
 
-  const canRequestUpdate = user?.role === 'SUPER_ADMIN' || (user?.role === 'VSM' && user.id === String(vendorDetail?.assignedVsmId));
+  const hasVendorListing = !!listingsData?.vendorListing;
+  const canRequestUpdate = hasVendorListing && (user?.role === 'SUPER_ADMIN' || (user?.role === 'VSM' && user.id === String(vendorDetail?.assignedVsmId)));
   const canEditTeam = user?.role === 'SUPER_ADMIN' || user?.role === 'VSM';
+
+  const offersMap: Record<string, any> = {};
+  if (listingsData?.benefitListing?.benefitOffers) {
+    for (const offer of listingsData.benefitListing.benefitOffers) {
+      if (offer.id) offersMap[String(offer.id)] = offer;
+    }
+  }
+
+  const mappedBenefits = benefits.map((b) => {
+    const matchedOffer = b.external_benefit_id ? offersMap[String(b.external_benefit_id)] : null;
+    return {
+      ...b,
+      ...matchedOffer,
+      trackerStatus: b.status,
+    };
+  });
 
   return (
     <div className="animate-in fade-in slide-in-from-bottom-4 duration-700 space-y-6">
@@ -138,23 +158,22 @@ export default function VendorDetailPage() {
 
       <div className="bg-surface rounded-3xl p-6 sm:p-8 shadow-sm border border-border">
         <div className="flex flex-col sm:flex-row items-center gap-6">
-          {(() => {
-            const logoFile = listingsData?.vendorListing?.files?.find((f: any) => f.fileType === 'LOGO');
-            return logoFile?.fileUrl ? (
-              <div className="w-24 h-24 rounded-2xl bg-surface-hover border border-border flex items-center justify-center p-2 overflow-hidden">
-                <img src={logoFile.fileUrl} alt="Logo" className="max-w-full max-h-full object-contain" />
-              </div>
-            ) : (
-              <div className="w-24 h-24 rounded-2xl bg-gradient-to-br from-brand/20 to-brand/5 text-brand flex items-center justify-center font-bold text-4xl shadow-inner border border-brand/10">
-                {vendorDetail.companyName?.charAt(0) || 'V'}
-              </div>
-            );
-          })()}
-
           <div className="flex-1 text-center sm:text-start">
-            <h1 className="text-3xl font-bold text-main mb-2">
-              {vendorDetail.companyName || t.backoffice.vendors.unnamedVendor}
-            </h1>
+            <div className="flex items-center gap-4 mb-3 justify-center sm:justify-start">
+              {(() => {
+                const logoFile = listingsData?.vendorListing?.files?.find((f: any) => f.fileType === 'LOGO');
+                return logoFile?.fileUrl ? (
+                  <img src={logoFile.fileUrl} alt="Logo" className="w-10 h-10 object-contain rounded-md" />
+                ) : (
+                  <div className="w-10 h-10 rounded-md bg-brand/10 text-brand flex items-center justify-center font-bold text-lg">
+                    {vendorDetail.companyName?.charAt(0) || 'V'}
+                  </div>
+                );
+              })()}
+              <h1 className="text-3xl font-bold text-main">
+                {vendorDetail.companyName || t.backoffice.vendors.unnamedVendor}
+              </h1>
+            </div>
 
             <div className="flex flex-wrap items-center justify-center sm:justify-start gap-4 text-sm text-muted">
               {vendorDetail.companyCountry && (
@@ -201,45 +220,54 @@ export default function VendorDetailPage() {
           </div>
         )}
 
-        <div className="bg-surface border border-border rounded-3xl p-6">
-          <h3 className="text-lg font-bold text-main mb-4 flex items-center gap-2">
-            <Users className="text-brand w-5 h-5" />
-            {t.backoffice.vendors.teamMembers} ({vendorDetail.teamMembers.length})
-          </h3>
-          <div className="space-y-3">
-            {vendorDetail.teamMembers.map((member) => (
-              <div 
-                key={member.id} 
-                className={`w-full p-4 rounded-xl border border-border bg-surface-hover/30 flex justify-between items-center transition-all ${canEditTeam ? 'hover:bg-surface-hover hover:border-brand/30 cursor-pointer group text-left' : ''}`}
-                onClick={() => canEditTeam && setEditingMember(member)}
-              >
-                <div>
-                  <div className={`font-bold text-main ${canEditTeam ? 'group-hover:text-brand transition-colors' : ''}`}>{member.firstName} {member.lastName}</div>
-                  <div className="text-xs text-muted mt-1">{member.email}</div>
+        {user?.role !== 'OPERATIONS' && (
+          <div className="bg-surface border border-border rounded-3xl p-6">
+            <h3 className="text-lg font-bold text-main mb-4 flex items-center gap-2">
+              <Users className="text-brand w-5 h-5" />
+              {t.backoffice.vendors.teamMembers} ({vendorDetail.teamMembers.length})
+            </h3>
+            <div className="space-y-3">
+              {vendorDetail.teamMembers.map((member) => (
+                <div 
+                  key={member.id} 
+                  className={`w-full p-4 rounded-xl border border-border bg-surface-hover/30 flex justify-between items-center transition-all ${canEditTeam ? 'hover:bg-surface-hover hover:border-brand/30 cursor-pointer group text-left' : ''}`}
+                  onClick={() => canEditTeam && setEditingMember(member)}
+                >
+                  <div>
+                    <div className={`font-bold text-main ${canEditTeam ? 'group-hover:text-brand transition-colors' : ''}`}>{member.firstName} {member.lastName}</div>
+                    <div className="text-xs text-muted mt-1">{member.email}</div>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <MemberRoleBadge role={member.role} t={t} />
+                    {canEditTeam && <Edit2 className="w-4 h-4 text-muted group-hover:text-brand transition-colors opacity-0 group-hover:opacity-100" />}
+                  </div>
                 </div>
-                <div className="flex items-center gap-3">
-                  <MemberRoleBadge role={member.role} t={t} />
-                  {canEditTeam && <Edit2 className="w-4 h-4 text-muted group-hover:text-brand transition-colors opacity-0 group-hover:opacity-100" />}
-                </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
-        </div>
+        )}
       </div>
 
-      {benefits.length > 0 && (
+      {mappedBenefits.length > 0 && (
         <div className="bg-surface border border-border rounded-3xl p-6">
           <h3 className="text-lg font-bold text-main mb-4 flex items-center gap-2">
             <Package className="text-brand w-5 h-5" />
-            {t.benefitTracker.title} ({benefits.length})
+            {t.benefitTracker.title} ({mappedBenefits.length})
           </h3>
           <div className="space-y-3">
-            {benefits.map((benefit) => (
-              <div key={benefit.id} className="p-4 rounded-xl border border-border bg-surface-hover/30 flex items-center justify-between">
+            {mappedBenefits.map((benefit) => (
+              <div 
+                key={benefit.id} 
+                onClick={() => {
+                  setSelectedBenefit(benefit);
+                  setIsDrawerOpen(true);
+                }}
+                className="p-4 rounded-xl border border-border bg-surface-hover/30 flex items-center justify-between cursor-pointer hover:border-brand/30 transition-colors"
+              >
                 <div className="flex-1">
                   <div className="flex items-center gap-3 mb-1">
                     <span className="font-bold text-main">
-                      {t.benefitTracker.benefitLabel} #{benefit.benefit_number}
+                      {benefit.benefitName || `${t.benefitTracker.benefitLabel} #${benefit.benefit_number}`}
                     </span>
                     <BenefitStatusBadge status={benefit.status} t={t} />
                   </div>
@@ -250,7 +278,7 @@ export default function VendorDetailPage() {
                     )}
                   </div>
                 </div>
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2" onClick={(e) => e.stopPropagation()}>
                   {benefit.test_link && (
                     <a href={benefit.test_link} target="_blank" rel="noopener noreferrer" className="p-2 rounded-lg bg-purple-50 text-purple-600 hover:bg-purple-100 transition-colors">
                       <ExternalLink className="w-4 h-4" />
@@ -275,6 +303,12 @@ export default function VendorDetailPage() {
         onClose={() => setEditingMember(null)}
         user={editingMember}
         onUpdate={updateTeamMember}
+      />
+
+      <BenefitDetailsDrawer
+        isOpen={isDrawerOpen}
+        onClose={() => setIsDrawerOpen(false)}
+        benefit={selectedBenefit}
       />
     </div>
   );
