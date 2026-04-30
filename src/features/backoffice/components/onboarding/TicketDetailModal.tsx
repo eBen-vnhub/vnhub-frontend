@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { X, ExternalLink, CheckCircle, XCircle, UserCheck, Package, Edit2 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import toast from 'react-hot-toast';
@@ -24,6 +24,7 @@ export default function TicketDetailModal({ ticket, onClose, onUpdate }: TicketD
   const { t } = useLanguage();
   const { user } = useAuth();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const isSubmittingRef = useRef(false);
   const [feedback, setFeedback] = useState('');
   const [showRejectForm, setShowRejectForm] = useState(false);
   const [linkedBenefits, setLinkedBenefits] = useState<BenefitTracker[]>([]);
@@ -42,7 +43,8 @@ export default function TicketDetailModal({ ticket, onClose, onUpdate }: TicketD
   const userRole = user?.role || user?.userType || '';
 
   const handleAction = async (action: () => Promise<OnboardingTicket>, successMsg: string, errorMsg: string) => {
-    if (isSubmitting) return;
+    if (isSubmittingRef.current) return;
+    isSubmittingRef.current = true;
     setIsSubmitting(true);
     try {
       const updated = await action();
@@ -53,6 +55,7 @@ export default function TicketDetailModal({ ticket, onClose, onUpdate }: TicketD
     } catch (err: any) {
       toast.error(err.response?.data?.error || errorMsg);
     } finally {
+      isSubmittingRef.current = false;
       setIsSubmitting(false);
     }
   };
